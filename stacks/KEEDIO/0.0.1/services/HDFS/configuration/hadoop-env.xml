@@ -23,12 +23,12 @@
 <configuration>
   <property>
     <name>hdfs_log_dir_prefix</name>
-    <value>/var/log/hadoop</value>
+    <value>/var/log/hadoop-hdfs</value>
     <description>Hadoop Log Dir Prefix</description>
   </property>
   <property>
     <name>hadoop_pid_dir_prefix</name>
-    <value>/var/run/hadoop</value>
+    <value>/var/run/hadoop-hdfs</value>
     <description>Hadoop PID Dir Prefix</description>
   </property>
   <property>
