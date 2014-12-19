@@ -79,6 +79,8 @@ def wait_safe_mode_off():
   
 
 def create_hdfs_directories():
+  import params
+
   cmd = ["hdfs","dfs","-mkdir","/tmp"] 
   rc = executeSudoKrb(cmd)[2]
   if rc:
