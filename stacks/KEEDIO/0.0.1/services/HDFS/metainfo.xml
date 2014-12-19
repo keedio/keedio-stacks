@@ -189,7 +189,9 @@
             <package>
               <name>hadoop-hdfs-secondarynamenode</name>
             </package>
-
+            <package>
+              <name>python-krbV</name>
+            </package>
           </packages>
         </osSpecific>
         

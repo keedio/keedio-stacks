@@ -18,73 +18,62 @@ limitations under the License.
 """
 
 from resource_management import *
-
+from time import sleep
+from functools import partial
 
 class HdfsServiceCheck(Script):
   def service_check(self, env):
     import params
 
+    execute_smoke = partial(executeSudoKrb,user=smoke_user,principal=smoke_keytab)
+    
+    MAX_TRIES=40
+    timeout=10
+    safemode = True
     env.set_params(params)
     unique = functions.get_unique_id_and_date()
     dir = '/tmp'
-    tmp_file = format("{dir}/{unique}")
+    tmp_file = dir+"/"+unique
+    smoke_user = params.smoke_user
+    smoke_keytab = params.smoke_user_keytab
+    safemode_command = ["hdfs","dfsadmin","-safemode","get"]
 
-    safemode_command = "dfsadmin -safemode get | grep OFF"
-
-    create_dir_cmd = format("fs -mkdir {dir}")
-    chmod_command = format("fs -chmod 777 {dir}")
-    test_dir_exists = format("su -s /bin/bash - {smoke_user} -c '{hadoop_bin_dir}/hadoop --config {hadoop_conf_dir} fs -test -e {dir}'")
-    cleanup_cmd = format("fs -rm {tmp_file}")
+    create_dir_cmd = ["hdfs","dfs","-mkdir",dir]
+    chmod_command = ["hdfs","dfs","-chmod","777",dir]
+    test_dir_exists = ["hdfs","dfs","-test","-e",dir]
+    cleanup_cmd = ["hdfs","dfs","-rm",tmp_file]
     #cleanup put below to handle retries; if retrying there wil be a stale file
     #that needs cleanup; exit code is fn of second command
-    create_file_cmd = format(
-      "{cleanup_cmd}; hadoop --config {hadoop_conf_dir} fs -put /etc/passwd {tmp_file}")
-    test_cmd = format("fs -test -e {tmp_file}")
-    if params.security_enabled:
-      Execute(format(
-        "su -s /bin/bash - {smoke_user} -c '{kinit_path_local} -kt {smoke_user_keytab} "
-        "{smoke_user}'"))
-    ExecuteHadoop(safemode_command,
-                  user=params.smoke_user,
-                  logoutput=True,
-                  conf_dir=params.hadoop_conf_dir,
-                  try_sleep=3,
-                  tries=20,
-                  bin_dir=params.hadoop_bin_dir
-    )
-    ExecuteHadoop(create_dir_cmd,
-                  user=params.smoke_user,
-                  logoutput=True,
-                  not_if=test_dir_exists,
-                  conf_dir=params.hadoop_conf_dir,
-                  try_sleep=3,
-                  tries=5,
-                  bin_dir=params.hadoop_bin_dir
-    )
-    ExecuteHadoop(chmod_command,
-                  user=params.smoke_user,
-                  logoutput=True,
-                  conf_dir=params.hadoop_conf_dir,
-                  try_sleep=3,
-                  tries=5,
-                  bin_dir=params.hadoop_bin_dir
-    )
-    ExecuteHadoop(create_file_cmd,
-                  user=params.smoke_user,
-                  logoutput=True,
-                  conf_dir=params.hadoop_conf_dir,
-                  try_sleep=3,
-                  tries=5,
-                  bin_dir=params.hadoop_bin_dir
-    )
-    ExecuteHadoop(test_cmd,
-                  user=params.smoke_user,
-                  logoutput=True,
-                  conf_dir=params.hadoop_conf_dir,
-                  try_sleep=3,
-                  tries=5,
-                  bin_dir=params.hadoop_bin_dir
-    )
+    create_file_cmd = ["hdfs","dfs","-put","/etc/passwd",tmp_file]
+    test_cmd = ["hdfs","dfs","-test","-e",tmp_file]
+
+    for x in xrange(MAX_TRIES):
+      out,err,rc = executeSudoKrb(safemode_command)
+      check_rc(rc,stdout=out,stderr=err)
+      safemode= out!="Safe mode is OFF"
+      if not safemode:
+        break
+      sleep(TIMEOUT)
+    if safemode:
+      raise Fail("Safemode ON")
+    
+    rc = execute_smoke(test_dir_exists)[2]
+    if rc==0:
+      out,err,rc = execute_smoke(create_dir_cmd)
+      check_rc(rc,stdout=out,stderr=err)
+
+      out,err,rc = execute_smoke(chmod_command)
+      check_rc(rc,stdout=out,stderr=err)
+
+      out,err,rc = execute_smoke(cleanup_cmd)
+      check_rc(rc,stdout=out,stderr=err)
+
+      out,err,rc = execute_smoke(create_file_cmd)
+      check_rc(rc,stdout=out,stderr=err)
+
+      rc = execute_smoke(test_cmd)[2]
+      check_rc(rc)
+
     if params.has_journalnode_hosts:
       journalnode_port = params.journalnode_port
       smoke_test_user = params.smoke_user

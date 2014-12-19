@@ -23,7 +23,7 @@
       <reponame>keedio</reponame>
     </repo>
     <repo>
-      <baseurl>http://ftp.cica.es/epel/6/x86_64/</baseurl>
+      <baseurl>http://10.229.0.40/cobbler/repo_mirror/epel</baseurl>
       <repoid>EPEL6.8</repoid>
       <reponame>EPEL</reponame>
     </repo>

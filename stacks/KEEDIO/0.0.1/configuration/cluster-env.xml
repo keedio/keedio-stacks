@@ -53,4 +53,9 @@
         <property-type>GROUP</property-type>
         <description>Hadoop user group.</description>
     </property>
+    <property>
+        <name>kerberos_cache_file</name>
+        <value>/tmp/krb_cache_file</value>
+        <description>File to store kerberos credentials</description>
+    </property>
 </configuration>

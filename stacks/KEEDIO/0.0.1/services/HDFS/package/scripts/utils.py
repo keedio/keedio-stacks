@@ -20,7 +20,7 @@ import os
 
 from resource_management import *
 import re
-
+from subprocess import *
 
 def service(action=None, name=None, user=None, create_pid_dir=False,
             create_log_dir=False):
@@ -127,10 +127,112 @@ def is_secure_port(port):
   else:
     return False
 
-def check_rc(rc,stdout,stderr):
+def check_rc(rc,stdout=None,stderr=None):
   if rc == 2 :
     raise InvalidArgument(stderr)
   if rc == 3 :
     raise ComponentIsNotRunning(stderr)
   if rc > 0 :
     raise Fail(stderr)
+
+def hdfs_mkdir(sudo_cmd,path,owner=None,group=None,recursive=False,mode=None):
+  cmd_aux = list(sudo_cmd) 
+  cmd_aux.extend(["hdfs dfs " + "-mkdir -p" if recursive else "-mkdir",path])
+  cmd_list =[list(cmd_aux)]
+  if mode:
+    cmd_aux = list(sudo_cmd) 
+    cmd_aux.extend(["hdfs dfs " + "-chmod -r" if recursive else "-chmod",mode,path])
+    cmd_list.append(cmd_aux)
+  if owner or group:
+    cmd_aux = list(sudo_cmd) 
+    cmd_aux.extend(["hdfs dfs " + "chown -r" if recursive else "-chown",__owner_group(owner,group),path])
+    cmd_list.append(cmd_aux)
+  for cmd in cmd_list:
+    Popen(cmd)
+
+def os_mkdir(directories,owner=None,group=None,mode=0755):
+  failed=[]
+  for path in directories.split(','):
+    status = __mkdir(path,mode)
+    status = __chown(path,owner,group) if status else status
+    if not status:
+      failed.append(path)
+  return failed
+    
+def __mkdir(path,mode):
+  exists = False
+  try:
+    os.makedirs(path,mode)
+    exists=True
+  except:
+    # If raised exception and path exists, it is fine
+    exists=os.path.exists(path)
+  return exists
+
+def __chown(path,owner,group):
+  uid,gid=-1,-1
+
+  if owner:
+    from pwd import getpwnam
+    try:
+      uid = getpwnam(owner).pw_uid
+    except:
+      return False
+
+  if group:
+    from grp import getgrnam
+    try:
+      gid = getgrnam(group).gr_gid
+    except:
+      return False
+
+  try:
+    os.chown(path,uid,gid)
+    return True
+  except:
+    return False
+  
+def __chmod(path,mode):
+  try:
+    os.chmod(path,mode)
+    return True
+  except:
+    return False
+
+def __owner_group(owner,group):
+  chown = owner
+  if chown:
+    chown = chown + ":" + group if group else chown
+  else:
+    chown = ":" + group
+  return chown    
+
+def executeSudoKrb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,input=None):
+  import params
+  
+  secure = params.security_enabled
+  user = user or params.hdfs_user
+  principal = principal or  params.hdfs_principal_name
+  keytab = keytab or params.hdfs_user_keytab
+  keytab_cache = keytab_cache or params.kerberos_cache_file
+  
+  auth_token=None
+ 
+  if secure:
+    import kerberosWrapper
+    auth_token = kerberosWrapper.krb_wrapper(params.hdfs_principal_name, params.hdfs_user_keytab,params.kerberos_cache_file)
+    os.environ['KRB5CCNAME'] = params.kerberos_cache_file
+  else:
+    cmd_aux = ["su","-s","/bin/bash",params.hdfs_user,"-c"]
+    cmd_aux.append(' '.join(cmd))
+    cmd = cmd_aux
+ 
+  executed=Popen(cmd,stdin=PIPE,stdout=PIPE,stderr=PIPE)
+  out,err=executed.communicate(input=input)
+
+  if secure and auth_token:
+    auth_token.destroy()
+
+  return out,err,executed.returncode
+    
+  
