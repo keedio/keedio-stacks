@@ -19,8 +19,8 @@ limitations under the License.
 
 from resource_management import *
 from resource_management.libraries.functions.dfs_datanode_helper import handle_dfs_data_dir
-from utils import service
-import os
+from utils import service,check_rc
+from subprocess import *
 
 def create_dirs(data_dir, params):
   """
@@ -53,4 +53,9 @@ def datanode(action=None):
     I assume it is for standarization porpuses and avoid using
     /etc/init.d
     """
-    os.system("service hadoop-hdfs-datanode %s" % action)
+    cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)
+    out,err=cmd.communicate()
+    rc = cmd.returncode
+    Logger.info("Datanode service %s: %s" % (action, rc == 0))
+    check_rc(rc,out,out)
+

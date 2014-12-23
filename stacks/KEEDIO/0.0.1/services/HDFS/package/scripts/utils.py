@@ -129,10 +129,13 @@ def is_secure_port(port):
 
 def check_rc(rc,stdout=None,stderr=None):
   if rc == 2 :
+    Logger.error("Code 2: Invalid argument\n%s" % stderr)
     raise InvalidArgument(stderr)
   if rc == 3 :
+    Logger.error("Code 3: Component is Not Running\n%s" % stderr)
     raise ComponentIsNotRunning(stderr)
   if rc > 0 :
+    Logger.error("Code 0: Undefined error\n%s" % stderr)
     raise Fail(stderr)
 
 def hdfs_mkdir(sudo_cmd,path,owner=None,group=None,recursive=False,mode=None):
@@ -212,7 +215,7 @@ def executeSudoKrb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,in
   
   secure = params.security_enabled
   user = user or params.hdfs_user
-  principal = principal or  params.hdfs_principal_name
+  principal = principal or params.hdfs_principal_name
   keytab = keytab or params.hdfs_user_keytab
   keytab_cache = keytab_cache or params.kerberos_cache_file
   

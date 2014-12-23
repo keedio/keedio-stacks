@@ -29,26 +29,33 @@ def namenode(action=None, do_format=True):
   #we need this directory to be present before any action(HA manual steps for
   #additional namenode)
   if action == "configure":
+    Logger.info("Configuring namenode")
     creation_errors=os_mkdir(params.dfs_name_dir,owner=params.hdfs_user,group=params.user_group)
     creation_errors.extend(os_mkdir(params.namenode_formatted_mark.rsplit('/',1)[0],owner=params.hdfs_user,group=params.user_group))
 
   if action == "start":
+    Logger.info("Starting namenode")
     if do_format:
+      Logger.info("Namenode will be be formatted")
       format_namenode()
       pass
     
-    cmd=Popen(['service','hadoop-hdfs-namenode','start'])
+    cmd=Popen(['service','hadoop-hdfs-namenode','start'],stdout=None,stderr=None)
     cmd.communicate()
+    Logger.info("Namenode service started: %s" % cmd.returncode == 0)
     if cmd.returncode == 0 and wait_safe_mode_off():
+      Logger.info("Creating hdfs directories")
       create_hdfs_directories()
 
   if action == "stop":
+    Logger.info("Stopping namenode")
     Popen(['service','hadoop-hdfs-namenode','stop'])
 
   if action == "decommission":
     decommission()
 
   if action == "status":
+    Logger.info("Checking namenode status")
     cmd=Popen(['service','hadoop-hdfs-namenode','status'],stdout=PIPE,stderror=PIPE)
     out,err=cmd.communicate()
     rc=cmd.returncode
@@ -62,20 +69,23 @@ def wait_safe_mode_off():
   TIMEOUT=10
 
   if params.dfs_ha_enabled:
+    Logger.info("Checking if active NN")
     cmd = ["hdfs","haadmin","-getServiceState",params.name_id]
     out,err,rc = executeSudoKrb(cmd)
     check_rc(rc,stdout=out,stderr=err)
     isActive= out=="active"
   if isActive:  
     for x in xrange(MAX_TRIES):
+      Logger.info("Waiting for safemode OFF")
       cmd=["hdfs","dfsadmin","-safemode","get"]
       out,err,rc = executeSudoKrb(cmd)
       check_rc(rc,stdout=out,stderr=err)
-      safemode= out!="Safe mode is OFF"
-      if not safemode:
+      safemode_off = "Safe mode is OFF" in out
+      if safemode_off:
         break
       sleep(TIMEOUT)
-  return safemode
+    Logger.info("safemode_off: %s, output message: %s" % (safemode_off,out))
+  return safemode_off
   
 
 def create_hdfs_directories():
@@ -95,6 +105,7 @@ def create_hdfs_directories():
   if rc:
     cmd = ["hdfs","dfs","-chown -R",params.smoke_user]
     rc = executeSudoKrb(cmd)[2]
+
   if rc:
     cmd = ["hdfs","dfs","-chmod -R",params.smoke_hdfs_user_mode]
     rc = executeSudoKrb(cmd)[2]
@@ -110,9 +121,11 @@ def format_namenode(force=None):
   if not params.dfs_ha_enabled:
     if not force:
       if os.path.exists(mark_file):
+        Logger.info("NN won't be formatted. %s file exists." % mark_file)
         return False
-    cmd = ["hdfs namenode -format"]
+    cmd = ["hdfs","namenode","-format"]
     out,err,rc=executeSudoKrb(cmd)
+    Logger.info("NN formatted %s\n%s" % (rc==0,out))
     check_rc(rc,stdout=out,stderr=err)
     file = open(mark_file, "w")
     file.write(strftime("%Y%m%d-%H%M%S"))

@@ -20,23 +20,27 @@ limitations under the License.
 from resource_management import *
 from time import sleep
 from functools import partial
+from utils import *
 
 class HdfsServiceCheck(Script):
   def service_check(self, env):
     import params
 
-    execute_smoke = partial(executeSudoKrb,user=smoke_user,principal=smoke_keytab)
     
     MAX_TRIES=40
-    timeout=10
+    TIMEOUT=10
     safemode = True
     env.set_params(params)
     unique = functions.get_unique_id_and_date()
     dir = '/tmp'
     tmp_file = dir+"/"+unique
     smoke_user = params.smoke_user
-    smoke_keytab = params.smoke_user_keytab
+    smoke_user_principal =  params.smoke_user_principal
+    smoke_keytab =params.smoke_user_keytab
+    Logger.info("smoke_user: %s\nsmoke_user_principal: %s, smoke_keytab: %s" % (smoke_user,smoke_user_principal,smoke_keytab))
     safemode_command = ["hdfs","dfsadmin","-safemode","get"]
+
+    execute_smoke = partial(executeSudoKrb,user=smoke_user,principal=smoke_user_principal,keytab=smoke_keytab)
 
     create_dir_cmd = ["hdfs","dfs","-mkdir",dir]
     chmod_command = ["hdfs","dfs","-chmod","777",dir]
@@ -48,31 +52,39 @@ class HdfsServiceCheck(Script):
     test_cmd = ["hdfs","dfs","-test","-e",tmp_file]
 
     for x in xrange(MAX_TRIES):
+      Logger.info("Waiting for safemode OFF")
       out,err,rc = executeSudoKrb(safemode_command)
       check_rc(rc,stdout=out,stderr=err)
-      safemode= out!="Safe mode is OFF"
-      if not safemode:
+      safemode_off = "Safe mode is OFF" in out
+      if safemode_off:
         break
       sleep(TIMEOUT)
-    if safemode:
+    Logger.info("safemode_off: %s, output message: %s" % (safemode_off,out))
+    if not safemode_off:
+      Logger.error("Safe mode ON, test won't be executed")
       raise Fail("Safemode ON")
     
     rc = execute_smoke(test_dir_exists)[2]
-    if rc==0:
+    if rc!=0:
       out,err,rc = execute_smoke(create_dir_cmd)
       check_rc(rc,stdout=out,stderr=err)
-
+    else:
       out,err,rc = execute_smoke(chmod_command)
       check_rc(rc,stdout=out,stderr=err)
 
       out,err,rc = execute_smoke(cleanup_cmd)
-      check_rc(rc,stdout=out,stderr=err)
-
+      if rc == 0:
+        out,err,rc = execute_smoke(test_cmd)[2]
+        check_rc(rc,stdout=out,stderr=err)
+      
       out,err,rc = execute_smoke(create_file_cmd)
       check_rc(rc,stdout=out,stderr=err)
 
       rc = execute_smoke(test_cmd)[2]
       check_rc(rc)
+
+      out,err,rc = execute_smoke(cleanup_cmd)
+      check_rc(rc,stdout=out,stderr=err)
 
     if params.has_journalnode_hosts:
       journalnode_port = params.journalnode_port

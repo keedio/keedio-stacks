@@ -83,7 +83,7 @@ execute_path = os.environ['PATH'] + os.pathsep + hadoop_bin_dir
 ulimit_cmd = "ulimit -c unlimited; "
 
 #security params
-smoke_user_keytab = config['configurations']['cluster-env']['smokeuser_keytab']
+smoke_user_keytab = default('/configurations/cluster-env/smokeuser_keytab',None)
 hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']
 falcon_user = config['configurations']['falcon-env']['falcon_user']
 
@@ -152,6 +152,7 @@ hive_user = config['configurations']['hive-env']['hive_user']
 smoke_user =  config['configurations']['cluster-env']['smokeuser']
 mapred_user = config['configurations']['mapred-env']['mapred_user']
 hdfs_principal_name = config['configurations']['hadoop-env']['hdfs_principal_name']
+smoke_user_principal = default('/configurations/cluster-env/smokeuser_principal_name',None)
 
 user_group = config['configurations']['cluster-env']['user_group']
 proxyuser_group =  config['configurations']['hadoop-env']['proxyuser_group']
