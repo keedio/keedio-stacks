@@ -60,9 +60,9 @@ class NameNode(Script):
     pass
 
   def status(self, env):
-    import params
+    #import params
 
-    env.set_params(params)
+    #env.set_params(params)
     namenode(action="status")
     pass
 

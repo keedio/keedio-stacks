@@ -24,16 +24,17 @@ from time import sleep,strftime
 
 
 def namenode(action=None, do_format=True):
-  import params
 
   #we need this directory to be present before any action(HA manual steps for
   #additional namenode)
   if action == "configure":
+    import params
     Logger.info("Configuring namenode")
     creation_errors=os_mkdir(params.dfs_name_dir,owner=params.hdfs_user,group=params.user_group)
     creation_errors.extend(os_mkdir(params.namenode_formatted_mark.rsplit('/',1)[0],owner=params.hdfs_user,group=params.user_group))
 
   if action == "start":
+    import params
     Logger.info("Starting namenode")
     if do_format:
       Logger.info("Namenode will be be formatted")
@@ -56,10 +57,10 @@ def namenode(action=None, do_format=True):
 
   if action == "status":
     Logger.info("Checking namenode status")
-    cmd=Popen(['service','hadoop-hdfs-namenode','status'],stdout=PIPE,stderror=PIPE)
+    cmd=Popen(['service','hadoop-hdfs-namenode','status'],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     rc=cmd.returncode
-    check_rc(rc,output,stderr)
+    check_rc(rc,out,err)
     
 def wait_safe_mode_off():
   import params 
@@ -94,7 +95,7 @@ def create_hdfs_directories():
   cmd = ["hdfs","dfs","-mkdir","/tmp"] 
   rc = executeSudoKrb(cmd)[2]
   if rc:
-    cmd = ["hdfs","dfs","-chown",user]
+    cmd = ["hdfs","dfs","-chown",params.hdfs_user]
     rc = executeSudoKrb(cmd)[2]
   if rc:
     cmd = ["hdfs","dfs","-chmod","1777"]

@@ -37,7 +37,6 @@ class HdfsServiceCheck(Script):
     smoke_user = params.smoke_user
     smoke_user_principal =  params.smoke_user_principal
     smoke_keytab =params.smoke_user_keytab
-    Logger.info("smoke_user: %s\nsmoke_user_principal: %s, smoke_keytab: %s" % (smoke_user,smoke_user_principal,smoke_keytab))
     safemode_command = ["hdfs","dfsadmin","-safemode","get"]
 
     execute_smoke = partial(executeSudoKrb,user=smoke_user,principal=smoke_user_principal,keytab=smoke_keytab)

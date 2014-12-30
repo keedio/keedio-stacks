@@ -220,7 +220,7 @@ def executeSudoKrb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,in
   keytab_cache = keytab_cache or params.kerberos_cache_file
   
   auth_token=None
- 
+  
   if secure:
     import kerberosWrapper
     auth_token = kerberosWrapper.krb_wrapper(params.hdfs_principal_name, params.hdfs_user_keytab,params.kerberos_cache_file)
@@ -229,7 +229,7 @@ def executeSudoKrb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,in
     cmd_aux = ["su","-s","/bin/bash",params.hdfs_user,"-c"]
     cmd_aux.append(' '.join(cmd))
     cmd = cmd_aux
- 
+  Logger.info("Executing %s" % str(cmd)) 
   executed=Popen(cmd,stdin=PIPE,stdout=PIPE,stderr=PIPE)
   out,err=executed.communicate(input=input)
 
