@@ -18,9 +18,8 @@ limitations under the License.
 """
 
 from resource_management import *
-from utils import service
-from utils import hdfs_directory
-import os
+from utils import service, check_rc
+from subprocess import *
 
 def snamenode(action=None, format=False):
   import params
@@ -41,4 +40,8 @@ def snamenode(action=None, format=False):
     I assume it is for standarization porpuses and avoid using
     /etc/init.d
     """
-    os.system("service hadoop-hdfs-datanode %s" % action)
+    executed = Popen(["service","hadoop-hdfs-secondarynamenode",action],stdout=PIPE,stderr=PIPE)
+    out,err = executed.communicate()
+    rc = executed.returncode
+    check_rc(rc,out,err)
+
