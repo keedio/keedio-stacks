@@ -22,9 +22,9 @@ from utils import service, check_rc
 from subprocess import *
 
 def snamenode(action=None, format=False):
-  import params
 
   if action == "configure":
+    import params
     Directory(params.fs_checkpoint_dir,
               recursive=True,
               mode=0755,
@@ -34,7 +34,7 @@ def snamenode(action=None, format=False):
          content=Template("exclude_hosts_list.j2"),
          owner=params.hdfs_user,
          group=params.user_group)
-  elif action == "start" or action == "stop":
+  elif action == "start" or action == "stop" or action == "status":
     """
     In this point, HDP code uses a much more complex execution,
     I assume it is for standarization porpuses and avoid using
