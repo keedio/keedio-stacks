@@ -71,7 +71,7 @@ def wait_safe_mode_off():
 
   if params.dfs_ha_enabled:
     Logger.info("Checking if active NN")
-    cmd = ["hdfs","haadmin","-getServiceState",params.name_id]
+    cmd = ["hdfs","haadmin","-getServiceState",params.namenode_id]
     out,err,rc = executeSudoKrb(cmd)
     check_rc(rc,stdout=out,stderr=err)
     isActive= out=="active"

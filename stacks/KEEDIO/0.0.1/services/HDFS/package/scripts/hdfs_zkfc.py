@@ -18,42 +18,14 @@ limitations under the License.
 """
 
 from resource_management import *
-from hdfs import hdfs
-from hdfs_journalnode import journalnode
+from utils import check_rc
+from subprocess import *
 
-class JournalNode(Script):
-  def install(self, env):
-    import params
+def zkfc(action=None, format=False):
 
-    env.set_params(params)
-    self.install_packages(env, params.exclude_packages)
+  if action == "start" or action == "stop" or action == "status":
+    executed = Popen(["service","hadoop-hdfs-zkfc",action],stdout=PIPE,stderr=PIPE)
+    out,err = executed.communicate()
+    rc = executed.returncode
+    check_rc(rc,out,err)
 
-  def start(self, env):
-    import params
-
-    env.set_params(params)
-    self.configure(env)
-    journalnode(action="start")
-
-  def stop(self, env):
-    import params
-
-    env.set_params(params)
-    journalnode(action="stop")
-
-  def configure(self, env):
-    import params
-
-    env.set_params(params)
-    hdfs()
-    journalnode(action="configure")
-
-  def status(self, env):
-    import status_params
-
-    env.set_params(status_params)
-    journalnode(action="status")
-
-
-if __name__ == "__main__":
-  JournalNode().execute()

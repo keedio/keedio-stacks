@@ -18,7 +18,7 @@ limitations under the License.
 """
 
 from resource_management import *
-from utils import service
+from hdfs_zkfc import zkfc
 from hdfs import hdfs
 
 
@@ -34,19 +34,13 @@ class ZkfcSlave(Script):
 
     env.set_params(params)
     self.configure(env)
-    service(
-      action="start", name="zkfc", user=params.hdfs_user, create_pid_dir=True,
-      create_log_dir=True
-    )
+    zkfc(action="start")
 
   def stop(self, env):
     import params
 
     env.set_params(params)
-    service(
-      action="stop", name="zkfc", user=params.hdfs_user, create_pid_dir=True,
-      create_log_dir=True
-    )
+    zkfc(action="stop")
 
   def configure(self, env):
     hdfs()
@@ -56,8 +50,7 @@ class ZkfcSlave(Script):
     import status_params
 
     env.set_params(status_params)
-
-    check_process_status(status_params.zkfc_pid_file)
+    zkfc(action="status")
 
 
 if __name__ == "__main__":
