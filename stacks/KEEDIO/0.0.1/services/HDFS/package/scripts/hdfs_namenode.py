@@ -68,6 +68,7 @@ def wait_safe_mode_off():
   isActive=True 
   MAX_TRIES=40
   TIMEOUT=10
+  safemode_off=False 
 
   if params.dfs_ha_enabled:
     Logger.info("Checking if active NN")
