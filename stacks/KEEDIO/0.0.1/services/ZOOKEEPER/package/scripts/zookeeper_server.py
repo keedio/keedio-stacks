@@ -23,32 +23,35 @@ import sys
 from resource_management import *
 
 from zookeeper import zookeeper
-from zookeeper_service import zookeeper_service
+from subprocess import *
+from utils import *
 
 class ZookeeperServer(Script):
   def install(self, env):
+    import params
     self.install_packages(env)
     self.configure(env)
+
   def configure(self, env):
     import params
     env.set_params(params)
     zookeeper(type='server')
 
-  def start(self, env):
-    import params
-    env.set_params(params)
+  def start(self,env):
     self.configure(env)
-    zookeeper_service(action = 'start')
-
-  def stop(self, env):
-    import params
-    env.set_params(params)
-    zookeeper_service(action = 'stop')
+    cmd=Popen(['service','zookeeper-server','start'],stdout=None,stderr=None)
+    cmd.communicate()
+    Logger.info("Zookeeper service started: %s" % cmd.returncode == 0)
+  
+  def stop(self,env):
+    cmd=Popen(['service','zookeeper-server','stop'],stdout=None,stderr=None)
 
   def status(self, env):
-    import status_params
-    env.set_params(status_params)
-    check_process_status(status_params.zk_pid_file)
+    Logger.info("Checking zookeeper server status")
+    cmd=Popen(['service','zookeeper-server','status'],stdout=PIPE,stderr=PIPE)
+    out,err=cmd.communicate()
+    rc=cmd.returncode
+    check_rc(rc,out,err)
 
 if __name__ == "__main__":
   ZookeeperServer().execute()

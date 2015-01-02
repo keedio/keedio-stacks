@@ -15,17 +15,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Ambari Agent
-
 """
+import os
 
 from resource_management import *
+import re
+from subprocess import *
 
-def zookeeper_service(action='start'):
-  if action == 'start':
-    cmd=Popen(['service','zookeeper-server','start'],stdout=None,stderr=None)
-    cmd.communicate()
-    Logger.info("Zookeeper service started: %s" % cmd.returncode == 0)
-  elif action == 'stop':
-    cmd=Popen(['service','zookeeper-server','stop'],stdout=None,stderr=None)
+def check_rc(rc,stdout=None,stderr=None):
+  if rc == 2 :
+    Logger.error("Code 2: Invalid argument\n%s" % stderr)
+    raise InvalidArgument(stderr)
+  if rc == 3 :
+    Logger.error("Code 3: Component is Not Running\n%s" % stderr)
+    raise ComponentIsNotRunning(stderr)
+  if rc > 0 :
+    Logger.error("Code 0: Undefined error\n%s" % stderr)
+    raise Fail(stderr)
 

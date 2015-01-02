@@ -22,7 +22,7 @@
       <name>ZOOKEEPER</name>
       <displayName>ZooKeeper</displayName>
       <comment>Centralized service which provides highly reliable distributed coordination</comment>
-      <version>3.4.5.2.0</version>
+      <version>3.4.5_0.0.1</version>
       <components>
 
         <component>
@@ -67,6 +67,12 @@
           <packages>
             <package>
               <name>zookeeper</name>
+            </package>
+            <package>
+              <name>zookeeper-server</name>
+            </package>
+            <package>
+              <name>zookeeper-rest</name>
             </package>
           </packages>
         </osSpecific>
