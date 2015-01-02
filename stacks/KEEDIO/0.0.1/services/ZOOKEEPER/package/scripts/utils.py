@@ -16,44 +16,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 """
+import os
 
 from resource_management import *
-from hdfs_datanode import datanode
-from hdfs import hdfs
+import re
+from subprocess import *
 
+def check_rc(rc,stdout=None,stderr=None):
+  if rc == 2 :
+    Logger.error("Code 2: Invalid argument\n%s" % stderr)
+    raise InvalidArgument(stderr)
+  if rc == 3 :
+    Logger.error("Code 3: Component is Not Running\n%s" % stderr)
+    raise ComponentIsNotRunning(stderr)
+  if rc > 0 :
+    Logger.error("Code 0: Undefined error\n%s" % stderr)
+    raise Fail(stderr)
 
-class DataNode(Script):
-  def install(self, env):
-    import params
-
-    env.set_params(params)
-    self.install_packages(env, params.exclude_packages)
-
-  def start(self, env):
-    import params
-
-    env.set_params(params)
-    self.configure(env)
-    datanode(action="start")
-
-  def stop(self, env):
-    import params
-
-    env.set_params(params)
-    datanode(action="stop")
-
-  def configure(self, env):
-    import params
-    env.set_params(params)
-    hdfs()
-    datanode(action="configure")
-
-  def status(self, env):
-    import status_params
-
-    env.set_params(status_params)
-    #check_process_status(status_params.datanode_pid_file)
-
-
-if __name__ == "__main__":
-  DataNode().execute()

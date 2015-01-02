@@ -18,42 +18,14 @@ limitations under the License.
 """
 
 from resource_management import *
-from hdfs_datanode import datanode
-from hdfs import hdfs
+from utils import check_rc
+from subprocess import *
 
+def zkfc(action=None, format=False):
 
-class DataNode(Script):
-  def install(self, env):
-    import params
+  if action == "start" or action == "stop" or action == "status":
+    executed = Popen(["service","hadoop-hdfs-zkfc",action],stdout=PIPE,stderr=PIPE)
+    out,err = executed.communicate()
+    rc = executed.returncode
+    check_rc(rc,out,err)
 
-    env.set_params(params)
-    self.install_packages(env, params.exclude_packages)
-
-  def start(self, env):
-    import params
-
-    env.set_params(params)
-    self.configure(env)
-    datanode(action="start")
-
-  def stop(self, env):
-    import params
-
-    env.set_params(params)
-    datanode(action="stop")
-
-  def configure(self, env):
-    import params
-    env.set_params(params)
-    hdfs()
-    datanode(action="configure")
-
-  def status(self, env):
-    import status_params
-
-    env.set_params(status_params)
-    #check_process_status(status_params.datanode_pid_file)
-
-
-if __name__ == "__main__":
-  DataNode().execute()

@@ -26,7 +26,7 @@ from zookeeper import zookeeper
 
 class ZookeeperClient(Script):
   def install(self, env):
-    self.install_packages(env)
+    self.install_packages(env,['zookeeper-server','zookeeper-rest'])
     self.configure(env)
 
   def configure(self, env):

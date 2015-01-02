@@ -18,123 +18,127 @@ limitations under the License.
 """
 
 from resource_management import *
-from utils import service
-import subprocess
+from utils import *
+from subprocess import *
+from time import sleep,strftime
+
 
 def namenode(action=None, do_format=True):
-  import params
+
   #we need this directory to be present before any action(HA manual steps for
   #additional namenode)
   if action == "configure":
-    create_name_dirs(params.dfs_name_dir)
+    import params
+    Logger.info("Configuring namenode")
+    creation_errors=os_mkdir(params.dfs_name_dir,owner=params.hdfs_user,group=params.user_group)
+    creation_errors.extend(os_mkdir(params.namenode_formatted_mark.rsplit('/',1)[0],owner=params.hdfs_user,group=params.user_group))
 
   if action == "start":
+    import params
+    Logger.info("Starting namenode")
     if do_format:
+      Logger.info("Namenode will be be formatted")
       format_namenode()
       pass
     
-    #cmd=subprocess.Popen(['service','hadoop-hdfs-namenode','start'],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    subprocess.Popen(['service','hadoop-hdfs-namenode','start'])
+    cmd=Popen(['service','hadoop-hdfs-namenode','start'],stdout=None,stderr=None)
     cmd.communicate()
-    if cmd.returncode == 0:
-      if params.dfs_ha_enabled:
-        dfs_check_nn_status_cmd = format("su -s /bin/bash - {hdfs_user} -c 'export PATH=$PATH:{hadoop_bin_dir} ; hdfs --config {hadoop_conf_dir} haadmin -getServiceState {namenode_id} | grep active > /dev/null'")
-      else:
-        dfs_check_nn_status_cmd = None
-
-      namenode_safe_mode_off = format("su -s /bin/bash - {hdfs_user} -c 'export PATH=$PATH:{hadoop_bin_dir} ; hdfs --config {hadoop_conf_dir} dfsadmin -safemode get' | grep 'Safe mode is OFF'")
-
-      if params.security_enabled:
-        Execute(format("{kinit_path_local} -kt {hdfs_user_keytab} {hdfs_principal_name}"),
-                user = params.hdfs_user)
-      Execute(namenode_safe_mode_off,
-              tries=40,
-              try_sleep=10,
-              only_if=dfs_check_nn_status_cmd #skip when HA not active
-      )
-      create_hdfs_directories(dfs_check_nn_status_cmd)
+    Logger.info("Namenode service started: %s" % cmd.returncode == 0)
+    if cmd.returncode == 0 and wait_safe_mode_off():
+      Logger.info("Creating hdfs directories")
+      create_hdfs_directories()
 
   if action == "stop":
-    subprocess.Popen(['service','hadoop-hdfs-namenode','stop'])
+    Logger.info("Stopping namenode")
+    Popen(['service','hadoop-hdfs-namenode','stop'])
 
   if action == "decommission":
     decommission()
 
   if action == "status":
-    cmd=subprocess.Popen(['service','hadoop-hdfs-namenode','status'],stdout=PIPE,stderror=PIPE)
+    Logger.info("Checking namenode status")
+    cmd=Popen(['service','hadoop-hdfs-namenode','status'],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     rc=cmd.returncode
-    check_rc(rc,output,stderr)
+    check_rc(rc,out,err)
     
-def 
+def wait_safe_mode_off():
+  import params 
 
-def create_name_dirs(directories):
+  isActive=True 
+  MAX_TRIES=40
+  TIMEOUT=10
+  safemode_off=False 
+
+  if params.dfs_ha_enabled:
+    Logger.info("Checking if active NN")
+    cmd = ["hdfs","haadmin","-getServiceState",params.namenode_id]
+    out,err,rc = executeSudoKrb(cmd)
+    check_rc(rc,stdout=out,stderr=err)
+    isActive= out=="active"
+  if isActive:  
+    for x in xrange(MAX_TRIES):
+      Logger.info("Waiting for safemode OFF")
+      cmd=["hdfs","dfsadmin","-safemode","get"]
+      out,err,rc = executeSudoKrb(cmd)
+      check_rc(rc,stdout=out,stderr=err)
+      safemode_off = "Safe mode is OFF" in out
+      if safemode_off:
+        break
+      sleep(TIMEOUT)
+    Logger.info("safemode_off: %s, output message: %s" % (safemode_off,out))
+  return safemode_off
+  
+
+def create_hdfs_directories():
   import params
 
-  dirs = directories.split(",")
-  Directory(dirs,
-            mode=0755,
-            owner=params.hdfs_user,
-            group=params.user_group,
-            recursive=True
-  )
+  cmd = ["hdfs","dfs","-mkdir","/tmp"] 
+  rc = executeSudoKrb(cmd)[2]
+  if rc:
+    cmd = ["hdfs","dfs","-chown",params.hdfs_user]
+    rc = executeSudoKrb(cmd)[2]
+  if rc:
+    cmd = ["hdfs","dfs","-chmod","1777"]
+    rc = executeSudoKrb(cmd)[2]
+   
+  cmd = ["hdfs","dfs","-mkdir -p",params.smoke_hdfs_user_dir] 
+  rc = executeSudoKrb(cmd)[2]
+  if rc:
+    cmd = ["hdfs","dfs","-chown -R",params.smoke_user]
+    rc = executeSudoKrb(cmd)[2]
 
-
-def create_hdfs_directories(check):
-  import params
-
-  params.HdfsDirectory("/tmp",
-                       action="create_delayed",
-                       owner=params.hdfs_user,
-                       mode=0777
-  )
-  params.HdfsDirectory(params.smoke_hdfs_user_dir,
-                       action="create_delayed",
-                       owner=params.smoke_user,
-                       mode=params.smoke_hdfs_user_mode
-  )
-  params.HdfsDirectory(None, action="create",
-                       only_if=check #skip creation when HA not active
-  )
+  if rc:
+    cmd = ["hdfs","dfs","-chmod -R",params.smoke_hdfs_user_mode]
+    rc = executeSudoKrb(cmd)[2]
 
 def format_namenode(force=None):
   import params
 
-  old_mark_dir = params.namenode_formatted_old_mark_dir
-  mark_dir = params.namenode_formatted_mark_dir
+  mark_file = params.namenode_formatted_mark
   dfs_name_dir = params.dfs_name_dir
   hdfs_user = params.hdfs_user
   hadoop_conf_dir = params.hadoop_conf_dir
 
   if not params.dfs_ha_enabled:
-    if force:
-      ExecuteHadoop('namenode -format',
-                    kinit_override=True,
-                    bin_dir=params.hadoop_bin_dir,
-                    conf_dir=hadoop_conf_dir)
-    else:
-      File(format("{tmp_dir}/checkForFormat.sh"),
-           content=StaticFile("checkForFormat.sh"),
-           mode=0755)
-      Execute(format(
-        "{tmp_dir}/checkForFormat.sh {hdfs_user} {hadoop_conf_dir} "
-        "{hadoop_bin_dir} {old_mark_dir} {mark_dir} {dfs_name_dir}"),
-              not_if=format("test -d {old_mark_dir} || test -d {mark_dir}"),
-              path="/usr/sbin:/sbin:/usr/local/bin:/bin:/usr/bin"
-      )
-    
-      Directory(mark_dir,
-        recursive = True
-      )
-
+    if not force:
+      if os.path.exists(mark_file):
+        Logger.info("NN won't be formatted. %s file exists." % mark_file)
+        return False
+    cmd = ["hdfs","namenode","-format"]
+    out,err,rc=executeSudoKrb(cmd)
+    Logger.info("NN formatted %s\n%s" % (rc==0,out))
+    check_rc(rc,stdout=out,stderr=err)
+    file = open(mark_file, "w")
+    file.write(strftime("%Y%m%d-%H%M%S"))
+    file.close()
+    return True
 
 def decommission():
   import params
 
   hdfs_user = params.hdfs_user
-  conf_dir = params.hadoop_conf_dir
   user_group = params.user_group
-  dn_kinit_cmd = params.dn_kinit_cmd
   
   File(params.exclude_file_path,
        content=Template("exclude_hosts_list.j2"),
@@ -142,18 +146,11 @@ def decommission():
        group=user_group
   )
   
-  Execute(dn_kinit_cmd,
-          user=hdfs_user
-  )
-
   if params.dfs_ha_enabled:
     # due to a bug in hdfs, refreshNodes will not run on both namenodes so we
     # need to execute each command scoped to a particular namenode
-    nn_refresh_cmd = format('dfsadmin -fs hdfs://{namenode_rpc} -refreshNodes')
+    cmd=["dfsadmin","-fs","hdfs://"+params.namenode_rpc,"-refreshNodes"]
   else:
-    nn_refresh_cmd = format('dfsadmin -refreshNodes')
-  ExecuteHadoop(nn_refresh_cmd,
-                user=hdfs_user,
-                conf_dir=conf_dir,
-                kinit_override=True,
-                bin_dir=params.hadoop_bin_dir)
+    cmd=["dfsadmin","-fs","-refreshNodes"]
+  executeSudoKrb(cmd)
+

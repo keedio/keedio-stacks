@@ -22,21 +22,10 @@ Ambari Agent
 from resource_management import *
 
 def zookeeper_service(action='start'):
-  import params
-
-  cmd = format("env ZOOCFGDIR={config_dir} ZOOCFG=zoo.cfg {zk_bin}/zkServer.sh")
-
   if action == 'start':
-    daemon_cmd = format("source {config_dir}/zookeeper-env.sh ; {cmd} start")
-    no_op_test = format("ls {zk_pid_file} >/dev/null 2>&1 && ps `cat {zk_pid_file}` >/dev/null 2>&1")
-    Execute(daemon_cmd,
-            not_if=no_op_test,
-            user=params.zk_user
-    )
+    cmd=Popen(['service','zookeeper-server','start'],stdout=None,stderr=None)
+    cmd.communicate()
+    Logger.info("Zookeeper service started: %s" % cmd.returncode == 0)
   elif action == 'stop':
-    daemon_cmd = format("source {config_dir}/zookeeper-env.sh ; {cmd} stop")
-    rm_pid = format("rm -f {zk_pid_file}")
-    Execute(daemon_cmd,
-            user=params.zk_user
-    )
-    Execute(rm_pid)
+    cmd=Popen(['service','zookeeper-server','stop'],stdout=None,stderr=None)
+

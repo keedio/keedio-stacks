@@ -31,6 +31,7 @@ tmp_dir = Script.get_tmp_dir()
 stack_version_unformatted = str(config['hostLevelParams']['stack_version'])
 hdp_stack_version = format_hdp_stack_version(stack_version_unformatted)
 security_enabled = config['configurations']['cluster-env']['security_enabled']
+kerberos_cache_file = config['configurations']['cluster-env']['kerberos_cache_file']
 stack_is_hdp22_or_further = hdp_stack_version != "" and compare_versions(hdp_stack_version, '2.2') >= 0
 hdfs_user = status_params.hdfs_user
 hadoop_pid_dir_prefix = status_params.hadoop_pid_dir_prefix
@@ -82,7 +83,7 @@ execute_path = os.environ['PATH'] + os.pathsep + hadoop_bin_dir
 ulimit_cmd = "ulimit -c unlimited; "
 
 #security params
-smoke_user_keytab = config['configurations']['cluster-env']['smokeuser_keytab']
+smoke_user_keytab = default('/configurations/cluster-env/smokeuser_keytab',None)
 hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']
 falcon_user = config['configurations']['falcon-env']['falcon_user']
 
@@ -151,6 +152,7 @@ hive_user = config['configurations']['hive-env']['hive_user']
 smoke_user =  config['configurations']['cluster-env']['smokeuser']
 mapred_user = config['configurations']['mapred-env']['mapred_user']
 hdfs_principal_name = config['configurations']['hadoop-env']['hdfs_principal_name']
+smoke_user_principal = default('/configurations/cluster-env/smokeuser_principal_name',None)
 
 user_group = config['configurations']['cluster-env']['user_group']
 proxyuser_group =  config['configurations']['hadoop-env']['proxyuser_group']
@@ -174,7 +176,7 @@ smoke_hdfs_user_dir = format("/user/{smoke_user}")
 smoke_hdfs_user_mode = 0770
 
 namenode_formatted_old_mark_dir = format("{hadoop_pid_dir_prefix}/hdfs/namenode/formatted/")
-namenode_formatted_mark_dir = format("/var/lib/hdfs/namenode/formatted/")
+namenode_formatted_mark = format("{hadoop_home}/namenode/formatted")
 
 fs_checkpoint_dir = config['configurations']['hdfs-site']['dfs.namenode.checkpoint.dir']
 
@@ -263,6 +265,8 @@ if not is_snamenode:
   exclude_packages += [format("hadoop-hdfs-secondarynamenode")]
 if not is_slave:
   exclude_packages += [format("hadoop-hdfs-datanode")]
+if not security_enabled:
+  exclude_packages += [format("python-krbV")]
   
 name_node_params = default("/commandParams/namenode", None)
 

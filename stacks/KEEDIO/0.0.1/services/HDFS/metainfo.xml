@@ -22,7 +22,7 @@
       <name>HDFS</name>
       <displayName>HDFS</displayName>
       <comment>Apache Hadoop Distributed File System</comment>
-      <version>2.1.0.2.0</version>
+      <version>2.2.0_0.0.1</version>
 
       <components>
         <component>
@@ -189,7 +189,9 @@
             <package>
               <name>hadoop-hdfs-secondarynamenode</name>
             </package>
-
+            <package>
+              <name>python-krbV</name>
+            </package>
           </packages>
         </osSpecific>
         

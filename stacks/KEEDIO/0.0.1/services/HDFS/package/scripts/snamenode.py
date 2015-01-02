@@ -58,7 +58,7 @@ class SNameNode(Script):
 
     env.set_params(status_params)
 
-    check_process_status(status_params.snamenode_pid_file)
+    snamenode(action="status")
 
 
 if __name__ == "__main__":

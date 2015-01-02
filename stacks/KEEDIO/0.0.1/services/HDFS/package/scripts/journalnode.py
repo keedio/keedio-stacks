@@ -18,55 +18,41 @@ limitations under the License.
 """
 
 from resource_management import *
-from utils import service
 from hdfs import hdfs
-
+from hdfs_journalnode import journalnode
 
 class JournalNode(Script):
   def install(self, env):
     import params
 
-    self.install_packages(env, params.exclude_packages)
     env.set_params(params)
+    self.install_packages(env, params.exclude_packages)
 
   def start(self, env):
     import params
 
     env.set_params(params)
     self.configure(env)
-    service(
-      action="start", name="journalnode", user=params.hdfs_user,
-      create_pid_dir=True,
-      create_log_dir=True
-    )
+    journalnode(action="start")
 
   def stop(self, env):
     import params
 
     env.set_params(params)
-    service(
-      action="stop", name="journalnode", user=params.hdfs_user,
-      create_pid_dir=True,
-      create_log_dir=True
-    )
+    journalnode(action="stop")
 
   def configure(self, env):
     import params
 
-    Directory(params.jn_edits_dir,
-              recursive=True,
-              owner=params.hdfs_user,
-              group=params.user_group
-    )
     env.set_params(params)
     hdfs()
-    pass
+    journalnode(action="configure")
 
   def status(self, env):
     import status_params
 
     env.set_params(status_params)
-    check_process_status(status_params.journalnode_pid_file)
+    journalnode(action="status")
 
 
 if __name__ == "__main__":
