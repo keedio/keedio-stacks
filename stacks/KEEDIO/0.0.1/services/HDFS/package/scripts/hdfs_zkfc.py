@@ -22,10 +22,30 @@ from utils import check_rc
 from subprocess import *
 
 def zkfc(action=None, format=False):
+  if action == "configure":
+    File("/etc/monit.d/hadoop-hdfs-zkfc",
+      content=StaticFile("monit.d_hadoop-hdfs-zkfc"))
+    File("/etc/monit.conf",
+      content=StaticFile("monit.conf"))
+ 
+  #First check monit is running and start if not
+  executed = Popen(["service","monit","status"])
+  executed.communicate()
+  rc = executed.returncode
+  if rc > 0 or action=="configure":
+    executed = Popen(["service","monit","restart"])
+    executed.communicate()
 
-  if action == "start" or action == "stop" or action == "status":
+  if action == "start" or action == "stop":
+    executed = Popen(["monit",action,"hadoop-hdfs-zkfc"],stdout=PIPE,stderr=PIPE)
+    out,err = executed.communicate()
+    rc = executed.returncode
+    check_rc(rc,out,err)
+
+  if action == "status":
     executed = Popen(["service","hadoop-hdfs-zkfc",action],stdout=PIPE,stderr=PIPE)
     out,err = executed.communicate()
     rc = executed.returncode
     check_rc(rc,out,err)
+
 

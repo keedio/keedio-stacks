@@ -257,10 +257,11 @@ if not lzo_enabled:
   exclude_packages += all_lzo_packages
 if not is_journalnode:
   exclude_packages += [format("hadoop-hdfs-journalnode")]
-if not dfs_ha_enabled:
-  exclude_packages += [format("hadoop-hdfs-zkfc")]
 if not is_namenode_master:
   exclude_packages += [format("hadoop-hdfs-namenode")]
+if not dfs_ha_enabled or not is_namenode_master:
+  exclude_packages += [format("hadoop-hdfs-zkfc")]
+  exclude_packages += [format("monit")]
 if not is_snamenode:
   exclude_packages += [format("hadoop-hdfs-secondarynamenode")]
 if not is_slave:
