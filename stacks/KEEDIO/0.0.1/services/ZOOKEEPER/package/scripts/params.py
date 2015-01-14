@@ -35,11 +35,11 @@ stack_is_hdp22_or_further = hdp_stack_version != "" and compare_versions(hdp_sta
 if stack_is_hdp22_or_further:
   zk_home = '/usr/hdp/current/zookeeper-client'
   zk_bin = '/usr/hdp/current/zookeeper-client/bin'
-  smoke_script = '/usr/hdp/current/zookeeper-client/bin/zkCli.sh'
+  zk_client = '/usr/hdp/current/zookeeper-client/bin/zkCli.sh'
 else:
   zk_home = '/usr'
   zk_bin = '/usr/lib/zookeeper/bin'
-  smoke_script = "/usr/lib/zookeeper/bin/zkCli.sh"
+  zk_client = "/usr/lib/zookeeper/bin/zkCli.sh"
 
 config_dir = "/etc/zookeeper/conf"
 zk_user =  config['configurations']['zookeeper-env']['zk_user']

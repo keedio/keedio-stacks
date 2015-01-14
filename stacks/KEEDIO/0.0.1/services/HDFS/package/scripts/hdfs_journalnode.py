@@ -30,9 +30,10 @@ def journalnode(action=None, format=False):
               group=params.user_group
     )
 
-  elif action == "start" or action == "stop" or action == "status":
+  if action == "start" or action == "stop" or action == "status":
     executed = Popen(["service","hadoop-hdfs-journalnode",action],stdout=PIPE,stderr=PIPE)
     out,err = executed.communicate()
-    rc = executed.returncode
-    check_rc(rc,out,err)
+    if action == "status":
+      rc = executed.returncode
+      check_rc(rc,out,err)
 

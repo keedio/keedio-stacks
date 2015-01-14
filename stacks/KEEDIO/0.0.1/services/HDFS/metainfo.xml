@@ -192,6 +192,9 @@
             <package>
               <name>python-krbV</name>
             </package>
+            <package>
+              <name>monit</name>
+            </package>
           </packages>
         </osSpecific>
         
