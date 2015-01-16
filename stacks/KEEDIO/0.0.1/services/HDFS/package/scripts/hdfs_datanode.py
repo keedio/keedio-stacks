@@ -47,7 +47,7 @@ def datanode(action=None):
 
     handle_dfs_data_dir(create_dirs, params)
 
-  elif action == "start" or action == "stop":
+  if action == "start" or action == "stop":
     """
     In this point, HDP code uses a much more complex execution,
     I assume it is for standarization porpuses and avoid using
@@ -57,5 +57,4 @@ def datanode(action=None):
     out,err=cmd.communicate()
     rc = cmd.returncode
     Logger.info("Datanode service %s: %s" % (action, rc == 0))
-    check_rc(rc,out,out)
 

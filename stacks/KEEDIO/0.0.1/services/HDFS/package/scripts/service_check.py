@@ -53,7 +53,6 @@ class HdfsServiceCheck(Script):
     for x in xrange(MAX_TRIES):
       Logger.info("Waiting for safemode OFF")
       out,err,rc = executeSudoKrb(safemode_command)
-      check_rc(rc,stdout=out,stderr=err)
       safemode_off = "Safe mode is OFF" in out
       if safemode_off:
         break

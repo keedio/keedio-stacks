@@ -36,6 +36,13 @@ def namenode(action=None, do_format=True):
   if action == "start":
     import params
     Logger.info("Starting namenode")
+    # This file is required when starting service
+    File(params.exclude_file_path,
+         content=Template("exclude_hosts_list.j2"),
+         owner=params.hdfs_user,
+         group=params.user_group
+    )
+
     if do_format:
       Logger.info("Namenode will be be formatted")
       format_namenode()
@@ -60,7 +67,7 @@ def namenode(action=None, do_format=True):
     cmd=Popen(['service','hadoop-hdfs-namenode','status'],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     rc=cmd.returncode
-    check_rc(rc,out,err)
+    check_rc(rc,stdout=out,stderr=err)
     
 def wait_safe_mode_off():
   import params 
