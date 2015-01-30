@@ -35,18 +35,18 @@ class Nodemanager(Script):
     env.set_params(params)
     nodemanages(action="configure")
     #self.configure(env) # FOR SECURITY
-    nodemanages(action="start")
+    nodemanager(action="start")
 
   def stop(self, env):
     import params
     env.set_params(params)
 
-    nodemanages(action="stop")
+    nodemanager(action="stop")
 
   def status(self, env):
     import status_params
     env.set_params(status_params)
-    nodemanages(action="status")
+    nodemanager(action="status")
 
 if __name__ == "__main__":
   Nodemanager().execute()

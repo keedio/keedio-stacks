@@ -21,7 +21,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-stacks/KEEDIO/0.0.1/services/HDFS/package/scripts/clean_install.sh
+clean_install.sh
 archive.zip
 .hash
 # PyInstaller

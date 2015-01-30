@@ -27,6 +27,7 @@ def resourcemanager(action=None):
     yarn_conf.configure(service="resourcemanager")
 
   if action == "start" or action == "stop" or action == "status":
-    executed = Popen(["service","hadoop-yarn-resourcemanager",action],stdout=PIPE,stderr=PIPE)
-    out,err = executed.communicate()
+    cmd = Popen(["service","hadoop-yarn-resourcemanager",action],stdout=PIPE,stderr=PIPE)
+    out,err = cmd.communicate()
+    rc=cmd.returncode
     check_rc(rc,stdout=out,stderr=err)

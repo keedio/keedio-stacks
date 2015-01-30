@@ -18,16 +18,23 @@ limitations under the License.
 """
 
 from resource_management import *
-from utils import check_rc
-from subprocess import *
-import yarn_conf
 
-def nodemanager(action=None):
-  if action == "configure" or action == "start":
-    yarn_conf.configure(service="nodemanager")
 
-  if action == "start" or action == "stop" or action == "status":
-    cmd = Popen(["service","hadoop-yarn-nodemanager",action],stdout=PIPE,stderr=PIPE)
-    out,err = cmd.communicate()
-    rc=cmd.returncode
-    check_rc(rc,stdout=out,stderr=err)
+class FlumeServiceCheck(Script):
+
+  def service_check(self, env):
+    import params
+
+    env.set_params(params)
+    if params.security_enabled:
+      principal_replaced = params.http_principal.replace("_HOST", params.hostname)
+      Execute(format("{kinit_path_local} -kt {http_keytab} {principal_replaced}"),
+              user=params.smoke_user)
+
+    Execute(format('env JAVA_HOME={java_home} {flume_bin} version'),
+            logoutput=True,
+            tries = 3,
+            try_sleep = 20)
+
+if __name__ == "__main__":
+  FlumeServiceCheck().execute()
