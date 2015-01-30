@@ -36,11 +36,11 @@ def namenode(action=None, do_format=True):
   if action == "start":
     import params
     Logger.info("Starting namenode")
-    # This file is required when starting service
+    #This file is required when starting service
     File(params.exclude_file_path,
-         content=Template("exclude_hosts_list.j2"),
-         owner=params.hdfs_user,
-         group=params.user_group
+	content=Template("exclude_hosts_list.j2"),
+	owner=params.hdfs_user,
+	group=params.user_group
     )
 
     if do_format:

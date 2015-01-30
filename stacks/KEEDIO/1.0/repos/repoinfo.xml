@@ -18,8 +18,8 @@
 <reposinfo>
   <os type="redhat6">
     <repo>
-      <baseurl>http://10.129.128.12:8082</baseurl>
-      <repoid>keedio-0.0.1</repoid>
+      <baseurl>http://10.129.128.12/openbus/1.0/rpm</baseurl>
+      <repoid>keedio-1.0</repoid>
       <reponame>keedio</reponame>
     </repo>
     <repo>
