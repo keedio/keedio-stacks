@@ -33,7 +33,7 @@ class Nodemanager(Script):
   def start(self, env):
     import params
     env.set_params(params)
-    nodemanages(action="configure")
+    nodemanager(action="configure")
     #self.configure(env) # FOR SECURITY
     nodemanager(action="start")
 

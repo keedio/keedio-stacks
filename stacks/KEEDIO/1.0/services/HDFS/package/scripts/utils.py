@@ -232,7 +232,6 @@ def executeSudoKrb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,in
   Logger.info("Executing %s" % str(cmd)) 
   executed=Popen(cmd,stdin=PIPE,stdout=PIPE,stderr=PIPE)
   out,err=executed.communicate(input=input)
-
   if secure and auth_token:
     auth_token.destroy()
 

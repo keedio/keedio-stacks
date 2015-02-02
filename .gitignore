@@ -54,3 +54,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+#Vim temporal files
+*.swp

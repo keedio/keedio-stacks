@@ -102,21 +102,21 @@ def create_hdfs_directories():
 
   cmd = ["hdfs","dfs","-mkdir","/tmp"] 
   rc = executeSudoKrb(cmd)[2]
-  if rc:
+  if rc == 0:
     cmd = ["hdfs","dfs","-chown",params.hdfs_user]
     rc = executeSudoKrb(cmd)[2]
-  if rc:
+  if rc == 0:
     cmd = ["hdfs","dfs","-chmod","1777"]
     rc = executeSudoKrb(cmd)[2]
    
   cmd = ["hdfs","dfs","-mkdir -p",params.smoke_hdfs_user_dir] 
   rc = executeSudoKrb(cmd)[2]
-  if rc:
-    cmd = ["hdfs","dfs","-chown -R",params.smoke_user]
+  if rc == 0:
+    cmd = ["hdfs","dfs","-chown -R",params.smoke_user, params.smoke_hdfs_user_dir]
     rc = executeSudoKrb(cmd)[2]
 
-  if rc:
-    cmd = ["hdfs","dfs","-chmod -R",params.smoke_hdfs_user_mode]
+  if rc == 0:
+    cmd = ["hdfs","dfs","-chmod -R",str(params.smoke_hdfs_user_mode), params.smoke_hdfs_user_dir]
     rc = executeSudoKrb(cmd)[2]
 
 def format_namenode(force=None):
