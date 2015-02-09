@@ -67,6 +67,10 @@ def flume(action = None):
       from utils import check_rc
       rc = executed.returncode
       check_rc(rc,out,err)
+    if action == "stop":
+      filelist = glob.glob(params.flume_agent_conf_dir+"/*.conf")
+      for f in filelist:
+        os.remove(f)
 
 
 def ambari_meta(agent_name, agent_conf):

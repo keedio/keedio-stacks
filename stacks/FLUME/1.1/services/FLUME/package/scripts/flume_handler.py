@@ -35,7 +35,8 @@ class FlumeHandler(Script):
     import params
 
     env.set_params(params)
-
+    
+    flume(action='config')
     flume(action='start')
 
   def stop(self, env):
