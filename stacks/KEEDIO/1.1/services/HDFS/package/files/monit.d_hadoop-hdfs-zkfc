@@ -1,0 +1,4 @@
+check process hadoop-hdfs-zkfc with pidfile /var/run/hadoop-hdfs/hadoop-hdfs-zkfc.pid
+  start program = "/etc/init.d/hadoop-hdfs-zkfc start" 
+  stop program = "/etc/init.d/hadoop-hdfs-zkfc  stop"
+#  if 2 restarts within 5 cycles then alert
