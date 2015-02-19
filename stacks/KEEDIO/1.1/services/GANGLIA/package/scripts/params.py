@@ -64,8 +64,7 @@ jtnode_host = set(default("/clusterHostInfo/jtnode_host", []))
 rm_host = set(default("/clusterHostInfo/rm_host", []))
 hs_host = set(default("/clusterHostInfo/hs_host", []))
 hbase_master_hosts = set(default("/clusterHostInfo/hbase_master_hosts", []))
-# datanodes are marked as slave_hosts
-slave_hosts = set(default("/clusterHostInfo/slave_hosts", []))
+datanodes_hosts = set(default("/clusterHostInfo/slave_hosts", []))
 tt_hosts = set(default("/clusterHostInfo/mapred_tt_hosts", []))
 nm_hosts = set(default("/clusterHostInfo/nm_hosts", []))
 hbase_rs_hosts = set(default("/clusterHostInfo/hbase_rs_hosts", []))
@@ -77,7 +76,7 @@ kafka_broker_hosts =  set(default("/clusterHostInfo/kafka_broker_hosts", []))
 kafka_ganglia_port = default("/configurations/kafka-broker/kafka.ganglia.metrics.port", 8671)
 
 pure_slave = not hostname in (namenode_host | jtnode_host | rm_host | hs_host | \
-                              hbase_master_hosts | slave_hosts | tt_hosts | hbase_rs_hosts | \
+                              hbase_master_hosts | datanodes_hosts | tt_hosts | hbase_rs_hosts | \
                               flume_hosts | nm_hosts | jn_hosts | nimbus_server_hosts | \
                               supervisor_server_hosts)
 is_ganglia_server_host = (hostname == ganglia_server_host)
@@ -87,7 +86,7 @@ has_jobtracker = not len(jtnode_host) == 0
 has_resourcemanager = not len(rm_host) == 0
 has_historyserver = not len(hs_host) == 0
 has_hbase_masters = not len(hbase_master_hosts) == 0
-has_slaves = not len(slave_hosts) == 0
+has_datanodes = not len(datanodes_hosts) == 0
 has_tasktracker = not len(tt_hosts) == 0
 has_nodemanager = not len(nm_hosts) == 0
 has_hbase_rs = not len(hbase_rs_hosts) == 0
@@ -96,6 +95,32 @@ has_journalnode = not len(jn_hosts) == 0
 has_nimbus_server = not len(nimbus_server_hosts) == 0
 has_supervisor_server = not len(supervisor_server_hosts) == 0
 has_kafka_broker = not len(kafka_broker_hosts) == 0
+
+clusters=["Slaves"]
+if has_namenodes:
+  clusters.append("NameNode")
+if has_hbase_masters:
+  clusters.append("HBaseMaster")
+if has_resourcemanager:
+  clusters.append("ResourceManager")
+if has_nodemanager:
+  clusters.append("NodeManager")
+if has_historyserver:
+  clusters.append("HistoryServer")
+if has_datanodes:
+  clusters.append("DataNode")
+if has_hbase_rs:
+  clusters.append("HBaseRegionServer")
+if has_nimbus_server:
+  clusters.append("Nimbus")
+if has_supervisor_server:
+  clusters.append("Supervisor")
+if has_kafka_broker:
+  clusters.append("Kafka")
+if has_flume:
+  clusters.append("FlumeServer")
+if has_journalnode:
+  clusters.append("JournalNode")
 
 exclude_packages = []
 if not is_ganglia_server_host:
@@ -121,7 +146,7 @@ ganglia_cluster_names = {
   "ReservedPort3": [("ReservedPort3", 8669)]
 }
 
-ganglia_clusters = [("Slaves", 8658)]
+ganglia_clusters = [("Slaves", 8653)]
 
 for key in ganglia_cluster_names:
   property_name = format("/clusterHostInfo/{key}")

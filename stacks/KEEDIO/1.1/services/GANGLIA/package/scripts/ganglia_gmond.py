@@ -21,11 +21,13 @@ from subprocess import *
 from functions import check_rc
 
 def gmond(action=None):# 'start' or 'stop'
-  cmd=Popen(['service','gmond',action],stdout=None,stderr=None)
-  cmd.communicate()
-  rc=cmd.returncode
-  Logger.info("Ganglia gmond service %s: %s" % (action, cmd.returncode == 0))
+  import params
+  for service in params.clusters:
+    cmd=Popen(['service','gmond.'+service,action],stdout=None,stderr=None)
+    cmd.communicate()
+    rc=cmd.returncode
+    Logger.info("Ganglia gmond.%s service %s: %s" % (service,action, cmd.returncode == 0))
    
-  if action == "status" :
-    from utils import check_rc
-    check_rc(rc,stdout=out,stderr=err)
+    if action == "status" :
+      from utils import check_rc
+      check_rc(rc,stdout=out,stderr=err)

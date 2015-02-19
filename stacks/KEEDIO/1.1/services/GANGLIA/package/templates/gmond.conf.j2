@@ -6,7 +6,11 @@ globals {
   user = {{gmond_user}}
   debug_level = 0
   max_udp_msg_len = 1472
+{% if is_ganglia_server_host and clusterName != Slave %}
+ mute = yes
+{% else %}
   mute = no
+{% endif %}
   deaf = no
   allow_extra_data = yes
   host_dmax = 0 /*secs */
@@ -41,22 +45,22 @@ udp_send_channel {
                        # interface and the DNS names associated with
                        # those IPs will be used to create the RRDs.
   bind_hostname = yes
-  host = {{ganglia_server_host}}
-  port = {{gmondPort}}
+  host = {{gmond_server}}
+  port = {{gmond_port}}
   ttl = 1
 }
-{%if is_ganglia_server_host %} 
+{% if is_ganglia_server_host %} 
 /* You can specify as many udp_recv_channels as you like as well. */
 udp_recv_channel {
-  port = {{gmondPort}}
-  bind = {{ganglia_server_host}}
+  bind = {{gmond_server}}
+  port = {{gmond_port}}
 }
 {% endif %}
 /* You can specify as many tcp_accept_channels as you like to share
    an xml description of the state of the cluster */
 tcp_accept_channel {
   bind = 0.0.0.0
-  port = {{gmondPort}}
+  port = {{gmond_port}}
 }
 
 /* Each metrics module that is referenced by gmond must be specified and

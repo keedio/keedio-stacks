@@ -28,6 +28,28 @@
     For configuring multiple agents on the same host, provide the combined agent configurations here. Each agent should have a different name.</description>
     <value>
 # Flume agent config
+agent-1.sources = tailFile
+agent-1.channels = memoryChannel
+agent-1.sinks = fileRoll  
+
+# SOURCES
+
+        # tailFile
+                        agent-1.sources.tailFile.type = exec
+                                        agent-1.sources.tailFile.command = tail -F /var/log/ambari-agent/ambari-agent.log
+                                                        agent-1.sources.tailFile.channels = memoryChannel
+
+# CHANNELS
+
+        # memoryChannel
+                        agent-1.channels.memoryChannel.type = memory
+
+# SINKS
+        # fileRoll
+                        agent-1.sinks.fileRoll.type = file_roll
+                                        agent-1.sinks.fileRoll.channel = memoryChannel
+                                                        agent-1.sinks.fileRoll.sink.rollInterval= 0
+                                                                        agent-1.sinks.fileRoll.sink.directory = /tmp
     </value>
   </property>
 </configuration>

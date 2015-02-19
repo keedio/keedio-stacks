@@ -22,42 +22,10 @@ import os
 def config():
   import params
 
-  shell_cmds_dir = params.ganglia_shell_cmds_dir
-  shell_files = ['gmetadLib.sh', 'gmondLib.sh', 'setupGanglia.sh']
-  Directory(shell_cmds_dir,
-            owner="root",
-            group="root",
-            recursive=True
-  )
   File("/etc/init.d/gmond",
             content=StaticFile("gmond.init"),
             mode=0755
   )
-  for sh_file in shell_files:
-    shell_file(sh_file)
-  for conf_file in ['gangliaClusters.conf', 'gangliaEnv.sh', 'gangliaLib.sh']:
-    ganglia_TemplateConfig(conf_file)
-
-
-def shell_file(name):
-  import params
-
-  File(params.ganglia_shell_cmds_dir + os.sep + name,
-       content=StaticFile(name),
-       mode=0755
-  )
-
-
-def ganglia_TemplateConfig(name, mode=0755, tag=None):
-  import params
-
-  TemplateConfig(format("{params.ganglia_shell_cmds_dir}/{name}"),
-                 owner="root",
-                 group="root",
-                 template_tag=tag,
-                 mode=mode
-  )
-
 
 def generate_daemon(ganglia_service,
                     name=None,
@@ -65,18 +33,41 @@ def generate_daemon(ganglia_service,
                     owner=None,
                     group=None):
   import params
-
+  import functions
+  for gmond_server in params.ganglia_clusters:
+    if gmond_server[0] == name:
+      gmond_port = gmond_server[1]
+      break
+  params.gmond_server=gmond_server[0]
+  params.gmond_port=gmond_server[1]
   cmd = ""
   if ganglia_service == "gmond":
-    if role == "server":
-      cmd = "{params.ganglia_shell_cmds_dir}/setupGanglia.sh -c {name} -m -o {owner} -g {group}"
-    else:
-      cmd = "{params.ganglia_shell_cmds_dir}/setupGanglia.sh -c {name} -o {owner} -g {group}"
+    # When multi daemon gmond where packaged, should be changeb by only a synbolic link with service name
+    File("/etc/init.d/gmond." + name,
+      content=StaticFile("gmond.init"),
+      mode=0755 )
+    functions.turn_off_autostart("gmond."+name)
+    File("/etc/ganglia/gmond."+name+".conf",
+      content=Template("gmond.conf.j2",
+        clusterName=name,
+        gmond_server=params.ganglia_server_host,
+        gmond_port=gmond_port,
+        is_master_server=role=="server"),
+      mode=0644)
+    Directory("/var/run/gmond",
+      owner="root",
+      group="root",
+      recursive=True
+    )
   elif ganglia_service == "gmetad":
-    cmd = "{params.ganglia_shell_cmds_dir}/setupGanglia.sh -t -o {owner} -g {group}"
+    File("/etc/ganglia/gmetad.conf",
+      content=Template("gmetad.conf.j2",gridName="KEEDIO"),
+      mode=0644 )
+    functions.turn_off_autostart("gmetad")
   else:
     raise Fail("Unexpected ganglia service")
   Execute(format(cmd),
           path=[params.ganglia_shell_cmds_dir, "/usr/sbin",
                 "/sbin:/usr/local/bin", "/bin", "/usr/bin"]
   )
+

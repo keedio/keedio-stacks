@@ -45,7 +45,16 @@
               <name>flume</name>
             </package>
             <package>
-              <name>flume-*</name>
+              <name>flume-agent</name>
+            </package>
+            <package>
+              <name>flume-kafka-avro-sink</name>
+            </package>
+            <package>
+              <name>flume-kafka-sink</name>
+            </package>
+            <package>
+              <name>flume-snmp-source</name>
             </package>
           </packages>
         </osSpecific>
