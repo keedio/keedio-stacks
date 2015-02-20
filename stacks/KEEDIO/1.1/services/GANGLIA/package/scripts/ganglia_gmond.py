@@ -18,7 +18,6 @@ limitations under the License.
 
 from resource_management import *
 from subprocess import *
-from functions import check_rc
 
 def gmond(action=None):# 'start' or 'stop'
   import params
@@ -29,5 +28,5 @@ def gmond(action=None):# 'start' or 'stop'
     Logger.info("Ganglia gmond.%s service %s: %s" % (service,action, cmd.returncode == 0))
    
     if action == "status" :
-      from utils import check_rc
+      from functions import check_rc
       check_rc(rc,stdout=out,stderr=err)

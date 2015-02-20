@@ -18,7 +18,6 @@ limitations under the License.
 
 from resource_management import *
 from subprocess import *
-from functions import check_rc
 
 def gmetad(action=None):# 'start' or 'stop'
   cmd=Popen(['service','gmetad',action],stdout=None,stderr=None)
@@ -27,7 +26,7 @@ def gmetad(action=None):# 'start' or 'stop'
   Logger.info("Ganglia gmetad service %s: %s" % (action, cmd.returncode == 0))
    
   if action == "status":
-    from utils import check_rc
+    from functions import check_rc
     check_rc(rc,stdout=out,stderr=err)
   if action =="start" or action == "stop":
     MonitorWebserver("restart")
