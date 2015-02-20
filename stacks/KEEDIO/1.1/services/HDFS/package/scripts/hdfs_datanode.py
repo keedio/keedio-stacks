@@ -19,33 +19,24 @@ limitations under the License.
 
 from resource_management import *
 from resource_management.libraries.functions.dfs_datanode_helper import handle_dfs_data_dir
-from utils import service,check_rc
+from utils import * 
 from subprocess import *
-
-def create_dirs(data_dir, params):
-  """
-  :param data_dir: The directory to create
-  :param params: parameters
-  """
-  Directory(data_dir,
-            recursive=True,
-            mode=0755,
-            owner=params.hdfs_user,
-            group=params.user_group,
-            ignore_failures=True
-  )
 
 
 def datanode(action=None):
   import params
+
   if action == "configure":
+    os_mkdir(params.dfs_data_dir,
+      owner=params.hdfs_user,
+      group=params.hdfs_group,
+      mode=750)
+
     Directory(params.dfs_domain_socket_dir,
               recursive=True,
               mode=0751,
               owner=params.hdfs_user,
               group=params.user_group)
-
-    handle_dfs_data_dir(create_dirs, params)
 
   if action == "start" or action == "stop":
     """

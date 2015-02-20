@@ -6,8 +6,8 @@ globals {
   user = {{gmond_user}}
   debug_level = 0
   max_udp_msg_len = 1472
-{% if is_ganglia_server_host and clusterName != "Slave" %}
- mute = yes
+{% if is_ganglia_server_host and clusterName != "Slaves" %}
+  mute = yes
 {% else %}
   mute = no
 {% endif %}
