@@ -20,8 +20,8 @@ from resource_management import *
 from subprocess import *
 
 def gmetad(action=None):# 'start' or 'stop'
-  cmd=Popen(['service','gmetad',action],stdout=None,stderr=None)
-  cmd.communicate()
+  cmd=Popen(['service','gmetad',action],stdout=PIPE,stderr=PIPE)
+  out,err=cmd.communicate()
   rc=cmd.returncode
   Logger.info("Ganglia gmetad service %s: %s" % (action, cmd.returncode == 0))
    

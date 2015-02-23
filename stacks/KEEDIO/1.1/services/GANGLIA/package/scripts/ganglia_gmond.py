@@ -18,12 +18,16 @@ limitations under the License.
 
 from resource_management import *
 from subprocess import *
+from glob import glob
+from os.path import basename
 
 def gmond(action=None):# 'start' or 'stop'
-  import params
-  for service in params.clusters:
-    cmd=Popen(['service','gmond.'+service,action],stdout=None,stderr=None)
-    cmd.communicate()
+  clusters = glob('/etc/init.d/gmond.*')
+  for service in clusters:
+    base=basename(service)
+    cmd=Popen(['service',base,action],stdout=PIPE,stderr=PIPE)
+    out,err=cmd.communicate()
+    
     rc=cmd.returncode
     Logger.info("Ganglia gmond.%s service %s: %s" % (service,action, cmd.returncode == 0))
    
