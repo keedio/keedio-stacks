@@ -29,15 +29,12 @@ def datanode(action=None):
   if action == "configure":
     os_mkdir(params.dfs_data_dir,
       owner=params.hdfs_user,
-      group=params.hdfs_group,
-      mode=750)
-
-    Directory(params.dfs_domain_socket_dir,
-              recursive=True,
-              mode=0751,
-              owner=params.hdfs_user,
-              group=params.user_group)
-
+      group=params.user_group,
+      mode="0750")
+    os_mkdir(params.dfs_domain_socket_dir,
+      owner=params.hdfs_user,
+      group=params.user_group,
+      mode="0751" )
   if action == "start" or action == "stop":
     """
     In this point, HDP code uses a much more complex execution,

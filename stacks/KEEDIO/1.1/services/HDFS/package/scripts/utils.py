@@ -153,7 +153,7 @@ def hdfs_mkdir(sudo_cmd,path,owner=None,group=None,recursive=False,mode=None):
   for cmd in cmd_list:
     Popen(cmd)
 
-def os_mkdir(directories,owner=None,group=None,mode=0755):
+def os_mkdir(directories,owner=None,group=None,mode="0755"):
   failed=[]
   for path in directories.split(','):
     status = __mkdir(path,mode)
