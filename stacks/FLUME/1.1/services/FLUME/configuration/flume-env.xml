@@ -67,7 +67,9 @@ export JAVA_HOME={{java_home}}
 
 # Give Flume more memory and pre-allocate, enable remote monitoring via JMX
 # export JAVA_OPTS="-Xms100m -Xmx2000m -Dcom.sun.management.jmxremote"
-
+{% if has_ganglia_server %}
+export JAVA_OPTS="-Dflume.monitoring.type=ganglia -Dflume.monitoring.hosts={{ganglia_server_host}}:8655" 
+{% endif %}
 # Note that the Flume conf directory is always included in the classpath.
 #FLUME_CLASSPATH=""
 
