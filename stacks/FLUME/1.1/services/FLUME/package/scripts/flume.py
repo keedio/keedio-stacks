@@ -20,6 +20,7 @@ limitations under the License.
 import glob
 import json
 import os
+import re
 from resource_management import *
 from subprocess import *
 
@@ -37,23 +38,22 @@ def flume(action = None):
     File(os.path.join(params.flume_conf_dir, 'log4j.properties'),
       content=StaticFile("log4j.properties"))
 
-    flume_env_file = os.path.join(params.flume_conf_dir, 'flume-env.sh')
-
-    File(flume_env_file,
-         owner=params.flume_user,
-         content=InlineTemplate(params.flume_env_sh_template)
-    )
-
     flume_agents = {}
     if params.flume_conf_content is not None:
       flume_agents = build_flume_topology(params.flume_conf_content)
+
+    if params.flume_env_content is not None:
+      flume_agents_env = build_flume_env(params.flume_env_content)
 
     for agent in flume_agents.keys():
       flume_meta_file = os.path.join(params.flume_conf_dir, 'ambari-meta_%s.json' % agent )
       File(flume_meta_file,
         content = json.dumps(ambari_meta(agent, flume_agents[agent])),
         mode = 0644)
-
+      flume_env = flume_agents_env[agent] if flume_agents_env.has_key(agent) else flume_agents_env['default']
+      File(os.path.join(params.flume_agent_conf_dir,'%s.sh' % agent),
+        content = InlineTemplate(flume_env),
+        mode = 0644)
       flume_agent_conf_file = os.path.join(params.flume_agent_conf_dir, '%s.conf' % agent)
 
       PropertiesFile(flume_agent_conf_file,
@@ -118,6 +118,22 @@ def build_flume_topology(content):
 
 
   return result
+
+def build_flume_env(flume_env_content):
+  all_env=dict()
+  pattern = re.compile('###\s*(\w[\-\w]*)\s*###')
+  agent="default"
+  current_env=""
+  for line in flume_env_content.split('\n'):
+    match = pattern.match(line)
+    if match is not None:
+      all_env[agent]=current_env
+      agent=match.group(1)
+      current_env=""
+    else:
+      current_env+="\n"+line
+  all_env[agent]=current_env
+  return all_env
 
 def is_live(pid_file):
   live = False

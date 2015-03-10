@@ -49,7 +49,7 @@ flume_run_dir = '/var/run/flume'
 flume_user = 'flume'
 flume_group = 'flume'
 
-if 'flume-env' in config['configurations'] and 'flume_user' in config['configurations']['flume-env']:
+if 'flume-user' in config['configurations'] and 'flume_user' in config['configurations']['flume-env']:
   flume_user = config['configurations']['flume-env']['flume_user']
 
 if (('flume-conf' in config['configurations']) and('content' in config['configurations']['flume-conf'])):
@@ -62,10 +62,14 @@ if (('flume-log4j' in config['configurations']) and ('content' in config['config
 else:
   flume_log4j_content = None
 
+if (('flume-env' in config['configurations']) and ('content' in config['configurations']['flume-env'])):
+  flume_env_content = config['configurations']['flume-env']['content']
+else:
+  flume_env_content = None
+
 targets = default('/commandParams/flume_handler', None)
 flume_command_targets = [] if targets is None else targets.split(',')
 
-flume_env_sh_template = config['configurations']['flume-env']['content']
 
 ganglia_server_hosts = default('/clusterHostInfo/ganglia_server_host', [])
 has_ganglia_server = not len(ganglia_server_hosts) == 0

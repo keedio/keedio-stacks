@@ -34,22 +34,22 @@ agent-1.sinks = fileRoll
 
 # SOURCES
 
-        # tailFile
-                        agent-1.sources.tailFile.type = exec
-                                        agent-1.sources.tailFile.command = tail -F /var/log/ambari-agent/ambari-agent.log
-                                                        agent-1.sources.tailFile.channels = memoryChannel
+# tailFile
+agent-1.sources.tailFile.type = exec
+agent-1.sources.tailFile.command = tail -F /var/log/ambari-agent/ambari-agent.log
+agent-1.sources.tailFile.channels = memoryChannel
 
 # CHANNELS
 
-        # memoryChannel
-                        agent-1.channels.memoryChannel.type = memory
+# memoryChannel
+agent-1.channels.memoryChannel.type = memory
 
 # SINKS
-        # fileRoll
-                        agent-1.sinks.fileRoll.type = file_roll
-                                        agent-1.sinks.fileRoll.channel = memoryChannel
-                                                        agent-1.sinks.fileRoll.sink.rollInterval= 0
-                                                                        agent-1.sinks.fileRoll.sink.directory = /tmp
+# fileRoll
+agent-1.sinks.fileRoll.type = file_roll
+agent-1.sinks.fileRoll.channel = memoryChannel
+agent-1.sinks.fileRoll.sink.rollInterval= 0
+agent-1.sinks.fileRoll.sink.directory = /tmp
     </value>
   </property>
 </configuration>
