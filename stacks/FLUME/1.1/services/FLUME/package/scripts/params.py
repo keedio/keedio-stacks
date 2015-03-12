@@ -48,6 +48,7 @@ flume_log_dir = '/var/log/flume'
 flume_run_dir = '/var/run/flume'
 flume_user = 'flume'
 flume_group = 'flume'
+flume_extra = None
 
 if 'flume-user' in config['configurations'] and 'flume_user' in config['configurations']['flume-env']:
   flume_user = config['configurations']['flume-env']['flume_user']
@@ -66,6 +67,8 @@ if (('flume-env' in config['configurations']) and ('content' in config['configur
   flume_env_content = config['configurations']['flume-env']['content']
 else:
   flume_env_content = None
+if 'flume-extra' in config['configurations']:
+  flume_extra = config['configurations']['flume-extra']
 
 targets = default('/commandParams/flume_handler', None)
 flume_command_targets = [] if targets is None else targets.split(',')

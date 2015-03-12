@@ -14,3 +14,5 @@ flume-env.sh files (which have been renamed to [agent-name].sh). To do so, in fl
 to separate personalized flume-env, if ommited default will be used. Default is considered the first block in the context before any "magical tag".
 If magical tag default is introduced it will override the initial one if exists.
 If a magical tag is declared more than once, last one will take precedence.
+
+It is possible to deploy extra files with flume. TO do it, in section "Custom flume-extra"->Add Property-> key=IGNORED, VALUE="json with schema https://github.com/keedio/keedio-stacks/tree/development/stacks/FLUME/1.1/services/FLUME/package/files/flume_schema.schema"

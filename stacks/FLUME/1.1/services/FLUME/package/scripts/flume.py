@@ -26,7 +26,9 @@ from subprocess import *
 
 def flume(action = None):
   import params
+  import flume_extra 
 
+  
   if action == 'config':
     # remove previously defined meta's
     for n in find_expected_agent_names():
@@ -60,6 +62,23 @@ def flume(action = None):
         properties=flume_agents[agent],
         mode = 0644)
 
+    if params.flume_extra is not None:
+      #import jsonschema
+      #File('/tmp/flume_extra.schema',
+      #  content=StaticFile("flume_extra.schema"))
+      #flume_extra_schema = json.loads(open('/tmp/flume_extra.schema').read())
+
+      for extra_file_raw in params.flume_extra.values():
+        extra_file=json.loads(extra_file_raw)
+        if not extra_file.has_key('path'):
+          raise Exception("path field is required")
+        File(extra_file['path'],
+          mode = int(extra_file['mode'],8),
+          owner = extra_file['owner'],
+          group = extra_file['group'],
+          content=extra_file['content']
+        )
+
   if action == "start" or action == "stop" or action == "status":
     executed = Popen(["service","flume-agent",action],stdout=PIPE,stderr=PIPE)
     out,err = executed.communicate()
@@ -75,6 +94,13 @@ def flume(action = None):
 
 def ambari_meta(agent_name, agent_conf):
   res = {}
+
+  sources = agent_conf[agent_name + '.sources'].split(' ')
+  res['sources_count'] = len(sources)
+
+  sinks = agent_conf[agent_name + '.sinks'].split(' ')
+  res['sinks_count'] = len(sinks)
+
 
   sources = agent_conf[agent_name + '.sources'].split(' ')
   res['sources_count'] = len(sources)
@@ -220,10 +246,3 @@ def _set_desired_state(state):
 
 def get_desired_state():
   import params
-
-  try:
-    with open(os.path.join(params.flume_run_dir, 'ambari-state.txt'), 'r') as fp:
-      return fp.read()
-  except:
-    return 'INSTALLED'
-  

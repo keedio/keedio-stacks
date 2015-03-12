@@ -56,6 +56,9 @@
             <package>
               <name>flume-snmp-source</name>
             </package>
+            <!--package>
+              <name>python-jsonschema</name>
+            </package-->
           </packages>
         </osSpecific>
       </osSpecifics>
