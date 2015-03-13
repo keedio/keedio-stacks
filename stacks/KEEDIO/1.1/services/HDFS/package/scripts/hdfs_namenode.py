@@ -128,8 +128,7 @@ def format_namenode(force=None):
   hadoop_conf_dir = params.hadoop_conf_dir
 
   if not params.dfs_ha_enabled:
-    if not force:
-      if os.path.exists(mark_file):
+    if not force and os.path.exists(mark_file):
         Logger.info("NN won't be formatted. %s file exists." % mark_file)
         return False
     cmd = ["hdfs","namenode","-format"]
