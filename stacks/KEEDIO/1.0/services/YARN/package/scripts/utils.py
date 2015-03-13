@@ -210,7 +210,7 @@ def __owner_group(owner,group):
     chown = ":" + group
   return chown    
 
-def executeSudoKrb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,input=None):
+def execute_sudo_krb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,input=None):
   import params
   
   secure = params.security_enabled

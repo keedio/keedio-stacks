@@ -80,14 +80,14 @@ def wait_safe_mode_off():
   if params.dfs_ha_enabled:
     Logger.info("Checking if active NN")
     cmd = ["hdfs","haadmin","-getServiceState",params.namenode_id]
-    out,err,rc = executeSudoKrb(cmd)
+    out,err,rc = execute_sudo_krb(cmd)
     check_rc(rc,stdout=out,stderr=err)
     isActive= out=="active"
   if isActive:  
     for x in xrange(MAX_TRIES):
       Logger.info("Waiting for safemode OFF")
       cmd=["hdfs","dfsadmin","-safemode","get"]
-      out,err,rc = executeSudoKrb(cmd)
+      out,err,rc = execute_sudo_krb(cmd)
       check_rc(rc,stdout=out,stderr=err)
       safemode_off = "Safe mode is OFF" in out
       if safemode_off:
@@ -101,23 +101,23 @@ def create_hdfs_directories():
   import params
 
   cmd = ["hdfs","dfs","-mkdir","/tmp"] 
-  rc = executeSudoKrb(cmd)[2]
+  rc = execute_sudo_krb(cmd)[2]
   if rc == 0:
     cmd = ["hdfs","dfs","-chown",params.hdfs_user]
-    rc = executeSudoKrb(cmd)[2]
+    rc = execute_sudo_krb(cmd)[2]
   if rc == 0:
     cmd = ["hdfs","dfs","-chmod","1777"]
-    rc = executeSudoKrb(cmd)[2]
+    rc = execute_sudo_krb(cmd)[2]
    
   cmd = ["hdfs","dfs","-mkdir -p",params.smoke_hdfs_user_dir] 
-  rc = executeSudoKrb(cmd)[2]
+  rc = execute_sudo_krb(cmd)[2]
   if rc == 0:
     cmd = ["hdfs","dfs","-chown -R",params.smoke_user, params.smoke_hdfs_user_dir]
-    rc = executeSudoKrb(cmd)[2]
+    rc = execute_sudo_krb(cmd)[2]
 
   if rc == 0:
     cmd = ["hdfs","dfs","-chmod -R",str(params.smoke_hdfs_user_mode), params.smoke_hdfs_user_dir]
-    rc = executeSudoKrb(cmd)[2]
+    rc = execute_sudo_krb(cmd)[2]
 
 def format_namenode(force=None):
   import params
@@ -133,7 +133,7 @@ def format_namenode(force=None):
         Logger.info("NN won't be formatted. %s file exists." % mark_file)
         return False
     cmd = ["hdfs","namenode","-format"]
-    out,err,rc=executeSudoKrb(cmd)
+    out,err,rc=execute_sudo_krb(cmd)
     Logger.info("NN formatted %s\n%s" % (rc==0,out))
     check_rc(rc,stdout=out,stderr=err)
     file = open(mark_file, "w")
@@ -159,5 +159,5 @@ def decommission():
     cmd=["dfsadmin","-fs","hdfs://"+params.namenode_rpc,"-refreshNodes"]
   else:
     cmd=["dfsadmin","-fs","-refreshNodes"]
-  executeSudoKrb(cmd)
+  execute_sudo_krb(cmd)
 

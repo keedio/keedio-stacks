@@ -39,7 +39,7 @@ class HdfsServiceCheck(Script):
     smoke_keytab =params.smoke_user_keytab
     safemode_command = ["hdfs","dfsadmin","-safemode","get"]
 
-    execute_smoke = partial(executeSudoKrb,user=smoke_user,principal=smoke_user_principal,keytab=smoke_keytab)
+    execute_smoke = partial(execute_sudo_krb,user=smoke_user,principal=smoke_user_principal,keytab=smoke_keytab)
 
     create_dir_cmd = ["hdfs","dfs","-mkdir",dir]
     chmod_command = ["hdfs","dfs","-chmod","777",dir]
@@ -52,7 +52,7 @@ class HdfsServiceCheck(Script):
 
     for x in xrange(MAX_TRIES):
       Logger.info("Waiting for safemode OFF")
-      out,err,rc = executeSudoKrb(safemode_command)
+      out,err,rc = execute_sudo_krb(safemode_command)
       safemode_off = "Safe mode is OFF" in out
       if safemode_off:
         break

@@ -82,15 +82,15 @@ class NameNode(Script):
     threshold = name_node_parameters['threshold']
     _print("Starting balancer with threshold = %s\n" % threshold)
     
-    def calculateCompletePercent(first, current):
+    def calculate_complete_percent(first, current):
       return 1.0 - current.bytesLeftToMove/first.bytesLeftToMove
     
     
-    def startRebalancingProcess(threshold):
+    def start_rebalancing_progress(threshold):
       rebalanceCommand = format('export PATH=$PATH:{hadoop_bin_dir} ; hdfs --config {hadoop_conf_dir} balancer -threshold {threshold}')
       return ['su','-',params.hdfs_user,'-c', rebalanceCommand]
     
-    command = startRebalancingProcess(threshold)
+    command = start_rebalancing_progress(threshold)
     
     basedir = os.path.join(env.config.basedir, 'scripts')
     if(threshold == 'DEBUG'): #FIXME TODO remove this on PROD
@@ -112,7 +112,7 @@ class NameNode(Script):
       pl = parser.parse_line(line)
       if pl:
         res = pl.to_json()
-        res['completePercent'] = calculateCompletePercent(parser.initialLine, pl) 
+        res['completePercent'] = calculate_complete_percent(parser.initialLine, pl) 
         
         self.put_structured_out(res)
       elif parser.state == 'PROCESS_FINISED' : 
