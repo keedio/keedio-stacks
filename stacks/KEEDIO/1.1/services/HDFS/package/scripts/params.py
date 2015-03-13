@@ -61,7 +61,8 @@ if stack_is_hdp22_or_further:
       secure_dn_ports_are_in_use = utils.is_secure_port(dfs_dn_port) or utils.is_secure_port(dfs_dn_https_port)
     elif dfs_http_policy == "HTTP_AND_HTTPS":
       secure_dn_ports_are_in_use = utils.is_secure_port(dfs_dn_port) or utils.is_secure_port(dfs_dn_http_port) or utils.is_secure_port(dfs_dn_https_port)
-    else:   # params.dfs_http_policy == "HTTP_ONLY" or not defined:
+    else:   
+      # params.dfs_http_policy == "HTTP_ONLY" or not defined:
       secure_dn_ports_are_in_use = utils.is_secure_port(dfs_dn_port) or utils.is_secure_port(dfs_dn_http_port)
     if secure_dn_ports_are_in_use:
       hadoop_secure_dn_user = hdfs_user
@@ -176,7 +177,7 @@ smoke_hdfs_user_dir = format("/user/{smoke_user}")
 smoke_hdfs_user_mode = "0770"
 
 namenode_formatted_old_mark_dir = format("{hadoop_pid_dir_prefix}/hdfs/namenode/formatted/")
-namenode_formatted_mark = format("{hadoop_home}/namenode/formatted")
+namenode_formatted_mark = format("/var/lib/hadoop-hdfs/formatted")
 
 fs_checkpoint_dir = config['configurations']['hdfs-site']['dfs.namenode.checkpoint.dir']
 

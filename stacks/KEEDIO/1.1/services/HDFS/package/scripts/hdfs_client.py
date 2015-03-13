@@ -19,7 +19,6 @@ limitations under the License.
 
 from resource_management import *
 from hdfs import hdfs
-from utils import service
 
 
 class HdfsClient(Script):

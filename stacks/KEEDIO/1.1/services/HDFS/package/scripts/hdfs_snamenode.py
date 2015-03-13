@@ -18,7 +18,7 @@ limitations under the License.
 """
 
 from resource_management import *
-from utils import service, check_rc
+from utils import check_rc
 from subprocess import *
 
 def snamenode(action=None, format=False):
