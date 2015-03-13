@@ -70,14 +70,14 @@ def setup_hadoop():
     )
 
     log4j_filename = os.path.join(params.hadoop_conf_dir, "log4j.properties")
-    if (params.log4j_props != None):
+    if params.log4j_props != None:
       File(log4j_filename,
            mode=0644,
            group=params.user_group,
            owner=params.hdfs_user,
            content=params.log4j_props
       )
-    elif (os.path.exists(format("{params.hadoop_conf_dir}/log4j.properties"))):
+    elif os.path.exists(format("{params.hadoop_conf_dir}/log4j.properties")):
       File(log4j_filename,
            mode=0644,
            group=params.user_group,

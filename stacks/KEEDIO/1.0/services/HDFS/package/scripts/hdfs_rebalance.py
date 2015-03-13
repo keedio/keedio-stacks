@@ -28,15 +28,15 @@ class HdfsParser():
   def parse_line(self, line):
     hdfsLine = HdfsLine()
     type, matcher = hdfsLine.recognize_type(line)
-    if(type == HdfsLine.LineType.HeaderStart):
+    if type == HdfsLine.LineType.HeaderStart:
       self.state = 'PROCESS_STARTED'
-    elif (type == HdfsLine.LineType.Progress):
+    elif type == HdfsLine.LineType.Progress:
       self.state = 'PROGRESS'
       hdfsLine.parse_progress_log(line, matcher)
-      if(self.initialLine == None): self.initialLine = hdfsLine
+      if self.initialLine == None: self.initialLine = hdfsLine
       
       return hdfsLine 
-    elif (type == HdfsLine.LineType.ProgressEnd):
+    elif type == HdfsLine.LineType.ProgressEnd:
       self.state = 'PROCESS_FINISED'
     return None
     
@@ -70,7 +70,7 @@ class HdfsLine():
     self.bytesBeingMovedStr = None 
   
   def recognize_type(self, line):
-    for (type, pattern) in (
+    for type, pattern in (
                             (HdfsLine.LineType.HeaderStart, self.HEADER_BEGIN_PATTERN),
                             (HdfsLine.LineType.Progress, self.PROGRESS_PATTERN), 
                             (HdfsLine.LineType.ProgressEnd, self.PROGRESS_END_PATTERN)

@@ -93,7 +93,8 @@ class NameNode(Script):
     command = start_rebalancing_progress(threshold)
     
     basedir = os.path.join(env.config.basedir, 'scripts')
-    if(threshold == 'DEBUG'): #FIXME TODO remove this on PROD
+    if threshold == 'DEBUG': 
+      #FIXME TODO remove this on PROD
       basedir = os.path.join(env.config.basedir, 'scripts', 'balancer-emulator')
       command = ['python','hdfs-command.py']
     

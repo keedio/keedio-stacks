@@ -69,14 +69,14 @@ def zookeeper(type = None):
          content = myid
     )
 
-  if (params.log4j_props != None):
+  if params.log4j_props != None:
     File(format("{params.config_dir}/log4j.properties"),
          mode=0644,
          group=params.user_group,
          owner=params.zk_user,
          content=params.log4j_props
     )
-  elif (os.path.exists(format("{params.config_dir}/log4j.properties"))):
+  elif os.path.exists(format("{params.config_dir}/log4j.properties")):
     File(format("{params.config_dir}/log4j.properties"),
          mode=0644,
          group=params.user_group,
