@@ -25,14 +25,14 @@ class HdfsParser():
     self.initialLine = None
     self.state = None
   
-  def parseLine(self, line):
+  def parse_line(self, line):
     hdfsLine = HdfsLine()
-    type, matcher = hdfsLine.recognizeType(line)
+    type, matcher = hdfsLine.recognize_type(line)
     if(type == HdfsLine.LineType.HeaderStart):
       self.state = 'PROCESS_STARTED'
     elif (type == HdfsLine.LineType.Progress):
       self.state = 'PROGRESS'
-      hdfsLine.parseProgressLog(line, matcher)
+      hdfsLine.parse_progress_log(line, matcher)
       if(self.initialLine == None): self.initialLine = hdfsLine
       
       return hdfsLine 
@@ -69,7 +69,7 @@ class HdfsLine():
     self.bytesLeftToMoveStr = None
     self.bytesBeingMovedStr = None 
   
-  def recognizeType(self, line):
+  def recognize_type(self, line):
     for (type, pattern) in (
                             (HdfsLine.LineType.HeaderStart, self.HEADER_BEGIN_PATTERN),
                             (HdfsLine.LineType.Progress, self.PROGRESS_PATTERN), 
@@ -80,7 +80,7 @@ class HdfsLine():
         return type, m
     return HdfsLine.LineType.Unknown, None
     
-  def parseProgressLog(self, line, m):
+  def parse_progress_log(self, line, m):
     '''
     Parse the line of 'hdfs rebalancer' output. The example output being parsed:
     
@@ -96,9 +96,9 @@ class HdfsLine():
       self.date = m.group('date') 
       self.iteration = int(m.group('iteration'))
        
-      self.bytesAlreadyMoved = self.parseMemory(m.group('memory_1'), m.group('mult_1')) 
-      self.bytesLeftToMove = self.parseMemory(m.group('memory_2'), m.group('mult_2')) 
-      self.bytesBeingMoved = self.parseMemory(m.group('memory_3'), m.group('mult_3'))
+      self.bytesAlreadyMoved = self.parse_memory(m.group('memory_1'), m.group('mult_1')) 
+      self.bytesLeftToMove = self.parse_memory(m.group('memory_2'), m.group('mult_2')) 
+      self.bytesBeingMoved = self.parse_memory(m.group('memory_3'), m.group('mult_3'))
        
       self.bytesAlreadyMovedStr = m.group('memmult_1') 
       self.bytesLeftToMoveStr = m.group('memmult_2')
@@ -106,14 +106,14 @@ class HdfsLine():
     else:
       raise AmbariException("Failed to parse line [%s]") 
   
-  def parseMemory(self, memorySize, multiplier_type):
+  def parse_memory(self, memorySize, multiplier_type):
     try:
       factor = self.MEMORY_SUFFIX.index(multiplier_type)
     except ValueError:
       raise AmbariException("Failed to memory value [%s %s]" % (memorySize, multiplier_type))
     
     return float(memorySize) * (1024 ** factor)
-  def toJson(self):
+  def to_json(self):
     return {
             'timeStamp' : self.date,
             'iteration' : self.iteration,

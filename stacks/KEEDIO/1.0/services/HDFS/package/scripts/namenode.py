@@ -109,9 +109,9 @@ class NameNode(Script):
                            )
     for line in iter(proc.stdout.readline, ''):
       _print('[balancer] %s %s' % (str(datetime.now()), line ))
-      pl = parser.parseLine(line)
+      pl = parser.parse_line(line)
       if pl:
-        res = pl.toJson()
+        res = pl.to_json()
         res['completePercent'] = calculateCompletePercent(parser.initialLine, pl) 
         
         self.put_structured_out(res)
