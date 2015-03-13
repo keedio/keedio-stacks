@@ -69,32 +69,17 @@ def validate_availability(component, path, addresses, ssl_enabled):
 
 #Validate component-specific response
 def validate_availability_response(component, response):
+  rc = False
   try:
     if component == RESOURCEMANAGER:
-      rm_state = response['clusterInfo']['state']
-      if rm_state == STARTED_STATE:
-        return True
-      else:
-        print 'Resourcemanager is not started'
-        return False
-
+      rc = response['clusterInfo']['state'] == STARTED_STATE
     elif component == NODEMANAGER:
-      node_healthy = bool(response['nodeInfo']['nodeHealthy'])
-      if node_healthy:
-        return True
-      else:
-        return False
+      rc = bool(response['nodeInfo']['nodeHealthy'])
     elif component == HISTORYSERVER:
-      hs_start_time = response['historyInfo']['startedOn']
-      if hs_start_time > 0:
-        return True
-      else:
-        return False
-    else:
-      return False
+      rc = response['historyInfo']['startedOn'] > 0
   except Exception as e:
     print 'Error validation of availability response for ' + str(component), e
-    return False
+  return rc
 
 #Verify that component has required resources to work
 def validate_ability(component, path, addresses, ssl_enabled):
