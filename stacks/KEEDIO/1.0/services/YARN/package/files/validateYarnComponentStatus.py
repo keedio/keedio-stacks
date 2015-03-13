@@ -30,7 +30,7 @@ STARTED_STATE = 'STARTED'
 RUNNING_STATE = 'RUNNING'
 
 #Return reponse for given path and address
-def getResponse(path, address, ssl_enabled):
+def get_response(path, address, ssl_enabled):
 
   command = "curl"
   httpGssnegotiate = "--negotiate"
@@ -52,23 +52,23 @@ def getResponse(path, address, ssl_enabled):
   return response
 
 #Verify that REST api is available for given component
-def validateAvailability(component, path, addresses, ssl_enabled):
+def validate_availability(component, path, addresses, ssl_enabled):
   responses = {}
   for address in addresses.split(','):
     try:
-      responses[address] = getResponse(path, address, ssl_enabled)
+      responses[address] = get_response(path, address, ssl_enabled)
     except Exception as e:
       print 'Error checking availability status of component.', e
 
   if not responses:
     exit(1)
 
-  is_valid = validateAvailabilityResponse(component, responses.values()[0])
+  is_valid = validate_availability_response(component, responses.values()[0])
   if not is_valid:
     exit(1)
 
 #Validate component-specific response
-def validateAvailabilityResponse(component, response):
+def validate_availability_response(component, response):
   try:
     if component == RESOURCEMANAGER:
       rm_state = response['clusterInfo']['state']
@@ -97,23 +97,23 @@ def validateAvailabilityResponse(component, response):
     return False
 
 #Verify that component has required resources to work
-def validateAbility(component, path, addresses, ssl_enabled):
+def validate_ability(component, path, addresses, ssl_enabled):
   responses = {}
   for address in addresses.split(','):
     try:
-      responses[address] = getResponse(path, address, ssl_enabled)
+      responses[address] = get_response(path, address, ssl_enabled)
     except Exception as e:
       print 'Error checking ability of component.', e
 
   if not responses:
     exit(1)
 
-  is_valid = validateAbilityResponse(component, responses.values()[0])
+  is_valid = validate_ability_response(component, responses.values()[0])
   if not is_valid:
     exit(1)
 
 #Validate component-specific response that it has required resources to work
-def validateAbilityResponse(component, response):
+def validate_ability_response(component, response):
   try:
     if component == RESOURCEMANAGER:
       nodes = []
@@ -160,11 +160,11 @@ def main():
   else:
     parser.error("Invalid component")
 
-  validateAvailability(component, path, address, ssl_enabled)
+  validate_availability(component, path, address, ssl_enabled)
 
   if component == RESOURCEMANAGER:
     path = '/ws/v1/cluster/nodes'
-    validateAbility(component, path, address, ssl_enabled)
+    validate_ability(component, path, address, ssl_enabled)
 
 if __name__ == "__main__":
   main()
