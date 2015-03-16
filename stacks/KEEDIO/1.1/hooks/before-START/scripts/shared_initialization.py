@@ -63,7 +63,8 @@ def setup_hadoop():
          content=Template('commons-logging.properties.j2')
     )
 
-    health_check_template = "health_check-v2" #for stack 1 use 'health_check'
+    health_check_template = "health_check-v2" 
+    #for stack 1 use 'health_check'
     File(os.path.join(params.hadoop_conf_dir, "health_check"),
          owner=tc_owner,
          content=Template(health_check_template + ".j2")
