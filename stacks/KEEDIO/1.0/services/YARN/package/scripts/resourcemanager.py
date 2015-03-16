@@ -34,7 +34,8 @@ class Resourcemanager(Script):
     import params
 
     env.set_params(params)
-    resourcemanager(action="configure") # FOR SECURITY
+    resourcemanager(action="configure") 
+    # FOR SECURITY
     resourcemanager(action="start")
 
   def stop(self, env):

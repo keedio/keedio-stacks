@@ -19,7 +19,8 @@ limitations under the License.
 from resource_management import *
 from subprocess import *
 
-def gmetad(action=None):# 'start' or 'stop'
+def gmetad(action=None):
+  # 'start' or 'stop'
   cmd=Popen(['service','gmetad',action],stdout=PIPE,stderr=PIPE)
   out,err=cmd.communicate()
   rc=cmd.returncode

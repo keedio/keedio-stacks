@@ -46,7 +46,7 @@ def _alter_repo(action, repo_string, repo_template):
                mirror_list = repo['mirrorsList'],
                repo_file_name = repo['repoName'],
                repo_template = repo_template,
-               components = ubuntu_components, # ubuntu specific
+               components = ubuntu_components, 
     )
 
 def install_repos():

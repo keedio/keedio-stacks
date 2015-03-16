@@ -21,7 +21,8 @@ from subprocess import *
 from glob import glob
 from os.path import basename
 
-def gmond(action=None):# 'start' or 'stop'
+def gmond(action=None):
+  # 'start' or 'stop'
   clusters = glob('/etc/init.d/gmond.*')
   for service in clusters:
     base=basename(service)

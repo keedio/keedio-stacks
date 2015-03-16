@@ -35,7 +35,8 @@ def get_response(path, address, ssl_enabled):
   command = "curl"
   httpGssnegotiate = "--negotiate"
   userpswd = "-u:"
-  insecure = "-k"# This is smoke test, no need to check CA of server
+  insecure = "-k"
+  # This is smoke test, no need to check CA of server
   if ssl_enabled:
     url = 'https://' + address + path
   else:

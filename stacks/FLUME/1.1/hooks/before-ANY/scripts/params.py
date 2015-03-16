@@ -26,7 +26,8 @@ config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
 
 artifact_dir = format("{tmp_dir}/AMBARI-artifacts/")
-jce_policy_zip = default("/hostLevelParams/jce_name", None) # None when jdk is already installed by user
+jce_policy_zip = default("/hostLevelParams/jce_name", None) 
+# None when jdk is already installed by user
 jce_location = config['hostLevelParams']['jdk_location']
 jdk_name = default("/hostLevelParams/jdk_name", None)
 java_home = config['hostLevelParams']['java_home']
@@ -83,7 +84,8 @@ if stack_is_hdp22_or_further:
       secure_dn_ports_are_in_use = is_secure_port(dfs_dn_port) or is_secure_port(dfs_dn_https_port)
     elif dfs_http_policy == "HTTP_AND_HTTPS":
       secure_dn_ports_are_in_use = is_secure_port(dfs_dn_port) or is_secure_port(dfs_dn_http_port) or is_secure_port(dfs_dn_https_port)
-    else:   # params.dfs_http_policy == "HTTP_ONLY" or not defined:
+    else:   
+      # params.dfs_http_policy == "HTTP_ONLY" or not defined:
       secure_dn_ports_are_in_use = is_secure_port(dfs_dn_port) or is_secure_port(dfs_dn_http_port)
     if secure_dn_ports_are_in_use:
       hadoop_secure_dn_user = hdfs_user
