@@ -20,6 +20,7 @@ limitations under the License.
 from resource_management.libraries.functions.version import format_hdp_stack_version, compare_versions
 from resource_management import *
 
+exclude_packages=[]
 config = Script.get_config()
 zookeeper_server_hosts = default("/clusterHostInfo/zookeeper_hosts", [])
 zookeeper_port = default("/configurations/zoo.cfg/clientPort","2181")
@@ -31,8 +32,11 @@ kafka_conf = default("/configurations/kafka-server-properties",[])
 
 has_ganglia_server = not len(ganglia_server_hosts) == 0
 if has_ganglia_server:
-  ganglia_server_host = ganglia_server_hosts[0]
-
+  gmondServer = ganglia_server_hosts[0]
+  jmxPort = default("/configurations/kafka-env/jmxPort","9999")
+  gmondPort = default("/configurations/kafka-broker/kafka.ganglia.metrics.port", 8671)
+else:
+  exclude_packages.append('jmxtrans')
 hostname = None
 if config.has_key('hostname'):
   hostname = config['hostname']

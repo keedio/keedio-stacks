@@ -34,7 +34,7 @@
   </property>
 
   <property>
-    <name>num.i.threads</name>
+    <name>num.io.threads</name>
     <value>8</value>
     <description>Number of threads handling IO requests</description>
   </property>
@@ -52,7 +52,7 @@
   </property>
 
   <property>
-    <name>socket.requests.max.bytes</name>
+    <name>socket.request.max.bytes</name>
     <value>1048576</value>
     <description>The maximum size of a request that the socket server will accept (rotection against OOM)</description>
   </property>
@@ -108,7 +108,7 @@
 
   <property>
     <name>zookeeper.connect</name>
-    <value>localhost:2181</value>
+    <value>localhost:2181/kafka</value>
     <description>Zookeeper connection string</description>
   </property>
 
