@@ -40,8 +40,8 @@ def zookeeper(type = None):
   )
   
 
-  configFile("zoo.cfg", template_name="zoo.cfg.j2")
-  configFile("configuration.xsl", template_name="configuration.xsl.j2")
+  config_file("zoo.cfg", template_name="zoo.cfg.j2")
+  config_file("configuration.xsl", template_name="configuration.xsl.j2")
 
   Directory(params.zk_pid_dir,
             owner=params.zk_user,
@@ -69,14 +69,14 @@ def zookeeper(type = None):
          content = myid
     )
 
-  if (params.log4j_props != None):
+  if params.log4j_props != None:
     File(format("{params.config_dir}/log4j.properties"),
          mode=0644,
          group=params.user_group,
          owner=params.zk_user,
          content=params.log4j_props
     )
-  elif (os.path.exists(format("{params.config_dir}/log4j.properties"))):
+  elif os.path.exists(format("{params.config_dir}/log4j.properties")):
     File(format("{params.config_dir}/log4j.properties"),
          mode=0644,
          group=params.user_group,
@@ -85,10 +85,10 @@ def zookeeper(type = None):
 
   if params.security_enabled:
     if type == "server":
-      configFile("zookeeper_jaas.conf", template_name="zookeeper_jaas.conf.j2")
-      configFile("zookeeper_client_jaas.conf", template_name="zookeeper_client_jaas.conf.j2")
+      config_file("zookeeper_jaas.conf", template_name="zookeeper_jaas.conf.j2")
+      config_file("zookeeper_client_jaas.conf", template_name="zookeeper_client_jaas.conf.j2")
     else:
-      configFile("zookeeper_client_jaas.conf", template_name="zookeeper_client_jaas.conf.j2")
+      config_file("zookeeper_client_jaas.conf", template_name="zookeeper_client_jaas.conf.j2")
 
   File(format("{config_dir}/zoo_sample.cfg"),
        owner=params.zk_user,
@@ -96,7 +96,7 @@ def zookeeper(type = None):
   )
 
 
-def configFile(name, template_name=None):
+def config_file(name, template_name=None):
   import params
 
   File(format("{config_dir}/{name}"),

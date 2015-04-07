@@ -155,9 +155,9 @@ yarn_log_dir_prefix = default("/configurations/yarn-env/yarn_log_dir_prefix","/v
 dfs_hosts = default('/configurations/hdfs-site/dfs.hosts', None)
 
 #log4j.properties
-if (('hdfs-log4j' in config['configurations']) and ('content' in config['configurations']['hdfs-log4j'])):
+if 'hdfs-log4j' in config['configurations'] and 'content' in config['configurations']['hdfs-log4j']:
   log4j_props = config['configurations']['hdfs-log4j']['content']
-  if (('yarn-log4j' in config['configurations']) and ('content' in config['configurations']['yarn-log4j'])):
+  if 'yarn-log4j' in config['configurations'] and 'content' in config['configurations']['yarn-log4j']:
     log4j_props += config['configurations']['yarn-log4j']['content']
 else:
   log4j_props = None

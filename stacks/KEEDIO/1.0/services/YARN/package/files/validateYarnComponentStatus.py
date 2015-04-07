@@ -30,12 +30,13 @@ STARTED_STATE = 'STARTED'
 RUNNING_STATE = 'RUNNING'
 
 #Return reponse for given path and address
-def getResponse(path, address, ssl_enabled):
+def get_response(path, address, ssl_enabled):
 
   command = "curl"
   httpGssnegotiate = "--negotiate"
   userpswd = "-u:"
-  insecure = "-k"# This is smoke test, no need to check CA of server
+  insecure = "-k"
+  # This is smoke test, no need to check CA of server
   if ssl_enabled:
     url = 'https://' + address + path
   else:
@@ -52,68 +53,53 @@ def getResponse(path, address, ssl_enabled):
   return response
 
 #Verify that REST api is available for given component
-def validateAvailability(component, path, addresses, ssl_enabled):
+def validate_availability(component, path, addresses, ssl_enabled):
   responses = {}
   for address in addresses.split(','):
     try:
-      responses[address] = getResponse(path, address, ssl_enabled)
+      responses[address] = get_response(path, address, ssl_enabled)
     except Exception as e:
       print 'Error checking availability status of component.', e
 
   if not responses:
     exit(1)
 
-  is_valid = validateAvailabilityResponse(component, responses.values()[0])
+  is_valid = validate_availability_response(component, responses.values()[0])
   if not is_valid:
     exit(1)
 
 #Validate component-specific response
-def validateAvailabilityResponse(component, response):
+def validate_availability_response(component, response):
+  rc = False
   try:
     if component == RESOURCEMANAGER:
-      rm_state = response['clusterInfo']['state']
-      if rm_state == STARTED_STATE:
-        return True
-      else:
-        print 'Resourcemanager is not started'
-        return False
-
+      rc = response['clusterInfo']['state'] == STARTED_STATE
     elif component == NODEMANAGER:
-      node_healthy = bool(response['nodeInfo']['nodeHealthy'])
-      if node_healthy:
-        return True
-      else:
-        return False
+      rc = bool(response['nodeInfo']['nodeHealthy'])
     elif component == HISTORYSERVER:
-      hs_start_time = response['historyInfo']['startedOn']
-      if hs_start_time > 0:
-        return True
-      else:
-        return False
-    else:
-      return False
+      rc = response['historyInfo']['startedOn'] > 0
   except Exception as e:
     print 'Error validation of availability response for ' + str(component), e
-    return False
+  return rc
 
 #Verify that component has required resources to work
-def validateAbility(component, path, addresses, ssl_enabled):
+def validate_ability(component, path, addresses, ssl_enabled):
   responses = {}
   for address in addresses.split(','):
     try:
-      responses[address] = getResponse(path, address, ssl_enabled)
+      responses[address] = get_response(path, address, ssl_enabled)
     except Exception as e:
       print 'Error checking ability of component.', e
 
   if not responses:
     exit(1)
 
-  is_valid = validateAbilityResponse(component, responses.values()[0])
+  is_valid = validate_ability_response(component, responses.values()[0])
   if not is_valid:
     exit(1)
 
 #Validate component-specific response that it has required resources to work
-def validateAbilityResponse(component, response):
+def validate_ability_response(component, response):
   try:
     if component == RESOURCEMANAGER:
       nodes = []
@@ -160,11 +146,11 @@ def main():
   else:
     parser.error("Invalid component")
 
-  validateAvailability(component, path, address, ssl_enabled)
+  validate_availability(component, path, address, ssl_enabled)
 
   if component == RESOURCEMANAGER:
     path = '/ws/v1/cluster/nodes'
-    validateAbility(component, path, address, ssl_enabled)
+    validate_ability(component, path, address, ssl_enabled)
 
 if __name__ == "__main__":
   main()

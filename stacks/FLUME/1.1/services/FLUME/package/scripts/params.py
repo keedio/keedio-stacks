@@ -53,17 +53,17 @@ flume_extra = None
 if 'flume-user' in config['configurations'] and 'flume_user' in config['configurations']['flume-env']:
   flume_user = config['configurations']['flume-env']['flume_user']
 
-if (('flume-conf' in config['configurations']) and('content' in config['configurations']['flume-conf'])):
+if 'flume-conf' in config['configurations'] and 'content' in config['configurations']['flume-conf']:
   flume_conf_content = config['configurations']['flume-conf']['content']
 else:
   flume_conf_content = None
 
-if (('flume-log4j' in config['configurations']) and ('content' in config['configurations']['flume-log4j'])):
+if 'flume-log4j' in config['configurations'] and 'content' in config['configurations']['flume-log4j']:
   flume_log4j_content = config['configurations']['flume-log4j']['content']
 else:
   flume_log4j_content = None
 
-if (('flume-env' in config['configurations']) and ('content' in config['configurations']['flume-env'])):
+if 'flume-env' in config['configurations'] and 'content' in config['configurations']['flume-env']:
   flume_env_content = config['configurations']['flume-env']['content']
 else:
   flume_env_content = None

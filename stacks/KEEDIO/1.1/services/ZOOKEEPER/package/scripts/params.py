@@ -79,7 +79,7 @@ smokeuser = config['configurations']['cluster-env']['smokeuser']
 kinit_path_local = functions.get_kinit_path(["/usr/bin", "/usr/kerberos/bin", "/usr/sbin"])
 
 #log4j.properties
-if (('zookeeper-log4j' in config['configurations']) and ('content' in config['configurations']['zookeeper-log4j'])):
+if 'zookeeper-log4j' in config['configurations'] and 'content' in config['configurations']['zookeeper-log4j']:
   log4j_props = config['configurations']['zookeeper-log4j']['content']
 else:
   log4j_props = None

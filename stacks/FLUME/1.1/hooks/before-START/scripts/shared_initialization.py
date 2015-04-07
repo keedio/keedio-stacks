@@ -63,21 +63,22 @@ def setup_hadoop():
          content=Template('commons-logging.properties.j2')
     )
 
-    health_check_template = "health_check-v2" #for stack 1 use 'health_check'
+    health_check_template = "health_check-v2" 
+    #for stack 1 use 'health_check'
     File(os.path.join(params.hadoop_conf_dir, "health_check"),
          owner=tc_owner,
          content=Template(health_check_template + ".j2")
     )
 
     log4j_filename = os.path.join(params.hadoop_conf_dir, "log4j.properties")
-    if (params.log4j_props != None):
+    if params.log4j_props != None:
       File(log4j_filename,
            mode=0644,
            group=params.user_group,
            owner=params.hdfs_user,
            content=params.log4j_props
       )
-    elif (os.path.exists(format("{params.hadoop_conf_dir}/log4j.properties"))):
+    elif os.path.exists(format("{params.hadoop_conf_dir}/log4j.properties")):
       File(log4j_filename,
            mode=0644,
            group=params.user_group,

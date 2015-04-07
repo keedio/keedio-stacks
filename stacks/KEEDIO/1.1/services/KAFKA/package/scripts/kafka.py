@@ -14,20 +14,49 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
 """
 
 from resource_management import *
-from subprocess import *
+from kafka_handler import kafka
 
-def gmetad(action=None):
-  # 'start' or 'stop'
-  cmd=Popen(['service','gmetad',action],stdout=PIPE,stderr=PIPE)
-  out,err=cmd.communicate()
-  rc=cmd.returncode
-  Logger.info("Ganglia gmetad service %s: %s" % (action, cmd.returncode == 0))
-   
-  if action == "status":
-    from functions import check_rc
-    check_rc(rc,stdout=out,stderr=err)
-  if action =="start" or action == "stop":
-    MonitorWebserver("restart")
+class Kafka(Script):
+  def install(self, env):
+    import params
+
+    self.install_packages(env,params.exclude_packages)
+    env.set_params(params)
+    self.configure(env)
+
+  def start(self, env):
+    import params
+
+    env.set_params(params)
+    
+    kafka(action='config')
+    kafka(action='start')
+
+  def stop(self, env):
+    import params
+
+    env.set_params(params)
+
+    kafka(action='stop')
+
+  def configure(self, env):
+    import params
+
+    env.set_params(params)
+
+    kafka(action='config')
+
+  def status(self, env):
+    import params
+
+    env.set_params(params)
+
+    kafka(action='status')
+
+
+if __name__ == "__main__":
+  Kafka().execute()

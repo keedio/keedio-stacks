@@ -34,7 +34,8 @@ class GangliaServer(Script):
     env.set_params(params)
     self.configure(env)
     
-    functions.turn_off_autostart(params.gmond_service_name) # since the package is installed as well
+    functions.turn_off_autostart(params.gmond_service_name) 
+    # since the package is installed as well
     File("/etc/httpd/conf.d/ganglia.conf",
       content=StaticFile("ganglia.conf"),
       owner="apache",
