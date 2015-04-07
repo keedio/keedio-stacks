@@ -15,17 +15,24 @@ def kafka(action):
         value=str(params.kafka_conf[param])+"\n"
       kafka_server_properties+=param+"="+value
     if params.has_ganglia_server:
-      kafka_server_properties+="KAFKA_JMX_OPTS=\"-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false\""
+      File('/etc/profile.d/kafka.sh',
+        content=StaticFile('kafka.profiles.d')
+      )
     File('/etc/kafka/conf/server.properties',
       content=kafka_server_properties,
       owner='kafka',
       group='kafka')
     if params.has_ganglia_server:
-      File('/etc/jmxtrans/conf/jmxtrans.conf',
+      File('/etc/jmxtrans/config/jmxtrans.config',
         content=Template('jmxtrans.j2')
+      )
+      File('/etc/jmxtrans/config/KafkaMetrics.json',
+        content=StaticFile('KafkaMetrics.json')
       )
   elif action == 'start' or action == 'stop' or action == 'status' :
     executed = Popen(["service","kafka",action],stdout=PIPE,stderr=PIPE)
+    if params.has_ganglia_server:
+        Popen(["service","jmxtrans",action])
 
   if action == "status":
     out,err = executed.communicate()

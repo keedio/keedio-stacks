@@ -2,7 +2,7 @@
 "servers": [
     {   
         "port": "${jmxPort}",
-        "host": "localhost",
+        "host": "${hostname}",
         "queries": [             
               {
                     "outputWriters" : [ {
