@@ -52,7 +52,7 @@ class DataNode(Script):
     import status_params
 
     env.set_params(status_params)
-    #check_process_status(status_params.datanode_pid_file)
+    datanode(action="status")
 
 
 if __name__ == "__main__":
