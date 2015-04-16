@@ -32,14 +32,10 @@ class DataNode(Script):
   def start(self, env):
     import params
 
-    env.set_params(params)
-    self.configure(env)
     datanode(action="start")
 
   def stop(self, env):
-    import params
 
-    env.set_params(params)
     datanode(action="stop")
 
   def configure(self, env):
@@ -49,9 +45,6 @@ class DataNode(Script):
     datanode(action="configure")
 
   def status(self, env):
-    import status_params
-
-    env.set_params(status_params)
     datanode(action="status")
 
 
