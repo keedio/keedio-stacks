@@ -24,9 +24,9 @@ from subprocess import *
 
 
 def datanode(action=None):
-  import params
 
   if action == "configure":
+    import params
     os_mkdir(params.dfs_data_dir,
       owner=params.hdfs_user,
       group=params.user_group,
@@ -35,16 +35,23 @@ def datanode(action=None):
       owner=params.hdfs_user,
       group=params.user_group,
       mode=0751 )
-  if action == "start" or action == "stop" or action == "status":
-    """
-    In this point, HDP code uses a much more complex execution,
-    I assume it is for standarization porpuses and avoid using
-    /etc/init.d
-    """
+
+  if action == "start":
     cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)
     out,err=cmd.communicate()
     rc = cmd.returncode
     Logger.info("Datanode service %s: %s" % (action, rc == 0))
-    if action == "status":
-      check_rc(rc,stdout=out,stderr=err)
+    check_rc(rc,stdout=out,stderr=err)
+
+  if action == "stop":
+    Logger.info("Datanode service %s")
+    cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)
+
+  if action == "status":
+    cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)
+    out,err=cmd.communicate()
+    rc = cmd.returncode
+    Logger.info("Datanode service %s: %s" % (action, rc == 0))
+    check_rc(rc,stdout=out,stderr=err)
+
 
