@@ -35,7 +35,7 @@ def datanode(action=None):
       owner=params.hdfs_user,
       group=params.user_group,
       mode=0751 )
-  if action == "start" or action == "stop":
+  if action == "start" or action == "stop" or action == "status":
     """
     In this point, HDP code uses a much more complex execution,
     I assume it is for standarization porpuses and avoid using
@@ -45,4 +45,6 @@ def datanode(action=None):
     out,err=cmd.communicate()
     rc = cmd.returncode
     Logger.info("Datanode service %s: %s" % (action, rc == 0))
+    if action == "status":
+      check_rc(rc,stdout=out,stderr=err)
 
