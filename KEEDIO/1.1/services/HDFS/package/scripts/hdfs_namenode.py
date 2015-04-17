@@ -30,8 +30,11 @@ def namenode(action=None, do_format=True):
   if action == "configure":
     import params
     Logger.info("Configuring namenode")
-    creation_errors=os_mkdir(params.dfs_name_dir,owner=params.hdfs_user,group=params.user_group)
-    creation_errors.extend(os_mkdir(params.namenode_formatted_mark.rsplit('/',1)[0],owner=params.hdfs_user,group=params.user_group))
+    Directory([params.dfs_name_dir, params.namenode_formatted_mark.rsplit('/',1)[0]],
+            owner=params.hdfs_user,
+            group=params.user_group,
+            recursive=True
+    )
 
   if action == "start":
     import params
