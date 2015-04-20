@@ -16,21 +16,45 @@
    limitations under the License.
 -->
 <reposinfo>
-  <os type="redhat6">
+  <os family="redhat6">
     <repo>
-      <baseurl>http://repo.keedio.org/openbus/1.2/rpm</baseurl>
-      <repoid>keedio-1.2</repoid>
+      <baseurl>http://10.129.128.12/openbus/1.1/rpm</baseurl>
+      <repoid>keedio-1.1</repoid>
       <reponame>keedio</reponame>
     </repo>
     <repo>
-      <baseurl>http://repo.keedio.org/openbus/1.2/updates</baseurl>
-      <repoid>keedio-1.2-updates</repoid>
+      <baseurl>http://10.129.128.12/openbus/1.1/updates</baseurl>
+      <repoid>keedio-1.1-updates</repoid>
       <reponame>keedio-updates</reponame>
     </repo>
     <repo>
-      <baseurl>http://mirror.de.leaseweb.net/epel/6/x86_64/</baseurl>
+      <baseurl>http://10.229.0.40/cobbler/repo_mirror/epel</baseurl>
       <repoid>epel6.8</repoid>
       <reponame>epel</reponame>
     </repo>
   </os>
+  <!--os type="redhat5">
+    <repo>
+      <baseurl>http://public-repo-1.hortonworks.com/HDP/centos5/2.x/updates/2.0.6.1</baseurl>
+      <repoid>HDP-2.0.6</repoid>
+      <reponame>HDP</reponame>
+    </repo>
+    <repo>
+      <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.17/repos/centos5</baseurl>
+      <repoid>HDP-UTILS-1.1.0.17</repoid>
+      <reponame>HDP-UTILS</reponame>
+    </repo>
+  </os>
+  <os type="suse11">
+    <repo>
+      <baseurl>http://public-repo-1.hortonworks.com/HDP/suse11/2.x/updates/2.0.6.1</baseurl>
+      <repoid>HDP-2.0.6</repoid>
+      <reponame>HDP</reponame>
+      <repo>
+        <baseurl>http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.17/repos/suse11</baseurl>
+        <repoid>HDP-UTILS-1.1.0.17</repoid>
+        <reponame>HDP-UTILS</reponame>
+      </repo>
+    </repo>
+  </os-->
 </reposinfo>
