@@ -18,13 +18,13 @@
 <reposinfo>
   <os family="redhat6">
     <repo>
-      <baseurl>http://10.129.128.12/openbus/1.1/rpm</baseurl>
-      <repoid>keedio-1.1</repoid>
+      <baseurl>http://10.129.128.12/openbus/1.2/rpm</baseurl>
+      <repoid>keedio-1.2</repoid>
       <reponame>keedio</reponame>
     </repo>
     <repo>
-      <baseurl>http://10.129.128.12/openbus/1.1/updates</baseurl>
-      <repoid>keedio-1.1-updates</repoid>
+      <baseurl>http://10.129.128.12/openbus/1.2/updates</baseurl>
+      <repoid>keedio-1.2-updates</repoid>
       <reponame>keedio-updates</reponame>
     </repo>
     <repo>

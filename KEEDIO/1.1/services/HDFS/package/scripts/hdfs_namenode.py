@@ -53,7 +53,11 @@ def namenode(action=None, do_format=True):
     
     cmd=Popen(['service','hadoop-hdfs-namenode','start'],stdout=None,stderr=None)
     cmd.communicate()
-    Logger.info("Namenode service started: %s" % cmd.returncode == 0)
+    if cmd.returncode == 0: 
+	    Logger.info("Namenode service started")
+    else:
+            Logger.info("Namenode service not started " + string(cmd.returncode))
+
     if cmd.returncode == 0 and wait_safe_mode_off():
       Logger.info("Creating hdfs directories")
       create_hdfs_directories()

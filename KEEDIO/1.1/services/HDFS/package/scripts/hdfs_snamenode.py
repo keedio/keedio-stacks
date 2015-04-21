@@ -24,12 +24,17 @@ from subprocess import *
 def snamenode(action=None, format=False):
 
   if action == "configure":
+    #Alessio
+    # params needs to be imported here: 
+    # in start or status it cannot import properly
     import params
-    Directory(params.fs_checkpoint_dir,
-              recursive=True,
-              mode=0755,
-              owner=params.hdfs_user,
-              group=params.user_group)
+    for fs_checkpoint_dir in params.fs_checkpoint_dirs:
+      Directory(fs_checkpoint_dir,
+                recursive=True,
+                cd_access="a",
+                mode=0755,
+                owner=params.hdfs_user,
+                group=params.user_group)
     File(params.exclude_file_path,
          content=Template("exclude_hosts_list.j2"),
          owner=params.hdfs_user,

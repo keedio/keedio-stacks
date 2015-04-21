@@ -35,7 +35,7 @@ class HdfsServiceCheck(Script):
     dir = '/tmp'
     tmp_file = dir+"/"+unique
     smoke_user = params.smoke_user
-    smoke_user_principal =  params.smoke_user_principal
+    smoke_user_principal =  params.smokeuser_principal
     smoke_keytab =params.smoke_user_keytab
     safemode_command = ["hdfs","dfsadmin","-safemode","get"]
 

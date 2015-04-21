@@ -41,7 +41,10 @@ class ZookeeperServer(Script):
     self.configure(env)
     cmd=Popen(['service','zookeeper-server','start'],stdout=None,stderr=None)
     cmd.communicate()
-    Logger.info("Zookeeper service started: %s" % cmd.returncode == 0)
+    if cmd.returncode == 0:
+            Logger.info("Zookeeper service started")
+    else:
+            Logger.info("Zookeeper service not started " + string(cmd.returncode))
   
   def stop(self,env):
     cmd=Popen(['service','zookeeper-server','stop'],stdout=None,stderr=None)
