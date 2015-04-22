@@ -1,0 +1,6 @@
+In version 2 of Ambari several changes were introduced, some of them are documented, others no.
+We had to change keedio-stacks in order to make it work
+
+1- repoinfo.xml format has changed. "os type" is now "os family" 
+2- Local IP based repos don´t work   
+
