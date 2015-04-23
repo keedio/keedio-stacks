@@ -28,6 +28,7 @@ class DataNode(Script):
 
     env.set_params(params)
     self.install_packages(env, params.exclude_packages)
+    self.configure(env)
 
   def start(self, env):
     import params
