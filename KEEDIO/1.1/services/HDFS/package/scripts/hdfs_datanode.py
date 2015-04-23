@@ -33,7 +33,7 @@ def datanode(action=None):
         mode=0750,
         recursive=True
     )
-    Directory([params.dfs.domain_socket_dir],
+    Directory([params.dfs_domain_socket_dir],
         owner=params.hdfs_user,
         group=params.user_group,
         recursive=True,
