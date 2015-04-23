@@ -18,12 +18,12 @@
 <reposinfo>
   <os type="redhat6">
     <repo>
-      <baseurl>http://10.129.128.12/openbus/1.0/rpm</baseurl>
+      <baseurl>http://repo.keedio.org/openbus/1.0/rpm</baseurl>
       <repoid>keedio-1.0</repoid>
       <reponame>keedio</reponame>
     </repo>
     <repo>
-      <baseurl>http://10.229.0.40/cobbler/repo_mirror/epel</baseurl>
+      <baseurl>http://mirror.de.leaseweb.net/epel/6/x86_64/</baseurl>
       <repoid>epel</repoid>
       <reponame>epel</reponame>
     </repo>

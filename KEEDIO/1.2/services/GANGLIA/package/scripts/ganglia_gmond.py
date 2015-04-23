@@ -14,40 +14,24 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
 """
 
 from resource_management import *
-from hdfs_datanode import datanode
-from hdfs import hdfs
+from subprocess import *
+from glob import glob
+from os.path import basename
 
-
-class DataNode(Script):
-  def install(self, env):
-    import params
-
-    env.set_params(params)
-    self.install_packages(env, params.exclude_packages)
-    self.configure(env)
-
-  def start(self, env):
-    import params
-
-    datanode(action="start")
-
-  def stop(self, env):
-
-    datanode(action="stop")
-
-  def configure(self, env):
-    import params
-    env.set_params(params)
-    hdfs()
-    datanode(action="configure")
-
-  def status(self, env):
-    datanode(action="status")
-
-
-if __name__ == "__main__":
-  DataNode().execute()
+def gmond(action=None):
+  # 'start' or 'stop'
+  clusters = glob('/etc/init.d/gmond.*')
+  for service in clusters:
+    base=basename(service)
+    cmd=Popen(['service',base,action],stdout=PIPE,stderr=PIPE)
+    out,err=cmd.communicate()
+    
+    rc=cmd.returncode
+    Logger.info("Ganglia gmond.%s service %s: %s" % (service,action, cmd.returncode == 0))
+   
+    if action == "status" :
+      from functions import check_rc
+      check_rc(rc,stdout=out,stderr=err)

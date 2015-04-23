@@ -27,14 +27,17 @@ def datanode(action=None):
 
   if action == "configure":
     import params
-    os_mkdir(params.dfs_data_dir,
-      owner=params.hdfs_user,
-      group=params.user_group,
-      mode=0750)
-    os_mkdir(params.dfs_domain_socket_dir,
-      owner=params.hdfs_user,
-      group=params.user_group,
-      mode=0751 )
+    Directory([params.dfs_data_dir],
+        owner=params.hdfs_user,
+        group=params.user_group,
+        mode=0750,
+        recursive=True
+    )
+    Directory([params.dfs_domain_socket_dir],
+        owner=params.hdfs_user,
+        group=params.user_group,
+        recursive=True,
+        mode=0751 )
 
   if action == "start":
     cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)

@@ -70,55 +70,6 @@ def hdfs_mkdir(sudo_cmd,path,owner=None,group=None,recursive=False,mode=None):
   for cmd in cmd_list:
     Popen(cmd)
 
-def os_mkdir(directories,owner=None,group=None,mode=0755):
-  failed=[]
-  for path in directories.split(','):
-    status = __mkdir(path,mode)
-    status = __chown(path,owner,group) if status else status
-    if not status:
-      failed.append(path)
-  return failed
-    
-def __mkdir(path,mode):
-  exists = False
-  try:
-    os.makedirs(path,mode)
-    exists=True
-  except:
-    # If raised exception and path exists, it is fine
-    exists=os.path.exists(path)
-  return exists
-
-def __chown(path,owner,group):
-  uid,gid=-1,-1
-
-  if owner:
-    from pwd import getpwnam
-    try:
-      uid = getpwnam(owner).pw_uid
-    except:
-      return False
-
-  if group:
-    from grp import getgrnam
-    try:
-      gid = getgrnam(group).gr_gid
-    except:
-      return False
-
-  try:
-    os.chown(path,uid,gid)
-    return True
-  except:
-    return False
-  
-def __chmod(path,mode):
-  try:
-    os.chmod(path,mode)
-    return True
-  except:
-    return False
-
 def __owner_group(owner,group):
   chown = owner
   if chown:

@@ -59,9 +59,6 @@
               <name>python-rrdtool</name>
             </package>
             <package>
-              <name>ganglia</name>
-            </package>
-            <package>
               <name>ganglia-devel</name>
             </package>
             <package>
