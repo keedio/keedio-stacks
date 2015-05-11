@@ -32,7 +32,7 @@ class DataNode(Script):
 
   def start(self, env):
     import params
-
+    self.configure(env)
     datanode(action="start")
 
   def stop(self, env):
