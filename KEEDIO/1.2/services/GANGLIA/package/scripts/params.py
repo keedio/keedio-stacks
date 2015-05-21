@@ -159,7 +159,7 @@ if len(gmond_apps) > 0:
   for gmond_app in gmond_apps:
     ganglia_clusters.append(gmond_app)
 
-ganglia_apache_config_file = "/etc/apache2/conf.d/ganglia.conf"
+ganglia_apache_config_file = "/etc/httpd/conf.d/ganglia.conf"
 ganglia_web_path="/var/www/html/ganglia"
 if System.get_instance().os_family == "suse":
   rrd_py_path = '/srv/www/cgi-bin'

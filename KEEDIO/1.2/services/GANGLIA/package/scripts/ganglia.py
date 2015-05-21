@@ -59,6 +59,22 @@ def generate_daemon(ganglia_service,
       group="root",
       recursive=True
     )
+    Directory("/var/lib/ganglia-web/dwoo/compiled",
+      owner="apache",
+      group="apache",
+      recursive=True
+    )  
+    Directory("/var/lib/ganglia-web/dwoo/cache",
+      owner="apache",
+      group="apache",
+      recursive=True
+    )
+    Directory("/var/lib/ganglia-web/conf/",
+      owner="apache",
+      group="apache",
+      recursive=True
+    )  
+    
   elif ganglia_service == "gmetad":
     File("/etc/ganglia/gmetad.conf",
       content=Template("gmetad.conf.j2",gridName="KEEDIO"),
