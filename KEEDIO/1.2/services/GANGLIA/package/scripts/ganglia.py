@@ -80,6 +80,21 @@ def generate_daemon(ganglia_service,
       content=Template("gmetad.conf.j2",gridName="KEEDIO"),
       mode=0644 )
     functions.turn_off_autostart("gmetad")
+    Directory("/var/lib/ganglia-web/dwoo/compiled",
+      owner="apache",
+      group="apache",
+      recursive=True
+    )
+    Directory("/var/lib/ganglia-web/dwoo/cache",
+      owner="apache",
+      group="apache",
+      recursive=True
+    )
+    Directory("/var/lib/ganglia-web/conf/",
+      owner="apache",
+      group="apache",
+      recursive=True
+    )
   else:
     raise Fail("Unexpected ganglia service")
   Execute(format(cmd),
