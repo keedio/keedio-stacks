@@ -42,7 +42,7 @@ def datanode(action=None):
   if action == "start":
     cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)
     out,err=cmd.communicate()
-    Logger.info("Alessio: starting datanode")
+    Logger.info("Starting datanode")
     Logger.info(out)
     Logger.info(err)
     rc = cmd.returncode
@@ -53,14 +53,14 @@ def datanode(action=None):
     Logger.info("Datanode service %s")
     cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)
     out,err=cmd.communicate()
-    Logger.info("Alessio: stopping datanode")
+    Logger.info("Stopping datanode")
     Logger.info(out)
     Logger.info(err)
 
   if action == "status":
     cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)
     out,err=cmd.communicate()
-    Logger.info("Alessio:Checking datanode status")
+    Logger.info("Checking datanode status")
     Logger.info(out)
     Logger.info(err)
     rc = cmd.returncode

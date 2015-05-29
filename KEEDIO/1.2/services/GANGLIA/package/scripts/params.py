@@ -129,7 +129,7 @@ if not is_ganglia_server_host:
     "ganglia-web", "httpd" ]
 
 ganglia_cluster_names = {
-  "jn_hosts": [("JournalNode", 8654)],
+  "journalnode_hosts": [("JournalNode", 8654)],
   "flume_hosts": [("FlumeServer", 8655)],
   "hbase_rs_hosts": [("HBaseRegionServer", 8656)],
   "nm_hosts": [("NodeManager", 8657)],

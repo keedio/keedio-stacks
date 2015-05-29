@@ -7,7 +7,7 @@ globals {
   debug_level = 0
   max_udp_msg_len = 1472
 {% if is_ganglia_server_host and clusterName != "Slaves" %}
-  mute = yes
+  mute = no 
 {% else %}
   mute = no
 {% endif %}
@@ -16,7 +16,7 @@ globals {
   host_dmax = 0 /*secs */
   cleanup_threshold = 300 /*secs */
   gexec = no
-  send_metadata_interval = 0 /*secs */
+  send_metadata_interval = 60 /*secs */
 }
 
 /*
