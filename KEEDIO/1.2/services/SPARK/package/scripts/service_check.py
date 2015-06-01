@@ -22,11 +22,10 @@ from resource_management import *
 
 class ServiceCheck(Script):
   def service_check(self, env):
-    return 0
-    pass
-    #import params
-
-    #env.set_params(params)
+    from spark import spark
+    import params
+    env.set_params(params)
+    spark(action="config")
 
 if __name__ == "__main__":
   ServiceCheck().execute()

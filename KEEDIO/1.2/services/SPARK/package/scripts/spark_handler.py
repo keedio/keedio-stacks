@@ -25,29 +25,18 @@ from subprocess import *
 class Spark(Script):
   def install(self, env):
     import params
+    env.set_params(params)
     self.install_packages(env)
+    spark(action="install")
 
   def configure(self, env):
     import params
     env.set_params(params)
     spark(action="config")
 
-  def start(self, env):
-    import params
-    env.set_params(params)
-    self.configure(env)
-
-  def stop(self, env):
-    import params
-    #env.set_params(params)
-
-    #storm(service="storm-nimbus", action="stop")
-
   def status(self, env):
-    import status_params
-    #env.set_params(status_params)
-
-    #storm(service="storm-nimbus", action="status")
+    self.configure(env)
+    raise ClientComponentHasNoStatus()
 
 if __name__ == "__main__":
   Spark().execute()
