@@ -33,14 +33,14 @@ def spark(service=None,action=None):
     execute_hdfs = partial(execute_sudo_krb,user=params.hdfs_user,principal=params.hdfs_principal_name,keytab=params.hdfs_user_keytab)
     execute_spark = partial(execute_sudo_krb,user=params.spark_user,principal=params.spark_principal,keytab=params.spark_keytab)
 
-    create_home = ["hdfs","dfs","-mkdir","-p",params.spark_home]
-    create_eventLog = ["hdfs","dfs","-mkdir","-p",params.spark_home+"/eventLog"]
+    create_home = ["hdfs","dfs","-mkdir","-p",params.spark_hdfs_home]
+    create_eventLog = ["hdfs","dfs","-mkdir","-p",params.spark_hdfs_home+"/eventLog"]
 
-    chown_home = ["hdfs","dfs","-chown",params.spark_user, params.spark_home]
-    chown_eventLog = ["hdfs","dfs","-chown",params.spark_user, params.spark_home+"/eventLog"]
+    chown_home = ["hdfs","dfs","-chown",params.spark_user, params.spark_hdfs_home]
+    chown_eventLog = ["hdfs","dfs","-chown",params.spark_user, params.spark_hdfs_home+"/eventLog"]
 
-    chmod_eventLog = ["hdfs","dfs","-chmod","1777",params.spark_home+"/eventLog"]   
-    upload_jars = ["hdfs","dfs","-put",params.spark_yarn_lib_dir,params.spark_home]
+    chmod_eventLog = ["hdfs","dfs","-chmod","1777",params.spark_hdfs_home+"/eventLog"]   
+    upload_jars = ["hdfs","dfs","-put",params.spark_local_home+"/lib",params.spark_hdfs_home]
  
     execute_hdfs(create_home)
     execute_hdfs(create_eventLog)

@@ -41,11 +41,6 @@
     <description>Kerberos keytab</description>
   </property>
   <property>
-    <name>spark_yarn_lib_dir</name>
-    <value>/usr/lib/spark/default/lib</value>
-    <description>Path to dir in local file system containing spark yarn libs</description>
-  </property>
-  <property>
     <name>spark_user</name>
     <value>spark</value>
     <property-type>USER</property-type>
@@ -57,9 +52,18 @@
     <description>Spark's user group</description>
   </property>
   <property>
-    <name>spark_home</name>
+    <name>spark_hdfs_home</name>
     <value>/user/spark</value>
     <description>Home path in HDFS. It will contains directory libs with jars and directory eventLogs</description>
   </property>
- 
+  <property>
+    <name>spark_local_home</name>
+    <value>/usr/lib/spark/default</value>
+    <description>Path to Spark version to use</description>
+  </property>
+  <property>
+    <name>spark_examples_jar</name>
+    <value>spark-examples-1.3.1-hadoop2.2.0.jar</value>
+    <description>JAR containing Spark examples</description>
+  </property>
 </configuration>
