@@ -16,6 +16,6 @@
 # limitations under the License.
 #}
 spark.master		yarn-cluster
-spark.yarn.jar 		hdfs://{{ spark_home }}/libs/{{ spark_assembly }}
+spark.yarn.jar 		hdfs://{{ spark_home }}/lib/{{ spark_assembly }}
 spark.eventLog.enabled	true
 spark.eventLog.dir	hdfs://{{ spark_home }}/eventLog

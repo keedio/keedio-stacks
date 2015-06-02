@@ -34,13 +34,21 @@ def spark(service=None,action=None):
     execute_spark = partial(execute_sudo_krb,user=params.spark_user,principal=params.spark_principal,keytab=params.spark_keytab)
 
     create_home = ["hdfs","dfs","-mkdir","-p",params.spark_home]
-    chown_home = ["hdfs","dfs","-chown",params.spark_user, params.spark_home]
+    create_eventLog = ["hdfs","dfs","-mkdir","-p",params.spark_home+"/eventLog"]
 
+    chown_home = ["hdfs","dfs","-chown",params.spark_user, params.spark_home]
+    chown_eventLog = ["hdfs","dfs","-chown",params.spark_user, params.spark_home+"/eventLog"]
+
+    chmod_eventLog = ["hdfs","dfs","-chmod","1777",params.spark_home+"/eventLog"]   
     upload_jars = ["hdfs","dfs","-put",params.spark_yarn_lib_dir,params.spark_home]
  
     execute_hdfs(create_home)
+    execute_hdfs(create_eventLog)
     execute_hdfs(chown_home)
+    execute_hdfs(chown_eventLog)
+    execute_hdfs(chmod_eventLog)
     execute_spark(upload_jars)
+
 
   if action == "install":
     configurations = params.config['configurations']['spark']
