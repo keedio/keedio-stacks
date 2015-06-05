@@ -48,7 +48,7 @@ oozie_group = config['configurations']['oozie-env']['oozie_group']
 
 if oozie_db_type == "mysql":
   jdbc_driver_name="com.mysql.jdbc.Driver"
-  oozie_jdbc_url='jdbc:mysql://%s/%s' % (oozie_db_server,oozie_db_schema_name =
+  oozie_jdbc_url='jdbc:mysql://%s/%s' % (oozie_db_server,oozie_db_schema_name )
 elif oozie_db_type == "postgresql":
   jdbc_driver_name="org.postgresql.Driver"
 elif oozie_db_type == "oracle":
