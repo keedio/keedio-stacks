@@ -33,29 +33,31 @@ def oozie(action=None,is_server=False):
       check_rc(cmd.returncode,stdout=out,stderr=err)
 
   if action == 'config' :
-    File(params.conf_dir + '/oozie-site.xml',
+    File(params.oozie_config_dir + '/oozie-site.xml',
       content=Template('oozie-site.j2'),
       owner=params.oozie_user,
       group=params.oozie_group,
       mode=0644)
 
-    File(params.conf_dir+'/oozie-env.sh',
+    File(params.oozie_config_dir+'/oozie-env.sh',
       content=Template('oozie-env.j2'),
       owner=params.oozie_user,
       group=params.oozie_group,
       mode=0644)
 
-    File(params.conf_dir+'/adminusers.txt',
+    File(params.oozie_config_dir+'/adminusers.txt',
       content=Template('adminusers.txt.j2'),
-      group=params.user_group,
       owner=params.oozie_user,
+      group=params.oozie_group,
       mode=0644)
 
     if is_server :
       File('/usr/lib/oozie/libext/ext-2.2.1.zip',
         content=StaticFile('ext-2.2.1.zip'))
-      extract_cmd=[ 'unzip', '/usr/lib/oozie/libext/ext-2.2.1.zip','-d','/usr/lib/oozie/libext/ext-2.2.1' ]
+      # oozie expect ext-2.2 directory and looks to be hard-coded
+      extract_cmd=[ 'unzip', '/usr/lib/oozie/libext/ext-2.2.1.zip','-d','/usr/lib/oozie/libext/ext-2.2' ]
       Popen(extract_cmd)
+      
 
       if params.jdbc_driver_name == "com.mysql.jdbc.Driver":
         create_db_cmd = [ "/usr/lib/oozie/bin/ooziedb.sh", "create", "-run" ]

@@ -58,6 +58,24 @@
             <scriptType>PYTHON</scriptType>
             <timeout>600</timeout>
           </commandScript>
+          <configFiles>
+            <configFile>
+              <type>xml</type>
+              <fileName>oozie-site.xml</fileName>
+              <dictionaryName>oozie-site</dictionaryName>
+            </configFile>
+            <configFile>
+              <type>xml</type>
+              <fileName>oozie-env.xml</fileName>
+              <dictionaryName>oozie-env</dictionaryName>
+            </configFile>
+            <configFile>
+              <type>env</type>
+              <fileName>oozie-log4j.properties</fileName>
+              <dictionaryName>oozie-log4j</dictionaryName>
+            </configFile>
+          </configFiles>
+ 
         </component>
 
         <component>
@@ -92,7 +110,7 @@
               <dictionaryName>oozie-site</dictionaryName>
             </configFile>
             <configFile>
-              <type>env</type>
+              <type>xml</type>
               <fileName>oozie-env.xml</fileName>
               <dictionaryName>oozie-env</dictionaryName>
             </configFile>

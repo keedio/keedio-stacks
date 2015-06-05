@@ -20,7 +20,6 @@ limitations under the License.
 
 from resource_management.libraries.functions.version import format_hdp_stack_version, compare_versions
 from resource_management import *
-import status_params
 import itertools
 import os
 
@@ -30,9 +29,9 @@ config = Script.get_config()
 ambari_server_hostname = config['clusterHostInfo']['ambari_server_host'][0]
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 
-oozie_db_type = config['configurations']['oozie-site']['oozie.db.type']
-oozie_schema_name = config['configurations']['oozie-site']['oozie.schema.name']
-oozie_jdbc_url = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.url']
+oozie_db_type = config['configurations']['oozie-site']['oozie_database']
+oozie_db_schema_name = config['configurations']['oozie-site']['oozie.db.schema.name']
+oozie_db_server = config['configurations']['oozie-site']['oozie.db.server']
 oozie_db_user = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.username']
 oozie_db_pass = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.password']
 
@@ -43,12 +42,13 @@ oozie_log_dir = '/var/log/oozie'
 
 oozie_port = config['configurations']['oozie-env']['oozie_port']
 oozie_https_port = config['configurations']['oozie-env']['oozie_https_port']
-oozie_user = config['configurations']['oozie_env']['oozie_user']
-oozie_group = config['configurations']['oozie_env']['oozie_group']
+oozie_user = config['configurations']['oozie-env']['oozie_user']
+oozie_group = config['configurations']['oozie-env']['oozie_group']
 
 
 if oozie_db_type == "mysql":
   jdbc_driver_name="com.mysql.jdbc.Driver"
+  oozie_jdbc_url='jdbc:mysql://%s/%s' % (oozie_db_server,oozie_db_schema_name =
 elif oozie_db_type == "postgresql":
   jdbc_driver_name="org.postgresql.Driver"
 elif oozie_db_type == "oracle":

@@ -31,7 +31,7 @@ class OozieHandler(Script):
   def configure(self, env):
     import params
     env.set_params(params)
-    ozie(action='config',is_server=True)
+    oozie(action='config',is_server=True)
     
   def start(self, env):
     import params
@@ -45,8 +45,8 @@ class OozieHandler(Script):
     oozie(action='stop')
 
   def status(self, env):
-    import status_params
-    env.set_params(status_params)
+    import params
+    env.set_params(params)
     oozie(action='status')
      
 if __name__ == "__main__":

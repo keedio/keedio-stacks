@@ -32,7 +32,7 @@
   </property>
 
   <property>
-    <name>oozie.db.type</name>
+    <name>oozie_database</name>
     <value>mysql</value>
     <description>Type of database to use. 'mysql' is the only one tested, but 'derby', 'oracle' and 'postgres' will be added.</description>
   </property>
@@ -41,14 +41,6 @@
     <name>oozie.db.server</name>
     <value>ambariclean.jcfernandez.cediant.es</value>
     <description>Database server</description>
-  </property>
-
-  <property>
-    <name>oozie.service.JPAService.jdbc.url</name>
-    <value>jdbc:${oozie.db.type}:${oozie.db.server}/${oozie.db.schema.name}</value>
-    <description>
-      JDBC URL.
-    </description>
   </property>
 
   <property>
@@ -61,13 +53,14 @@
 
   <property require-input = "true">
     <name>oozie.service.JPAService.jdbc.password</name>
-    <value> </value>
+    <value>oozieadmin</value>
     <property-type>PASSWORD</property-type>
     <description>
       DB user password.
 
       IMPORTANT: if password is emtpy leave a 1 space string, the service trims the value,
       if empty Configuration assumes it is NULL.
+      IMPORTANT: schema creation scripts attemps to logging with password if the value is space, but later it login without password, which causes auth error. Work-around, set password.
     </description>
   </property>
 
