@@ -49,6 +49,7 @@
   <property>
     <name>spark_group</name>
     <value>spark</value>
+    <property-type>GROUP</property-type>
     <description>Spark's user group</description>
   </property>
   <property>

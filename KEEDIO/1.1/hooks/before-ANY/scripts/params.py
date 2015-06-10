@@ -137,7 +137,6 @@ gmetad_user = config['configurations']['ganglia-env']["gmetad_user"]
 gmond_user = config['configurations']['ganglia-env']["gmond_user"]
 tez_user = config['configurations']['tez-env']["tez_user"]
 oozie_user = config['configurations']['oozie-env']["oozie_user"]
-
 user_group = config['configurations']['cluster-env']['user_group']
 
 hagios_server_hosts = default("/clusterHostInfo/nagios_server_host", [])
