@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -17,41 +18,44 @@ limitations under the License.
 
 """
 
+import sys
 from resource_management import *
-from kafka_handler import kafka
+from storm import storm
+from service import service
 
-class Kafka(Script):
+
+class Supervisor(Script):
   def install(self, env):
-    import params
-    self.install_packages(env,params.exclude_packages)
-    env.set_params(params)
+    self.install_packages(env)
     self.configure(env)
+
+  def configure(self, env):
+    import params
+    env.set_params(params)
+    storm()
 
   def start(self, env):
     import params
     env.set_params(params)
-    
-    kafka(action='config')
-    kafka(action='start')
+    self.configure(env)
+
+    service("supervisor", action="start")
+    service("logviewer", action="start")
 
   def stop(self, env):
     import params
     env.set_params(params)
 
-    kafka(action='stop')
-
-  def configure(self, env):
-    import params
-    env.set_params(params)
-
-    kafka(action='config')
+    service("supervisor", action="stop")
+    service("logviewer", action="stop")
 
   def status(self, env):
-    import params
-    env.set_params(params)
+    import status_params
+    env.set_params(status_params)
 
-    kafka(action='status')
+    check_process_status(status_params.pid_supervisor)
 
 
 if __name__ == "__main__":
-  Kafka().execute()
+  Supervisor().execute()
+

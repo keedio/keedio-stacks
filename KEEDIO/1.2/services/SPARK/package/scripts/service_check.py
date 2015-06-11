@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -18,40 +19,19 @@ limitations under the License.
 """
 
 from resource_management import *
-from kafka_handler import kafka
+from functools import partial
+from utils import *
+from spark import spark
 
-class Kafka(Script):
-  def install(self, env):
-    import params
-    self.install_packages(env,params.exclude_packages)
-    env.set_params(params)
-    self.configure(env)
-
-  def start(self, env):
+class ServiceCheck(Script):
+  def service_check(self, env):
     import params
     env.set_params(params)
-    
-    kafka(action='config')
-    kafka(action='start')
-
-  def stop(self, env):
-    import params
-    env.set_params(params)
-
-    kafka(action='stop')
-
-  def configure(self, env):
-    import params
-    env.set_params(params)
-
-    kafka(action='config')
-
-  def status(self, env):
-    import params
-    env.set_params(params)
-
-    kafka(action='status')
-
+    spark(action="config")
+    execute_spark = partial(execute_sudo_krb,user=params.spark_user,principal=params.spark_principal,keytab=params.spark_keytab)
+    check_spark = [ "source","/etc/profile.d/hadoop-env.sh","&&",params.spark_local_home+"/bin/spark-submit","--class","org.apache.spark.examples.SparkPi",params.spark_local_home+"/lib/"+params.spark_examples_jar,"10"]
+    out,err,rc=execute_spark(check_spark)
+    check_rc(rc,stdout=out,stderr=err)
 
 if __name__ == "__main__":
-  Kafka().execute()
+  ServiceCheck().execute()

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -18,40 +19,39 @@ limitations under the License.
 """
 
 from resource_management import *
-from kafka_handler import kafka
+from storm import storm
 
-class Kafka(Script):
+
+class Nimbus(Script):
   def install(self, env):
     import params
     self.install_packages(env,params.exclude_packages)
-    env.set_params(params)
     self.configure(env)
-
-  def start(self, env):
-    import params
-    env.set_params(params)
-    
-    kafka(action='config')
-    kafka(action='start')
-
-  def stop(self, env):
-    import params
-    env.set_params(params)
-
-    kafka(action='stop')
 
   def configure(self, env):
     import params
     env.set_params(params)
 
-    kafka(action='config')
+    storm(action="config")
 
-  def status(self, env):
+  def start(self, env):
+    import params
+    env.set_params(params)
+    self.configure(env)
+
+    storm(service="storm-nimbus", action="start")
+
+  def stop(self, env):
     import params
     env.set_params(params)
 
-    kafka(action='status')
+    storm(service="storm-nimbus", action="stop")
 
+  def status(self, env):
+    import status_params
+    env.set_params(status_params)
+
+    storm(service="storm-nimbus", action="status")
 
 if __name__ == "__main__":
-  Kafka().execute()
+  Nimbus().execute()

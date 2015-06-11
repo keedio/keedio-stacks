@@ -31,10 +31,20 @@ def kafka(action):
       )
   elif action == 'start' or action == 'stop' or action == 'status' :
     executed = Popen(["service","kafka",action],stdout=PIPE,stderr=PIPE)
+    out,err = executed.communicate()
+    Logger.info("Kafka service:")
+    Logger.info(action) 
+    Logger.info(out)
+    Logger.info(err)
     if params.has_ganglia_server:
-        Popen(["service","jmxtrans",action])
-
+        executed2=Popen(["service","jmxtrans",action])
+        out,err = executed2.communicate()
+        Logger.info("JMXtrans service")
+        Logger.info(action)
+        Logger.info(out)
+        Logger.info(err)
   if action == "status":
+    executed = Popen(["service","kafka",action],stdout=PIPE,stderr=PIPE)
     out,err = executed.communicate()
     rc = executed.returncode
     utils.check_rc(rc,out,err)

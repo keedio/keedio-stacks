@@ -31,6 +31,7 @@
       <baseurl>http://mirror.de.leaseweb.net/epel/6/x86_64/</baseurl>
       <repoid>epel</repoid>
       <reponame>epel</reponame>
+      <template>repo_suse_rhel.j2</template>
     </repo>
   </os>
   <!--os type="redhat5">

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -18,40 +19,25 @@ limitations under the License.
 """
 
 from resource_management import *
-from kafka_handler import kafka
+from spark import spark
+from subprocess import *
 
-class Kafka(Script):
+class Spark(Script):
   def install(self, env):
     import params
-    self.install_packages(env,params.exclude_packages)
     env.set_params(params)
-    self.configure(env)
-
-  def start(self, env):
-    import params
-    env.set_params(params)
-    
-    kafka(action='config')
-    kafka(action='start')
-
-  def stop(self, env):
-    import params
-    env.set_params(params)
-
-    kafka(action='stop')
+    self.install_packages(env)
+    spark(action="install")
 
   def configure(self, env):
     import params
     env.set_params(params)
-
-    kafka(action='config')
+    spark(action="config")
 
   def status(self, env):
-    import params
-    env.set_params(params)
-
-    kafka(action='status')
-
+    self.configure(env)
+    raise ClientComponentHasNoStatus()
 
 if __name__ == "__main__":
-  Kafka().execute()
+  Spark().execute()
+

@@ -90,6 +90,10 @@ def flume(action = None):
       filelist = glob.glob(params.flume_agent_conf_dir+"/*.conf")
       for f in filelist:
         os.remove(f)
+      # Removes flume-env files  
+      filelist = glob.glob(params.flume_agent_conf_dir+"/*.sh")
+      for f in filelist:
+        os.remove(f)
 
 
 def ambari_meta(agent_name, agent_conf):

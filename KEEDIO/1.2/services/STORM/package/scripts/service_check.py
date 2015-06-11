@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -18,40 +19,26 @@ limitations under the License.
 """
 
 from resource_management import *
-from kafka_handler import kafka
+from resource_management.libraries.functions import get_unique_id_and_date
 
-class Kafka(Script):
-  def install(self, env):
-    import params
-    self.install_packages(env,params.exclude_packages)
-    env.set_params(params)
-    self.configure(env)
-
-  def start(self, env):
-    import params
-    env.set_params(params)
-    
-    kafka(action='config')
-    kafka(action='start')
-
-  def stop(self, env):
+class ServiceCheck(Script):
+  def service_check(self, env):
     import params
     env.set_params(params)
 
-    kafka(action='stop')
+    unique = get_unique_id_and_date()
 
-  def configure(self, env):
-    import params
-    env.set_params(params)
+    File("/tmp/wordCount.jar",
+         content=StaticFile("wordCount.jar")
+    )
 
-    kafka(action='config')
+    cmd = format("storm jar /tmp/wordCount.jar storm.starter.WordCountTopology WordCount{unique} -c nimbus.host={nimbus_host}")
 
-  def status(self, env):
-    import params
-    env.set_params(params)
+    Execute(cmd,
+            logoutput=True
+    )
 
-    kafka(action='status')
-
+    Execute(format("storm kill WordCount{unique}"))
 
 if __name__ == "__main__":
-  Kafka().execute()
+  ServiceCheck().execute()

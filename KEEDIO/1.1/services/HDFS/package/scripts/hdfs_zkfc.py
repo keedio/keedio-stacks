@@ -20,6 +20,7 @@ limitations under the License.
 from resource_management import *
 from utils import check_rc
 from subprocess import *
+import time 
 
 def zkfc(action=None, format=False):
   if action == "configure":
@@ -30,21 +31,45 @@ def zkfc(action=None, format=False):
  
   #First check monit is running and start if not
   executed = Popen(["service","monit","status"])
-  executed.communicate()
+  out,err=executed.communicate()
+  Logger.info("Checking monit status")
+  Logger.info(out)
+  Logger.info(err)
   rc = executed.returncode
   if rc > 0 or action=="configure":
     executed = Popen(["service","monit","restart"])
-    executed.communicate()
+    out,err=executed.communicate()
+    Logger.info("Restarting monit")
+    Logger.info(out)
+    Logger.info(err)
 
-  if action == "start" or action == "stop":
-    executed = Popen(["monit",action,"hadoop-hdfs-zkfc"],stdout=PIPE,stderr=PIPE)
+
+  if action == "start":
+    # AC: this avoids a race condition at restart
+    time.sleep(30)
+    executed = Popen(["monit",action,"hadoop-hdfs-zkfc","-v"],stdout=PIPE,stderr=PIPE)
     out,err = executed.communicate()
+    Logger.info("Monit Hdfs-zkfc: "+action)
+    Logger.info(out)
+    Logger.info(err)
+    rc = executed.returncode
+    check_rc(rc,out,err)
+
+  if action == "stop":
+    executed = Popen(["monit",action,"hadoop-hdfs-zkfc","-v"],stdout=PIPE,stderr=PIPE)
+    out,err = executed.communicate()
+    Logger.info("Monit Hdfs-zkfc: "+action)
+    Logger.info(out)
+    Logger.info(err)
     rc = executed.returncode
     check_rc(rc,out,err)
 
   if action == "status":
     executed = Popen(["service","hadoop-hdfs-zkfc",action],stdout=PIPE,stderr=PIPE)
     out,err = executed.communicate()
+    Logger.info("Hdfs-zkfc: "+action)
+    Logger.info(out)
+    Logger.info(err)
     rc = executed.returncode
     check_rc(rc,out,err)
 
