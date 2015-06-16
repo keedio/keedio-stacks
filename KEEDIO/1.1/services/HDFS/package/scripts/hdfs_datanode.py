@@ -28,7 +28,7 @@ def datanode(action=None):
   if action == "configure":
     import params
     # Alessio: we do not need to set particular permission here, the datanode sets the right permission when it is started.
-    Directory([params.dfs_data_dir],
+    Directory(params.dfs_data_dir.split(','),
         owner=params.hdfs_user,
         group=params.user_group,
         recursive=True
@@ -42,6 +42,9 @@ def datanode(action=None):
   if action == "start":
     cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)
     out,err=cmd.communicate()
+    Logger.info("Starting datanode")
+    Logger.info(out)
+    Logger.info(err)
     rc = cmd.returncode
     Logger.info("Datanode service %s: %s" % (action, rc == 0))
     check_rc(rc,stdout=out,stderr=err)
@@ -49,10 +52,17 @@ def datanode(action=None):
   if action == "stop":
     Logger.info("Datanode service %s")
     cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)
+    out,err=cmd.communicate()
+    Logger.info("Stopping datanode")
+    Logger.info(out)
+    Logger.info(err)
 
   if action == "status":
     cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)
     out,err=cmd.communicate()
+    Logger.info("Checking datanode status")
+    Logger.info(out)
+    Logger.info(err)
     rc = cmd.returncode
     Logger.info("Datanode service %s: %s" % (action, rc == 0))
     check_rc(rc,stdout=out,stderr=err)

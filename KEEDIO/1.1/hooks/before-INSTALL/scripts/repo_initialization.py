@@ -40,12 +40,18 @@ def _alter_repo(action, repo_string, repo_template):
     
     ubuntu_components = [ repo['repoName'] ] + _UBUNTU_REPO_COMPONENTS_POSTFIX
     
+    if "keedio" in repo['repoName'].lower(): 
+	template='repo_keedio.j2'
+    else:
+	template=repo_template
+
     Repository(repo['repoId'],
                action = action,
                base_url = repo['baseUrl'],
                mirror_list = repo['mirrorsList'],
                repo_file_name = repo['repoName'],
-               repo_template = repo_template,
+               #repo_template = repo_template,
+               repo_template = template,
                components = ubuntu_components,
     )
 

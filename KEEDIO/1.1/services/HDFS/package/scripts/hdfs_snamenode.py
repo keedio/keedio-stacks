@@ -42,6 +42,9 @@ def snamenode(action=None, format=False):
     """
     executed = Popen(["service","hadoop-hdfs-secondarynamenode",action],stdout=PIPE,stderr=PIPE)
     out,err = executed.communicate()
+    Logger.info("Alessio: Secondary namenode:"+action)
+    Logger.info(out)
+    Logger.info(err)
     rc = executed.returncode
     check_rc(rc,out,err)
 

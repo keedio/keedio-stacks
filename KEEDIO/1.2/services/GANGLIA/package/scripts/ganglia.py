@@ -35,11 +35,16 @@ def generate_daemon(ganglia_service,
   import params
   import functions
   for gmond_server in params.ganglia_clusters:
+    Logger.info(gmond_server) 
     if gmond_server[0] == name:
       gmond_port = gmond_server[1]
+      Logger.info('Estamos dentro')
       break
   params.gmond_server=gmond_server[0]
   params.gmond_port=gmond_server[1]
+  Logger.info("Alessio")
+  Logger.info(name)
+  Logger.info(gmond_server)
   cmd = ""
   if ganglia_service == "gmond":
     # When multi daemon gmond where packaged, should be changeb by only a synbolic link with service name
@@ -59,11 +64,27 @@ def generate_daemon(ganglia_service,
       group="root",
       recursive=True
     )
+    
   elif ganglia_service == "gmetad":
     File("/etc/ganglia/gmetad.conf",
       content=Template("gmetad.conf.j2",gridName="KEEDIO"),
       mode=0644 )
     functions.turn_off_autostart("gmetad")
+    Directory("/var/lib/ganglia-web/dwoo/compiled",
+      owner="apache",
+      group="apache",
+      recursive=True
+    )
+    Directory("/var/lib/ganglia-web/dwoo/cache",
+      owner="apache",
+      group="apache",
+      recursive=True
+    )
+    Directory("/var/lib/ganglia-web/conf/",
+      owner="apache",
+      group="apache",
+      recursive=True
+    )
   else:
     raise Fail("Unexpected ganglia service")
   Execute(format(cmd),

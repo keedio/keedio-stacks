@@ -30,7 +30,9 @@ def namenode(action=None, do_format=True):
   if action == "configure":
     import params
     Logger.info("Configuring namenode")
-    Directory([params.dfs_name_dir, params.namenode_formatted_mark.rsplit('/',1)[0]],
+    aux_dir_list=params.dfs_name_dir.split(',')
+    aux_dir_list.append(params.namenode_formatted_mark.rsplit('/',1)[0])
+    Directory(aux_dir_list,
             owner=params.hdfs_user,
             group=params.user_group,
             recursive=True
@@ -52,15 +54,20 @@ def namenode(action=None, do_format=True):
       pass
     
     cmd=Popen(['service','hadoop-hdfs-namenode','start'],stdout=None,stderr=None)
-    cmd.communicate()
-    Logger.info("Namenode service started: %s" % cmd.returncode == 0)
+    out,err = cmd.communicate()
+    Logger.info("Starting namenode service")
+    Logger.info(out)
+    Logger.info(err)
     if cmd.returncode == 0 and wait_safe_mode_off():
       Logger.info("Creating hdfs directories")
       create_hdfs_directories()
 
   if action == "stop":
     Logger.info("Stopping namenode")
-    Popen(['service','hadoop-hdfs-namenode','stop'])
+    cmd=Popen(['service','hadoop-hdfs-namenode','stop'])
+    out,err = cmd.communicate()
+    Logger.info(out)
+    Logger.info(err)
 
   if action == "decommission":
     decommission()
@@ -69,6 +76,8 @@ def namenode(action=None, do_format=True):
     Logger.info("Checking namenode status")
     cmd=Popen(['service','hadoop-hdfs-namenode','status'],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
+    Logger.info(out)
+    Logger.info(err)
     rc=cmd.returncode
     check_rc(rc,stdout=out,stderr=err)
     
@@ -158,8 +167,10 @@ def decommission():
   if params.dfs_ha_enabled:
     # due to a bug in hdfs, refreshNodes will not run on both namenodes so we
     # need to execute each command scoped to a particular namenode
-    cmd=["dfsadmin","-fs","hdfs://"+params.namenode_rpc,"-refreshNodes"]
+#    cmd=["dfsadmin","-fs","hdfs://"+params.namenode_rpc,"-refreshNodes"]
+     cmd=["hdfs","dfsadmin","hdfs://"+params.namenode_rpc,"-refreshNodes"]
   else:
-    cmd=["dfsadmin","-fs","-refreshNodes"]
+#    cmd=["dfsadmin","-fs","-refreshNodes"]
+    cmd=["hdfs","dfsadmin","-refreshNodes"]
   execute_sudo_krb(cmd)
 

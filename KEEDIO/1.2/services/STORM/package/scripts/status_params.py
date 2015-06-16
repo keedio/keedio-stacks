@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -16,42 +17,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 """
-
 from resource_management import *
-from kafka_handler import kafka
 
-class Kafka(Script):
-  def install(self, env):
-    import params
-    self.install_packages(env,params.exclude_packages)
-    env.set_params(params)
-    self.configure(env)
+config = Script.get_config()
 
-  def start(self, env):
-    import params
-    env.set_params(params)
-    
-    kafka(action='config')
-    kafka(action='start')
-
-  def stop(self, env):
-    import params
-    env.set_params(params)
-
-    kafka(action='stop')
-
-  def configure(self, env):
-    import params
-    env.set_params(params)
-
-    kafka(action='config')
-
-  def status(self, env):
-    import params
-    env.set_params(params)
-
-    kafka(action='status')
-
-
-if __name__ == "__main__":
-  Kafka().execute()
+pid_dir = config['configurations']['storm-env']['storm_pid_dir']
+pid_nimbus = format("{pid_dir}/nimbus.pid")
+pid_supervisor = format("{pid_dir}/supervisor.pid")
+pid_drpc = format("{pid_dir}/drpc.pid")
+pid_ui = format("{pid_dir}/ui.pid")
+pid_logviewer = format("{pid_dir}/logviewer.pid")
+pid_rest_api = format("{pid_dir}/restapi.pid")
+pid_files = {"logviewer":pid_logviewer,
+             "ui": pid_ui,
+             "nimbus": pid_nimbus,
+             "supervisor": pid_supervisor,
+             "drpc": pid_drpc,
+             "rest_api": pid_rest_api}

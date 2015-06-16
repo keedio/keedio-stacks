@@ -129,7 +129,7 @@ if not is_ganglia_server_host:
     "ganglia-web", "httpd" ]
 
 ganglia_cluster_names = {
-  "jn_hosts": [("JournalNode", 8654)],
+  "journalnode_hosts": [("JournalNode", 8654)],
   "flume_hosts": [("FlumeServer", 8655)],
   "hbase_rs_hosts": [("HBaseRegionServer", 8656)],
   "nm_hosts": [("NodeManager", 8657)],
@@ -159,7 +159,7 @@ if len(gmond_apps) > 0:
   for gmond_app in gmond_apps:
     ganglia_clusters.append(gmond_app)
 
-ganglia_apache_config_file = "/etc/apache2/conf.d/ganglia.conf"
+ganglia_apache_config_file = "/etc/httpd/conf.d/ganglia.conf"
 ganglia_web_path="/var/www/html/ganglia"
 if System.get_instance().os_family == "suse":
   rrd_py_path = '/srv/www/cgi-bin'
