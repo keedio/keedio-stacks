@@ -28,7 +28,7 @@ def datanode(action=None):
   if action == "configure":
     import params
     # Alessio: we do not need to set particular permission here, the datanode sets the right permission when it is started.
-    Directory([params.dfs_data_dir],
+    Directory(params.dfs_data_dir.split(','),
         owner=params.hdfs_user,
         group=params.user_group,
         recursive=True

@@ -96,6 +96,11 @@
     <description>The transporter for communication among Storm tasks.</description>
   </property>
   <property>
+     <name>storm.meta.serialization.delegate</name>
+     <value>backtype.storm.serialization.DefaultSerializationDelegate</value>
+     <description>Serialization delegate</description>
+  </property>
+  <property>
     <name>nimbus.host</name>
     <value>localhost</value>
     <description>The host that the master server is running on.</description>
@@ -113,7 +118,7 @@
   </property>
   <property>
     <name>nimbus.childopts</name>
-    <value>-Xmx1024m -javaagent:/usr/lib/storm/contrib/storm-jmxetric/lib/jmxetric-1.0.4.jar=host=localhost,port=8649,wireformat31x=true,mode=multicast,config=/usr/lib/storm/contrib/storm-jmxetric/conf/jmxetric-conf.xml,process=Nimbus_JVM</value>
+    <value>-Xmx1024m</value>
     <description>This parameter is used by the storm-deploy project to configure the jvm options for the nimbus daemon.</description>
   </property>
   <property>
@@ -252,15 +257,20 @@
   </property>
   <property>
     <name>supervisor.slots.ports</name>
-    <value>[6700, 6701]</value>
+    <value>[6700, 6701, 6702, 6703]</value>
     <description>A list of ports that can run workers on this supervisor. Each worker uses one port, and
        the supervisor will only run one worker per port. Use this configuration to tune
        how many workers run on each machine.</description>
   </property>
   <property>
     <name>supervisor.childopts</name>
-    <value>-Xmx256m -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=56431 -javaagent:/usr/lib/storm/contrib/storm-jmxetric/lib/jmxetric-1.0.4.jar=host=localhost,port=8650,wireformat31x=true,mode=multicast,config=/usr/lib/storm/contrib/storm-jmxetric/conf/jmxetric-conf.xml,process=Supervisor_JVM</value>
+    <value>-Xmx256m</value>
     <description>This parameter is used by the storm-deploy project to configure the jvm options for the supervisor daemon.</description>
+  </property>
+  <property>
+     <name>supervisor.enable</name>
+      <value>true</value>
+     <description>Is the supervisor enabled</description>
   </property>
   <property>
     <name>supervisor.worker.start.timeout.secs</name>
@@ -287,7 +297,7 @@
   </property>
   <property>
     <name>worker.childopts</name>
-    <value>-Xmx768m -javaagent:/usr/lib/storm/contrib/storm-jmxetric/lib/jmxetric-1.0.4.jar=host=localhost,port=8650,wireformat31x=true,mode=multicast,config=/usr/lib/storm/contrib/storm-jmxetric/conf/jmxetric-conf.xml,process=Worker_%ID%_JVM</value>
+    <value>-Xmx768m</value>
     <description>The jvm opts provided to workers launched by this supervisor. All \"%ID%\" substrings are replaced with an identifier for this worker.</description>
   </property>
   <property>
@@ -333,9 +343,19 @@
     <description>Netty based messaging: The # of worker threads for the server.</description>
   </property>
   <property>
+      <name>storm.messaging.netty.transfer.batch.size</name>
+      <value>262144</value>
+       <description># If the Netty messaging layer is busy(netty internal buffer not writable), the Netty client will try to batch message as more as possible </description>
+  </property>
+  <property>
     <name>storm.messaging.netty.client_worker_threads</name>
     <value>1</value>
     <description>Netty based messaging: The # of worker threads for the client.</description>
+  </property>
+  <property>
+      <name>storm.messaging.netty.flush.check.interval.ms</name>
+          <value>10</value>
+       <description>We check with this interval that whether the Netty channel is writable and try to write pending messages if it is</description>
   </property>
   <property>
     <name>storm.messaging.netty.buffer_size</name>
@@ -417,6 +437,11 @@
        typically used in testing to limit the number of threads spawned in local mode.</description>
   </property>
   <property>
+     <name>topology.multilang.serializer</name>
+     <value>backtype.storm.multilang.JsonSerializer</value>
+     <description>JsonSerializer implements the JSON multilang protocol</description>
+  </property>
+  <property>
     <name>topology.max.spout.pending</name>
     <value>null</value>
     <description>The maximum number of tuples that can be pending on a spout task at any given time.
@@ -451,6 +476,11 @@
     <name>topology.worker.childopts</name>
     <value>null</value>
     <description>Topology-specific options for the worker child process. This is used in addition to WORKER_CHILDOPTS.</description>
+  </property>
+  <property>
+    <name>topology.worker.receiver.thread.count</name>
+    <value>1</value>
+    <description>Control how many worker receiver threads we need per worker</description>
   </property>
   <property>
     <name>topology.executor.receive.buffer.size</name>

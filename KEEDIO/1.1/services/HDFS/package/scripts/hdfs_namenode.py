@@ -30,7 +30,9 @@ def namenode(action=None, do_format=True):
   if action == "configure":
     import params
     Logger.info("Configuring namenode")
-    Directory([params.dfs_name_dir, params.namenode_formatted_mark.rsplit('/',1)[0]],
+    aux_dir_list=params.dfs_name_dir.split(',')
+    aux_dir_list.append(params.namenode_formatted_mark.rsplit('/',1)[0])
+    Directory(aux_dir_list,
             owner=params.hdfs_user,
             group=params.user_group,
             recursive=True

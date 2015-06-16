@@ -30,4 +30,7 @@ drpc.servers:
   {% endfor %}
 {% endif %}
 
-ui.port: 8744
+#ui.port: 8744
+{% for key, value in configurations|dictsort if not key.startswith('_') %}
+{{key}} : {{ escape_yaml_propetry(value) }}
+{% endfor %}
