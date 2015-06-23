@@ -63,8 +63,14 @@
       IMPORTANT: schema creation scripts attemps to logging with password if the value is space, but later it login without password, which causes auth error. Work-around, set password.
     </description>
   </property>
-
-
+  <property>
+    <name>oozie.service.JPAService.jdbc.url</name>
+    <value></value>
+  </property>
+  <property>
+    <name>oozie.service.JPAService.jdbc.driver</name>
+    <value></value>
+  </property>
  
   <!--property>
     <name>oozie.base.url</name>

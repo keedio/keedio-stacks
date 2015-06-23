@@ -37,9 +37,11 @@ hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
 hdfs_principal_name = default('/configurations/hadoop-env/hdfs_principal_name',None)
 hdfs_user_keytab = default('/configurations/hadoop-site/hdfs_user_keytab',None)
 
-oozie_db_type = default('/configurations/oozie-site/oozie_database',None)
+oozie_database = default('/configurations/oozie-site/oozie_database',None)
 oozie_db_schema_name = config['configurations']['oozie-site']['oozie.db.schema.name']
 oozie_db_server = config['configurations']['oozie-site']['oozie.db.server']
+oozie_jdbc_url = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.url']
+oozie_jdbc_driver = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.driver']
 oozie_db_user = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.username']
 oozie_db_pass = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.password']
 
@@ -56,15 +58,7 @@ oozie_group = config['configurations']['oozie-env']['oozie_group']
 oozie_principal = default('/configurations/oozie-env/oozie_principal',None)
 oozie_keytab = default('/configurations/oozie-env/oozie_keytab',None)
 
-if oozie_db_type is not None:
-  if oozie_db_type == "mysql":
-    jdbc_driver_name="com.mysql.jdbc.Driver"
-    oozie_jdbc_url='jdbc:mysql://%s/%s' % (oozie_db_server,oozie_db_schema_name )
-  elif oozie_db_type == "postgresql":
-    jdbc_driver_name="org.postgresql.Driver"
-  elif oozie_db_type == "oracle":
-    jdbc_driver_name="oracle.jdbc.driver.OracleDriver"
-  else:
-    is_derbydb=true
+
+#is_derbydb=False
 
 tmp_dir='/tmp/oozie'

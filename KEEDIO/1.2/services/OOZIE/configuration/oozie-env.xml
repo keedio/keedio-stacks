@@ -41,6 +41,10 @@
     <name>oozie_https_port</name>
     <value>11443</value>
     <description>Secure port to bind oozie server</description>
-  </property> 
+  </property>
+  <property>
+    <name>oozie_admin_port</name>
+    <value>11001</value>
+  </property>
 
 </configuration>

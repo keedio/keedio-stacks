@@ -59,13 +59,13 @@ def oozie(action=None,is_server=False):
       Popen(extract_cmd)
       
 
-      if params.jdbc_driver_name == "com.mysql.jdbc.Driver":
+      if params.oozie_jdbc_driver == "com.mysql.jdbc.Driver":
         create_db_cmd = [ "/usr/lib/oozie/bin/ooziedb.sh", "create", "-run" ]
       
-      if params.jdbc_driver_name == "org.postgresql.Driver":
+      if params.oozie_jdbc_driver == "org.postgresql.Driver":
         pass
       
-      if params.jdbc_driver_name == "oracle.jdbc.driver.OracleDriver":
+      if params.oozie_jdbc_driver == "oracle.jdbc.driver.OracleDriver":
         pass
 
       Popen(create_db_cmd)
