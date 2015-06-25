@@ -52,11 +52,11 @@ def oozie(action=None,is_server=False):
       mode=0644)
 
     if is_server :
-      File('/usr/lib/oozie/libext/ext-2.2.1.zip',
-        content=StaticFile('ext-2.2.1.zip'))
-      # oozie expect ext-2.2 directory and looks to be hardcoded
-      extract_cmd=[ 'unzip', '/usr/lib/oozie/libext/ext-2.2.1.zip','-d','/usr/lib/oozie/libext/ext-2.2' ]
-      Popen(extract_cmd)
+      #File('/usr/lib/oozie/libext/ext-2.2.1.zip',
+       # content=StaticFile('ext-2.2.1.zip'))
+      ## oozie expect ext-2.2 directory and looks to be hardcoded
+      #extract_cmd=[ 'unzip', '/usr/lib/oozie/libext/ext-2.2.1.zip','-d','/usr/lib/oozie/libext/ext-2.2' ]
+      #Popen(extract_cmd)
       
 
       if params.oozie_jdbc_driver == "com.mysql.jdbc.Driver":
