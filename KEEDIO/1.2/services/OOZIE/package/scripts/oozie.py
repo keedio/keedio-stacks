@@ -57,10 +57,17 @@ def oozie(action=None,is_server=False):
       ## oozie expect ext-2.2 directory and looks to be hardcoded
       #extract_cmd=[ 'unzip', '/usr/lib/oozie/libext/ext-2.2.1.zip','-d','/usr/lib/oozie/libext/ext-2.2' ]
       #Popen(extract_cmd)
-      
-
+      extract_cmd=[ 'ln', '-s','/usr/share/java/mysql-connector-java.jar','/usr/lib/oozie/libext/mysql-connector-java.jar' ] 
+      cmd=Popen(extract_cmd)
+      out,err=cmd.communicate() 
+      Logger.info("Creating mysql-connector-java.jar symbolic link in /usr/lib/oozie/libext/")
+      Logger.info(out)
+      Logger.info(err)
+          
+      Logger.info("AlessioDB")
+      Logger.info(params.oozie_jdbc_driver)
       if params.oozie_jdbc_driver == "com.mysql.jdbc.Driver":
-        create_db_cmd = [ "/usr/lib/oozie/bin/ooziedb.sh", "create", "-run" ]
+        create_db_cmd = format('su --shell=/bin/bash -l oozie -c "source /etc/profile.d/java.sh && /usr/lib/oozie/bin/ooziedb.sh create -sqlfile oozie.sql -run"') 
       
       if params.oozie_jdbc_driver == "org.postgresql.Driver":
         pass
@@ -68,4 +75,8 @@ def oozie(action=None,is_server=False):
       if params.oozie_jdbc_driver == "oracle.jdbc.driver.OracleDriver":
         pass
 
-      Popen(create_db_cmd)
+      cmd=Popen(create_db_cmd, shell=True)
+      out,err=cmd.communicate()
+      Logger.info("Installing the Oozie Schema in the DB")
+      Logger.info(out)
+      Logger.info(err)
