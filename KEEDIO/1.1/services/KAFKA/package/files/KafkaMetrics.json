@@ -219,7 +219,7 @@
                                "Count",
                                "FifteenMinuteRate",
                                "FiveMinuteRate",
-                               "OneMinuteRate",
+                               "1MinuteRate",
                                "MeanRate"
                     ], 
                     "resultAlias": "ControllerStats"

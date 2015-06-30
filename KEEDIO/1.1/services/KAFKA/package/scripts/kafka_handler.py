@@ -15,7 +15,7 @@ def kafka(action):
         value=str(params.kafka_conf[param])+"\n"
       kafka_server_properties+=param+"="+value
     if params.has_ganglia_server:
-      File('/etc/profile.d/kafka.sh',
+      File('/etc/default/kafka.sh',
         content=StaticFile('kafka.profiles.d')
       )
     File('/etc/kafka/conf/server.properties',
