@@ -280,9 +280,9 @@ java_home = config['hostLevelParams']['java_home']
 
 if hdp_stack_version.startswith('2.0') and System.get_instance().os_family != "suse":
   # deprecated rhel jsvc_path
-  jsvc_path = "/usr/libexec/bigtop-utils"
+  jsvc_path = "/usr/lib/jsvcdaemon"
 else:
-  jsvc_path = "/usr/lib/bigtop-utils"
+  jsvc_path = "/usr/lib/jsvcdaemon"
 
 hadoop_heapsize = config['configurations']['hadoop-env']['hadoop_heapsize']
 namenode_heapsize = config['configurations']['hadoop-env']['namenode_heapsize']
