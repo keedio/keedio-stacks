@@ -31,7 +31,7 @@ tmp_dir = Script.get_tmp_dir()
 stack_version_unformatted = str(config['hostLevelParams']['stack_version'])
 hdp_stack_version = format_hdp_stack_version(stack_version_unformatted)
 security_enabled = config['configurations']['cluster-env']['security_enabled']
-kerberos_cache_file = config['configurations']['cluster-env']['kerberos_cache_file']
+kerberos_cache_file = default('/configurations/cluster-env/kerberos_cache_file','/tmp/ccache_keytab')
 stack_is_hdp22_or_further = hdp_stack_version != "" and compare_versions(hdp_stack_version, '2.2') >= 0
 hdfs_user = status_params.hdfs_user
 hadoop_pid_dir_prefix = status_params.hadoop_pid_dir_prefix
@@ -282,7 +282,7 @@ if hdp_stack_version.startswith('2.0') and System.get_instance().os_family != "s
   # deprecated rhel jsvc_path
   jsvc_path = "/usr/libexec/bigtop-utils"
 else:
-  jsvc_path = "/usr/lib/bigtop-utils"
+  jsvc_path = "/usr/lib/jsvcdaemon"
 
 hadoop_heapsize = config['configurations']['hadoop-env']['hadoop_heapsize']
 namenode_heapsize = config['configurations']['hadoop-env']['namenode_heapsize']

@@ -39,7 +39,7 @@ class HdfsServiceCheck(Script):
     smoke_keytab =params.smoke_user_keytab
     safemode_command = ["hdfs","dfsadmin","-safemode","get"]
 
-    execute_smoke = partial(execute_sudo_krb,user=smoke_user,principal=smoke_user_principal,keytab=smoke_keytab)
+    execute_smoke = partial(execute_sudo_krb,user=smoke_user,principal=smoke_user,keytab=smoke_keytab)
 
     create_dir_cmd = ["hdfs","dfs","-mkdir",dir]
     chmod_command = ["hdfs","dfs","-chmod","777",dir]
@@ -104,7 +104,7 @@ class HdfsServiceCheck(Script):
 
     if params.is_namenode_master:
       if params.has_zkfc_hosts:
-        pid_dir = format("{hadoop_pid_dir_prefix}/{hdfs_user}")
+        pid_dir = format("{hadoop_pid_dir_prefix}")
         pid_file = format("{pid_dir}/hadoop-{hdfs_user}-zkfc.pid")
         check_zkfc_process_cmd = format(
           "ls {pid_file} >/dev/null 2>&1 && ps `cat {pid_file}` >/dev/null 2>&1")

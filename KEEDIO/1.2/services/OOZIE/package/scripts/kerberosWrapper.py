@@ -25,6 +25,7 @@ import os
 
 class krb_wrapper():
     def __init__(self,principal,keytab,ccache_file=None):
+        print "Principal: %s\nKeytab: %s\n" %(principal,keytab)
         self.context = krbV.default_context()
         principal = str(principal)
         self.principal = krbV.Principal(name=principal, context=self.context)
