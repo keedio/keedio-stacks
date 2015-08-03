@@ -1,3 +1,5 @@
+{#
+#}
 <?xml version="1.0"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
@@ -62,7 +64,7 @@
 
     <property>
         <name>oozie.service.AuthorizationService.security.enabled</name>
-        <value>false</value>
+        <value>{{ security_enabled }}</value>
         <description>
             Specifies whether security (user name/admin role) is enabled or not.
             If disabled any user can manage Oozie system and manage any job.
@@ -189,7 +191,7 @@
 
     <property>
         <name>local.realm</name>
-        <value>LOCALHOST</value>
+        <value>{{ kerberos_domain }}</value>
         <description>
             Kerberos Realm used by Oozie and Hadoop. Using 'local.realm' to be aligned with Hadoop configuration
         </description>
@@ -197,7 +199,7 @@
 
     <property>
         <name>oozie.service.HadoopAccessorService.keytab.file</name>
-        <value>${user.home}/oozie.keytab</value>
+        <value>/etc/security/keytabs/oozie.service.keytab</value>
         <description>
             Location of the Oozie user keytab file.
         </description>
@@ -205,7 +207,7 @@
 
     <property>
         <name>oozie.service.HadoopAccessorService.kerberos.principal</name>
-        <value>${user.name}/localhost@${local.realm}</value>
+        <value>${user.name}/{{ oozie_server }}@${local.realm}</value>
         <description>
             Kerberos principal for Oozie service.
         </description>
@@ -263,7 +265,7 @@
 
     <property>
         <name>oozie.authentication.type</name>
-        <value>simple</value>
+        <value>{% if security_enabled %}kerberos{% else %}simple{% endif %}</value>
         <description>
             Defines authentication used for Oozie HTTP endpoint.
             Supported values are: simple | kerberos | #AUTHENTICATION_HANDLER_CLASSNAME#
@@ -292,7 +294,7 @@
 
     <property>
       <name>oozie.authentication.cookie.domain</name>
-      <value></value>
+      <value>{{ kerberos_domain.lower() }}</value>
       <description>
         The domain to use for the HTTP cookie that stores the authentication token.
         In order to authentiation to work correctly across multiple hosts
@@ -311,7 +313,7 @@
 
     <property>
         <name>oozie.authentication.kerberos.principal</name>
-        <value>HTTP/localhost@${local.realm}</value>
+        <value>HTTP/{{ oozie_server }}@${local.realm}</value>
         <description>
             Indicates the Kerberos principal to be used for HTTP endpoint.
             The principal MUST start with 'HTTP/' as per Kerberos HTTP SPNEGO specification.

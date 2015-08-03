@@ -34,7 +34,7 @@ class OozieServiceCheck(Script):
     import params
   
     Directory(params.tmp_dir,
-      owner=params.oozie_user,
+      owner=params.smoke_user,
       group=params.oozie_group
     )
 
@@ -50,14 +50,14 @@ class OozieServiceCheck(Script):
 
     # Define partial aux functions 
     execute_hdfs = partial(execute_sudo_krb,user=params.hdfs_user,principal=params.hdfs_principal_name,keytab=params.hdfs_user_keytab) 
-    execute_oozie = partial(execute_sudo_krb,user=params.oozie_user,principal=params.oozie_principal,keytab=params.oozie_keytab)
+    execute_oozie = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
 
     cmd_untar=['tar','xzf','%s' % oozie_examples_file,'-C',params.tmp_dir]
     execute_oozie(cmd_untar)
 
     # HDFS oozie user init
-    cmd_create_dir_hdfs=['hdfs','dfs','-mkdir','-p','/user/oozie']
-    cmd_chown_dir_hdfs=['hdfs','dfs','-chown','oozie:','/user/oozie']
+    cmd_create_dir_hdfs=['hdfs','dfs','-mkdir','-p','/user/%s' % (params.smoke_user)]
+    cmd_chown_dir_hdfs=['hdfs','dfs','-chown','oozie:','/user/%s' % params.smoke_user]
     execute_hdfs(cmd_create_dir_hdfs)
     execute_hdfs(cmd_chown_dir_hdfs)
   
@@ -83,7 +83,7 @@ class OozieServiceCheck(Script):
     cmd_set_jobtracker_8032=['sed','-i','"s|jobTracker=localhost:8032|jobTracker=%s|g"' % resourcemanager, job_properties_file]
     cmd_set_jobtracker_9001=['sed','-i','"s|jobTracker=localhost:9001|jobTracker=%s|g"' % resourcemanager, job_properties_file]
 
-    execute_oozie = partial(execute_sudo_krb,user=params.oozie_user,principal=params.oozie_principal,keytab=params.oozie_keytab)
+    execute_oozie = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
 
     execute_oozie(cmd_set_namenode_8020) 
     execute_oozie(cmd_set_namenode_9000) 
@@ -95,7 +95,7 @@ class OozieServiceCheck(Script):
     import params
     import re,time
     pattern=re.compile('Status\s*\:\s*(\w+)')
-    execute_oozie = partial(execute_sudo_krb,user=params.oozie_user,principal=params.oozie_principal,keytab=params.oozie_keytab)
+    execute_oozie = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
     
     cmd_check_status=['oozie','job','-oozie','http://%s:%d/oozie' % (params.oozie_server,params.oozie_port),'-info','%s' % jobId]
     status="RUNNING"
