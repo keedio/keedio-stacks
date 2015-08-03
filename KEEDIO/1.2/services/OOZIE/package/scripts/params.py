@@ -58,7 +58,9 @@ oozie_https_port = config['configurations']['oozie-env']['oozie_https_port']
 oozie_user = config['configurations']['oozie-env']['oozie_user']
 oozie_group = config['configurations']['oozie-env']['oozie_group']
 oozie_principal = default('/configurations/oozie-site/oozie.service.HadoopAccessorService.kerberos.principal',None)
-oozie_keytab = default('/configurations/oozie-env/oozie_keytab',None)
+oozie_keytab = default('/configurations/oozie-site/oozie.service.HadoopAccessorService.keytab.file',None)
+oozie_spnego_principal = default('/configurations/oozie-site/oozie.authentication.kerberos.principal',None)
+oozie_spnego_keytab= default('/configurations/oozie-site/oozie.authentication.kerberos.keytab',None)
 
 
 #is_derbydb=False

@@ -70,6 +70,10 @@
             If disabled any user can manage Oozie system and manage any job.
         </description>
     </property>
+    <property>
+        <name>oozie.service.AuthorizationService.authorization.enabled</name>
+        <value>{{ security_enabled }}</value>  
+    </property>
 
     <property>
         <name>oozie.service.PurgeService.older.than</name>
@@ -313,7 +317,7 @@
 
     <property>
         <name>oozie.authentication.kerberos.principal</name>
-        <value>HTTP/{{ oozie_server }}@${local.realm}</value>
+        <value>{{ oozie_spnego_principal }}</value>
         <description>
             Indicates the Kerberos principal to be used for HTTP endpoint.
             The principal MUST start with 'HTTP/' as per Kerberos HTTP SPNEGO specification.
@@ -322,7 +326,7 @@
 
     <property>
         <name>oozie.authentication.kerberos.keytab</name>
-        <value>${oozie.service.HadoopAccessorService.keytab.file}</value>
+        <value>{{ oozie_spnego_keytab }}</value>
         <description>
             Location of the keytab file with the credentials for the principal.
             Referring to the same keytab file Oozie uses for its Kerberos credentials for Hadoop.
