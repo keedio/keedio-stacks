@@ -203,7 +203,7 @@
 
     <property>
         <name>oozie.service.HadoopAccessorService.keytab.file</name>
-        <value>/etc/security/keytabs/oozie.service.keytab</value>
+        <value>{{ oozie_keytab }}</value>
         <description>
             Location of the Oozie user keytab file.
         </description>
@@ -211,7 +211,7 @@
 
     <property>
         <name>oozie.service.HadoopAccessorService.kerberos.principal</name>
-        <value>${user.name}/{{ oozie_server }}@${local.realm}</value>
+        <value>{{ oozie_principal }}</value>
         <description>
             Kerberos principal for Oozie service.
         </description>
