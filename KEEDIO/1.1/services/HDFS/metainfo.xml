@@ -195,6 +195,9 @@
             <package>
               <name>monit</name>
             </package>
+            <package>
+              <name>jsvcdaemon</name>
+            </package>
           </packages>
         </osSpecific>
         
