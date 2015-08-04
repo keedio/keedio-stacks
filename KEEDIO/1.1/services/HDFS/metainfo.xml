@@ -198,6 +198,9 @@
             <package>
               <name>jsvcdaemon</name>
             </package>
+             <package>
+              <name>hadoop-httpfs</name>
+            </package>
           </packages>
         </osSpecific>
         

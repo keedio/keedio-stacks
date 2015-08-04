@@ -32,6 +32,7 @@ stack_version_unformatted = str(config['hostLevelParams']['stack_version'])
 hdp_stack_version = format_hdp_stack_version(stack_version_unformatted)
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 kerberos_cache_file = default('/configurations/cluster-env/kerberos_cache_file','/tmp/ccache_keytab')
+kerberos_domain = config['configurations']['cluster-env']['kerberos_domain']
 stack_is_hdp22_or_further = hdp_stack_version != "" and compare_versions(hdp_stack_version, '2.2') >= 0
 hdfs_user = status_params.hdfs_user
 hadoop_pid_dir_prefix = status_params.hadoop_pid_dir_prefix
