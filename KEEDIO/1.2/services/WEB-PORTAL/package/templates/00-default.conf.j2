@@ -1,0 +1,167 @@
+<VirtualHost *:80>
+	ServerName {{hostname}} 
+	ServerAdmin systems@keedio.com
+
+	DocumentRoot {{portal_www_dir}}
+        <Directory {{portal_www_dir}}>
+                Options FollowSymLinks Indexes MultiViews
+		AllowOverride all
+                Order Allow,Deny
+                Allow from all
+        </Directory>
+
+	ErrorLog /var/log/httpd/ambari_error.log
+	CustomLog /var/log/httpd/ambari_access.log combined
+
+        ProxyRequests On
+        ProxyPreserveHost On
+
+	#DIRECTIVAS PROXY AMBARI	
+	ProxyPass /ambari http://{{ambari_server_host}}:8080
+	ProxyPassReverse /ambari http://{{ambari_server_host}}:8080
+
+	ProxyPass /img http://{{ambari_server_host}}:8080/img
+	ProxyPassReverse /img http://{{ambari_server_host}}:8080/img
+	
+	ProxyPass /api http://{{ambari_server_host}}:8080/api
+        ProxyPassReverse /api http://{{ambari_server_host}}:8080/api
+
+	ProxyPass /data http://{{ambari_server_host}}:8080/data
+	ProxyPassReverse /data http://{{ambari_server_host}}:8080/data
+
+        ProxyPass /font http://{{ambari_server_host}}:8080/font
+        ProxyPassReverse /font http://{{ambari_server_host}}:8080/font
+
+        ProxyPass /javascripts http://{{ambari_server_host}}:8080/javascripts
+        ProxyPassReverse /javascripts http://{{ambari_server_host}}:8080/javascripts
+
+        ProxyPass /licenses http://{{ambari_server_host}}:8080/licenses
+        ProxyPassReverse /licenses http://{{ambari_server_host}}:8080/licenses
+
+        ProxyPass /stylesheets http://{{ambari_server_host}}:8080/stylesheets
+        ProxyPassReverse /stylesheets http://{{ambari_server_host}}:8080/stylesheets
+
+        ProxyPass /test http://{{ambari_server_host}}:8080/test
+        ProxyPassReverse /test http://{{ambari_server_host}}:8080/test
+
+	#DIRECTIVAS PROXY HUE
+#	SetEnv	proxy-nokeepalive 1
+	
+	ProxyPass /hue http://{{hue_server_host}}:8888/accounts/login/?next=/about/
+	ProxyPassReverse /hue http://{{hue_server_host}}:8888/accounts/login/?next=/about/
+
+        ProxyPass /accounts http://{{hue_server_host}}:8888/accounts
+        ProxyPassReverse /accounts http://{{hue_server_host}}:8888/accounts
+
+        ProxyPass /accounts/login http://{{hue_server_host}}:8888/accounts/login
+        ProxyPassReverse /accounts/login http://{{hue_server_host}}:8888/accounts/login
+
+        ProxyPass /accounts/logout http://{{hue_server_host}}:8888/accounts/logout
+        ProxyPassReverse /accounts/logout http://{{hue_server_host}}:8888/accounts/logout
+
+	ProxyPass /accounts/login/?next=/ http://{{hue_server_host}}:8888/accounts/login/?next=/about
+	ProxyPassReverse /accounts/login/?next=/ http.//{{hue_server_host}}:8888/accounts/login/?next=/about
+
+        ProxyPass /static http://{{hue_server_host}}:8888/static
+        ProxyPassReverse /static http://{{hue_server_host}}:8888/static
+
+        ProxyPass /about http://{{hue_server_host}}:8888/about
+        ProxyPassReverse /about http://{{hue_server_host}}:8888/about
+
+	ProxyPass /beeswax http://{{hue_server_host}}:8888/beeswax
+        ProxyPassReverse /beeswax http://{{hue_server_host}}:8888/beeswax
+
+	ProxyPass /filebrowser http://{{hue_server_host}}:8888/filebrowser
+        ProxyPassReverse /filebrowser http://{{hue_server_host}}:8888/filebrowser
+
+	ProxyPass /hbase http://{{hue_server_host}}:8888/hbase
+        ProxyPassReverse /hbase http://{{hue_server_host}}:8888/hbase
+
+        ProxyPass /help http://{{hue_server_host}}:8888/help
+        ProxyPassReverse /help http://{{hue_server_host}}:8888/help
+
+        ProxyPass /impala http://{{hue_server_host}}:8888/impala
+        ProxyPassReverse /impala http://{{hue_server_host}}:8888/impala
+
+        ProxyPass /jobbrowser http://{{hue_server_host}}:8888/jobbrowser
+        ProxyPassReverse /jobbrowser http://{{hue_server_host}}:8888/jobbrowser
+
+        ProxyPass /jobsub http://{{hue_server_host}}:8888/jobsub
+        ProxyPassReverse /jobsub http://{{hue_server_host}}:8888/jobsub
+
+        ProxyPass /kafka http://{{hue_server_host}}:8888/kafka
+        ProxyPassReverse /kafka http://{{hue_server_host}}:8888/kafka
+
+        ProxyPass /logs http://{{hue_server_host}}:8888/logs
+        ProxyPassReverse /logs http://{{hue_server_host}}:8888/logs
+
+        ProxyPass /metastore http://{{hue_server_host}}:8888/metastore
+        ProxyPassReverse /metastore http://{{hue_server_host}}:8888/metastore
+
+        ProxyPass /oozie http://{{hue_server_host}}:8888/oozie
+        ProxyPassReverse /oozie http://{{hue_server_host}}:8888/oozie
+
+        ProxyPass /pig http://{{hue_server_host}}:8888/pig
+        ProxyPassReverse /pig http://{{hue_server_host}}:8888/pig
+
+        ProxyPass /proxy http://{{hue_server_host}}:8888/proxy
+        ProxyPassReverse /proxy http://{{hue_server_host}}:8888/proxy
+
+        ProxyPass /rdbms http://{{hue_server_host}}:8888/rdbms
+        ProxyPassReverse /rdbms http://{{hue_server_host}}:8888/rdbms
+
+        ProxyPass /search http://{{hue_server_host}}:8888/search
+        ProxyPassReverse /search http://{{hue_server_host}}:8888/search
+
+        ProxyPass /spark http://{{hue_server_host}}:8888/spark
+        ProxyPassReverse /spark http://{{hue_server_host}}:8888/spark
+
+        ProxyPass /sqoop http://{{hue_server_host}}:8888/sqoop
+        ProxyPassReverse /sqoop http://{{hue_server_host}}:8888/sqoop
+
+        ProxyPass /storm http://{{hue_server_host}}:8888/storm
+        ProxyPassReverse /storm http://{{hue_server_host}}:8888/storm
+
+        ProxyPass /useradmin http://{{hue_server_host}}:8888/useradmin
+        ProxyPassReverse /useradmin http://{{hue_server_host}}:8888/useradmin
+
+        ProxyPass /zookeeper http://{{hue_server_host}}:8888/zookeeper
+        ProxyPassReverse /zookeeper http://{{hue_server_host}}:8888/zookeeper
+
+        ProxyPass /desktop http://{{hue_server_host}}:8888/desktop
+        ProxyPassReverse /desktop http://{{hue_server_host}}:8888/desktop
+
+	#DIRECTIVAS PROXY STORM
+	ProxyPass /storma/(.*) http://{{storm_ui_server_hosts}}:8744/index.html
+        ProxyPassReverse /storma/(.*) http://{{storm_ui_server_hosts}}:8744/index.html
+
+	ProxyPass /js http://{{storm_ui_server_hosts}}:8744/js
+        ProxyPassReverse /js http://{{storm_ui_server_hosts}}:8744/js
+
+        ProxyPass /css http://{{storm_ui_server_hosts}}:8744/css
+        ProxyPassReverse /css http://{{storm_ui_server_hosts}}:8744/css
+
+        ProxyPass /templates http://{{storm_ui_server_hosts}}:8744/templates
+        ProxyPassReverse /templates http://{{storm_ui_server_hosts}}:8744/templates
+
+        ProxyPass /images http://{{storm_ui_server_hosts}}:8744/images
+        ProxyPassReverse /images http://{{storm_ui_server_hosts}}:8744/images
+
+	#DIRECTIVAS PROXY HDFS NN01
+        ProxyPass /hfdfsnn01/dfshealth.jsp http://{{namenode_one_host}}:50070/dfshealth.jsp
+        ProxyPassReverse /hfdfsnn01/dfshealth.jsp http://{{namenode_one_host}}:50070/dfshealth.jsp
+
+        ProxyPass /nn_browsedfscontent.jsp  http://{{namenode_one_host}}:50070/nn_browsedfscontent.jsp 
+        ProxyPassReverse /nn_browsedfscontent.jsp  http://{{namenode_one_host}}:50070/nn_browsedfscontent.jsp 
+
+        ProxyPass /hfdfsnn01/dfsnodelist.jsp http://{{namenode_one_host}}:50070/dfsnodelist.jsp
+        ProxyPassReverse /hfdfsnn01/dfsnodelist.jsp http://{{namenode_one_host}}:50070/dfsnodelist.jsp
+
+	#DIRECTIVAS PROXY HDFS NN02
+        ProxyPass /hfdfsnn02/dfshealth.jsp http://{{namenode_two_host}}:50070/dfshealth.jsp
+        ProxyPassReverse /hfdfsnn02/dfshealth.jsp http://{{namenode_two_host}}:50070/dfshealth.jsp
+
+        ProxyPass /hfdfsnn02/dfsnodelist.jsp http://{{namenode_two_host}}:50070/dfsnodelist.jsp
+        ProxyPassReverse /hfdfsnn02/dfsnodelist.jsp http://{{namenode_two_host}}:50070/dfsnodelist.jsp
+</VirtualHost>
+
