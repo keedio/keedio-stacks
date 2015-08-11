@@ -47,6 +47,16 @@ def namenode(action=None, do_format=True):
 	owner=params.hdfs_user,
 	group=params.user_group
     )
+    if  params.security_enabled:
+        File('/etc/hadoop-httpfs/conf/httpfs-site.xml',
+             content=Template("httpfs-site-kerb.xml.j2"),
+             owner='httpfs',
+             group=params.user_group)
+    else:
+        File('/etc/hadoop-httpfs/conf/httpfs-site.xml',
+             content=Template("httpfs-site.xml.j2"),
+             owner='httpfs',
+             group=params.user_group) 
 
     if do_format:
       Logger.info("Namenode will be be formatted")
@@ -62,9 +72,21 @@ def namenode(action=None, do_format=True):
       Logger.info("Creating hdfs directories")
       create_hdfs_directories()
 
+    cmd=Popen(['service','hadoop-httpfs','start'],stdout=None,stderr=None)
+    out,err = cmd.communicate()
+    Logger.info("Starting httpfs service on the namenode")
+    Logger.info(out)
+    Logger.info(err)
+
   if action == "stop":
     Logger.info("Stopping namenode")
     cmd=Popen(['service','hadoop-hdfs-namenode','stop'])
+    out,err = cmd.communicate()
+    Logger.info(out)
+    Logger.info(err)
+
+    Logger.info("Stopping httpfs")
+    cmd=Popen(['service','hadoop-httpfs','stop'])
     out,err = cmd.communicate()
     Logger.info(out)
     Logger.info(err)
@@ -75,6 +97,14 @@ def namenode(action=None, do_format=True):
   if action == "status":
     Logger.info("Checking namenode status")
     cmd=Popen(['service','hadoop-hdfs-namenode','status'],stdout=PIPE,stderr=PIPE)
+    out,err=cmd.communicate()
+    Logger.info(out)
+    Logger.info(err)
+    rc=cmd.returncode
+    check_rc(rc,stdout=out,stderr=err)
+
+    Logger.info("Checking httpfs status")
+    cmd=Popen(['service','hadoop-httpfs','status'],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     Logger.info(out)
     Logger.info(err)
