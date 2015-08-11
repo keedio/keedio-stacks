@@ -28,6 +28,8 @@ import re
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
 
+print config
+
 stack_version_unformatted = str(config['hostLevelParams']['stack_version'])
 hdp_stack_version = format_hdp_stack_version(stack_version_unformatted)
 security_enabled = config['configurations']['cluster-env']['security_enabled']
