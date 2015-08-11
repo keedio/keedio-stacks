@@ -261,6 +261,7 @@ if not is_journalnode:
   exclude_packages += [format("hadoop-hdfs-journalnode")]
 if not is_namenode_master:
   exclude_packages += [format("hadoop-hdfs-namenode")]
+  exclude_packages += [format("hadoop-httpfs")]
 if not dfs_ha_enabled or not is_namenode_master:
   exclude_packages += [format("hadoop-hdfs-zkfc")]
   exclude_packages += [format("monit")]
