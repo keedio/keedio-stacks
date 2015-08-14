@@ -22,8 +22,28 @@
 
 <configuration>
   <property>
-    <name>hue_conf_dir</name>
-    <value>/etc/hue/conf/</value>
-    <description>Hue Configuration Dir</description>
+    <name>mysql_host</name>
+    <value>master.ambari.keedio.org</value>
+    <description>Hue Mysql  server</description>
+  </property>
+  <property>
+    <name>mysql_port</name>
+    <value>3306</value>
+    <description>Mysql  server port</description>
+  </property>
+  <property>
+    <name>mysql_name</name>
+    <value>hue</value>
+    <description>Mysql  server port</description>
+  </property>
+  <property>
+    <name>mysql_user</name>
+    <value>hue</value>
+    <description>Hue Mysql user</description>
+  </property>
+  <property>
+    <name>mysql_password</name>
+    <value>hue</value>
+    <description>Hue Mysql password</description>
   </property>
   </configuration>

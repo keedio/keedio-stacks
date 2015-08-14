@@ -27,22 +27,65 @@ hue_conf_dir = config['configurations']['hue-env']["hue_conf_dir"]
 webserver_group = "apache"
 
 ganglia_server_host = set(default("/clusterHostInfo/ganglia_server_host", []))
+Ganglia_server_host = str(default("/clusterHostInfo/ganglia_server_host", ["none"])[0])
 
 hostname = config["hostname"]
 namenode_host = set(default("/clusterHostInfo/namenode_host", []))
 namenode_list=list(namenode_host)
 
+namenode_one_host=str(namenode_list[0])
+
 security_enabled = config['configurations']['cluster-env']['security_enabled']
+
+mysql_host=config['configurations']['hue-mysql']['mysql_host']
+mysql_port=config['configurations']['hue-mysql']['mysql_port']
+mysql_name=config['configurations']['hue-mysql']['mysql_name']
+mysql_user=config['configurations']['hue-mysql']['mysql_user']
+mysql_password=config['configurations']['hue-mysql']['mysql_password']
+
+brokers_path=config['configurations']['hue-kafka']['brokers_path']
+consumers_path=config['configurations']['hue-kafka']['consumers_path']
+ganglia_data_source=config['configurations']['hue-kafka']['ganglia_data_source']
+
+zk_port=config['configurations']['zoo.cfg']['clientPort']
+zk_hosts=set(default("/clusterHostInfo/zookeeper_hosts", []))
+zk_rest_url="http://ambari1.ambari.keedio.org:9998"
+zk_host_ports=""
+for host in zk_hosts:
+    zk_host_ports+=host+":"+str(zk_port)
+
+
+storm_ui_port=default("/configurations/storm-site/ui.port", "9744")
+storm_ui_hosts=str(default("/clusterHostInfo/storm_ui_server_hosts", ["none"])[0])
+
+print "Alessiiooooo"
+print config['configurations']
+use_ldap=config['configurations']['hue-ldap']['use_ldap']
+ldap_base_dn=config['configurations']['hue-ldap']['base_dn']
+ldap_url=config['configurations']['hue-ldap']['ldap_url']
+ipa_cert=config['configurations']['hue-ldap']['ipa_cert']
+use_bind=config['configurations']['hue-ldap']['use_bind']
+use_start_tls=config['configurations']['hue-ldap']['use_start_tls']
+ldap_bind_dn=config['configurations']['hue-ldap']['ldap_bind_dn']
+ldap_bind_password=config['configurations']['hue-ldap']['ldap_bind_password']
+ldap_company=config['configurations']['hue-ldap']['ldap_company']
+ldap_username_pattern=config['configurations']['hue-ldap']['ldap_username_pattern']
+create_users_on_login=config['configurations']['hue-ldap']['create_users_on_login']
+user_filter=config['configurations']['hue-ldap']['user_filter']
+user_name_attr=config['configurations']['hue-ldap']['user_name_attr']
+group_filter=config['configurations']['hue-ldap']['group_filter']
+group_name_attr=config['configurations']['hue-ldap']['group_name_attr']
+group_member_attr=config['configurations']['hue-ldap']['group_member_attr']
 
 if security_enabled:
     secure='true'
 else:
     secure='false'
-namenode_one_host=str(namenode_list[0])
-namenode_two_host=str(namenode_list[1])
+
 ambari_server_host = str(default("/clusterHostInfo/ambari_server_host", ["none"])[0])
 jtnode_host = set(default("/clusterHostInfo/jtnode_host", []))
-JTnode_host = str(default("/clusterHostInfo/jtnode_host", ["none"])[0]) 
+JTnode_host = str(default("/clusterHostInfo/jtnode_host", ["none"])[0])
+Oozie_host = str(default("/clusterHostInfo/oozie_server", ["none"])[0]) 
 rm_host = set(default("/clusterHostInfo/rm_host", []))
 RM_host= str(default("/clusterHostInfo/rm_host", ["none"])[0])
 

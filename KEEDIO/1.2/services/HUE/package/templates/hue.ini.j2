@@ -115,9 +115,9 @@
   # -------------------
   [[custom]]
 
-    # Top banner HTML code
-    # e.g. <H2>Test Lab A2 Hue Services</H2>
-    ## banner_top_html=
+   #  Top banner HTML code
+   #  e.g. <H2> Keedio Hue Services</H2>
+    # banner_top_html=
 
   # Configuration options for user authentication into the web application
   # ------------------------------------------------------------------------
@@ -136,10 +136,15 @@
     # - libopenid.backend.OpenIDBackend
     # - liboauth.backend.OAuthBackend
     #     (Support Twitter, Facebook, Google+ and Linkedin
-    ## backend=desktop.auth.backend.AllowFirstUserDjangoBackend
-
+    {% if use_ldap %}
+    backend=desktop.auth.backend.LdapBackend
+    # The service to use when querying PAM.
+    pam_service=login
+    {% else %}
+    backend=desktop.auth.backend.AllowFirstUserDjangoBackend
     # The service to use when querying PAM.
     ## pam_service=login
+    {% endif %}
 
     # When using the desktop.auth.backend.RemoteUserDjangoBackend, this sets
     # the normalized name of the header that contains the remote user.
@@ -172,36 +177,46 @@
   # Configuration options for connecting to LDAP and Active Directory
   # -------------------------------------------------------------------
   [[ldap]]
-
-    # The search base for finding users and groups
-    ## base_dn="DC=mycompany,DC=com"
+    
+    {% if use_ldap %} 
+     # The search base for finding users and groups
+    base_dn={{ldap_base_dn}}
 
     # URL of the LDAP server
-    ## ldap_url=ldap://auth.mycompany.com
+    ldap_url={{ldap_url}}
 
     # A PEM-format file containing certificates for the CA's that
     # Hue will trust for authentication over TLS.
     # The certificate for the CA that signed the
     # LDAP server certificate must be included among these certificates.
     # See more here http://www.openldap.org/doc/admin24/tls.html.
-    ## ldap_cert=
-    ## use_start_tls=true
+    ldap_cert={{ipa_cert}}
+    use_start_tls={{use_start_tls}}
 
+   #Alessio: Add flag for anonymous search
+#    ###% if variable %}
     # Distinguished name of the user to bind as -- not necessary if the LDAP server
     # supports anonymous searches
-    ## bind_dn="CN=ServiceAccount,DC=mycompany,DC=com"
-
+    
+    {% if use_bind %}
+    bind_dn={{ldap_bind_dn}}
+    
     # Password of the bind user -- not necessary if the LDAP server supports
     # anonymous searches
-    ## bind_password=
+    bind_password={{ldap_bind_password}}
+     # Use search bind authentication.
+    search_bind_authentication=true
+    
+    {% endif %}
 
     # Pattern for searching for usernames -- Use <username> for the parameter
     # For use when using LdapBackend for Hue authentication
     ## ldap_username_pattern="uid=<username>,ou=People,dc=mycompany,dc=com"
+    ldap_username_pattern={{ldap_username_pattern}}
 
     # Create users in Hue when they try to login with their LDAP credentials
     # For use when using LdapBackend for Hue authentication
-    ## create_users_on_login = true
+    create_users_on_login = {{create_users_on_login}}
 
     # Ignore the case of usernames when searching for existing users in Hue.
     ## ignore_username_case=false
@@ -209,8 +224,6 @@
     # Force usernames to lowercase when creating new users from LDAP.
     ## force_username_lowercase=false
 
-    # Use search bind authentication.
-    ## search_bind_authentication=true
 
     # Choose which kind of subgrouping to use: nested or suboordinate (deprecated).
     ## subgroups=suboordinate
@@ -221,80 +234,97 @@
     [[[users]]]
 
       # Base filter for searching for users
-      ## user_filter="objectclass=*"
+
+     
+      user_filter={{user_filter}}
 
       # The username attribute in the LDAP schema
-      ## user_name_attr=sAMAccountName
+     
+      user_name_attr={{user_name_attr}}
 
     [[[groups]]]
 
       # Base filter for searching for groups
-      ## group_filter="objectclass=*"
+      group_filter={{group_filter}}
 
       # The group name attribute in the LDAP schema
-      ## group_name_attr=cn
+      group_name_attr={{group_name_attr}}
 
       # The attribute of the group object which identifies the members of the group
-      ## group_member_attr=members
-    
+      group_member_attr={{group_member_attr}}
+
     [[[ldap_servers]]]
 
-      ## [[[[mycompany]]]]
+       [[[[{{ldap_company}}]]]]
 
         # The search base for finding users and groups
-        ## base_dn="DC=mycompany,DC=com"
+        base_dn={{ldap_base_dn}}
 
         # URL of the LDAP server
-        ## ldap_url=ldap://auth.mycompany.com
+        ldap_url={{ldap_url}}
 
         # A PEM-format file containing certificates for the CA's that
-        # Hue will trust for authentication over TLS.
+              # Hue will trust for authentication over TLS.
         # The certificate for the CA that signed the
         # LDAP server certificate must be included among these certificates.
         # See more here http://www.openldap.org/doc/admin24/tls.html.
-        ## ldap_cert=
-        ## use_start_tls=true
+        ldap_cert={{ipa_cert}}
+        use_start_tls={{use_start_tls}}
 
+
+        {% if use_bind %}
         # Distinguished name of the user to bind as -- not necessary if the LDAP server
         # supports anonymous searches
-        ## bind_dn="CN=ServiceAccount,DC=mycompany,DC=com"
+        bind_dn={{ldap_bind_dn}} 
+  
+      
 
         # Password of the bind user -- not necessary if the LDAP server supports
         # anonymous searches
-        ## bind_password=
+        bind_password={{ldap_bind_password}}
+      
+        ## Use search bind authentication.
+        search_bind_authentication=true
+        {% endif %}
 
         # Pattern for searching for usernames -- Use <username> for the parameter
         # For use when using LdapBackend for Hue authentication
-        ## ldap_username_pattern="uid=<username>,ou=People,dc=mycompany,dc=com"
+        ldap_username_pattern={{ldap_username_pattern}}
+        #ldap_username_pattern="uid=<username>,ou=People,dc=mycompany,dc=com"
 
-        ## Use search bind authentication.
-        ## search_bind_authentication=true
 
-        ## [[[[[users]]]]]
+        [[[[[users]]]]]
 
           # Base filter for searching for users
-          ## user_filter="objectclass=Person"
+          user_filter={{user_filter}}
 
           # The username attribute in the LDAP schema
-          ## user_name_attr=sAMAccountName
+          user_name_attr={{user_name_attr}}
 
-        ## [[[[[groups]]]]]
+        [[[[[groups]]]]]
 
           # Base filter for searching for groups
-          ## group_filter="objectclass=groupOfNames"
+          group_filter={{group_filter}}
 
           # The username attribute in the LDAP schema
-          ## group_name_attr=cn
-
+          group_name_attr={{group_name_attr}}
+        {% endif %}
   # Configuration options for specifying the Desktop Database. For more info,
   # see http://docs.djangoproject.com/en/1.4/ref/settings/#database-engine
   # ------------------------------------------------------------------------
   [[database]]
-    engine=sqlite3
-    name=/var/lib/hue/desktop.db
+    engine=mysql
+    host={{mysql_host}}
+    port={{mysql_port}}
+    user={{mysql_user}}
+    password={{mysql_password}}
+    name={{mysql_name}}
+    #engine=sqlite3
+    #name=/var/lib/hue/desktop.db
     # Database engine is typically one of:
     # postgresql_psycopg2, mysql, sqlite3 or oracle.
     #
+   
     # Note that for sqlite3, 'name', below is a path to the filename. For other backends, it is the database name.
     # Note for Oracle, options={'threaded':true} must be set in order to avoid crashes.
     # Note for Oracle, you can use the Oracle Service Name by setting "port=0" and then "name=<host>:<port>/<service_name>".
@@ -345,13 +375,14 @@
   # Configuration options for Kerberos integration for secured Hadoop clusters
   # ------------------------------------------------------------------------
   [[kerberos]]
-
+  {% if security_enabled %}
     # Path to Hue's Kerberos keytab file
-    ## hue_keytab=
+    hue_keytab=hue_keytab
     # Kerberos principal name for Hue
-    ## hue_principal=hue/hostname.foo.com
+    hue_principal=hue_principal
     # Path to kinit
-    ## kinit_path=/path/to/kinit
+    kinit_path=kinit_path
+  {% endif %}
 
 
   # Configuration options for using OAuthBackend (core) login
@@ -600,7 +631,7 @@
        resourcemanager_host={{RM_host}}
 
       # The port where the ResourceManager IPC listens on
-       resourcemanager_port=8032
+       resourcemanager_port=8050
 
       # Whether to submit jobs to this cluster
       submit_to=True
@@ -612,13 +643,13 @@
        security_enabled={{secure}}
 
       # URL of the ResourceManager API
-      ## resourcemanager_api_url=http://localhost:8088
+       resourcemanager_api_url=http://{{RM_host}}:8088
 
       # URL of the ProxyServer API
-      ## proxy_api_url=http://{{RM_host}}:8088
+      proxy_api_url=http://{{RM_host}}:8088
 
       # URL of the HistoryServer API
-      # history_server_api_url=http://localhost:19888
+      history_server_api_url=http://{{RM_host}}:19888
 
     # HA support by specifying multiple clusters
     # e.g.
@@ -633,10 +664,10 @@
 
     [[[default]]]
       # Enter the host on which you are running the Hadoop JobTracker
-       jobtracker_host={{JTnode_host}}
+       #jobtracker_host={{JTnode_host}}
 
       # The port where the JobTracker IPC listens on
-       jobtracker_port=8021
+      # jobtracker_port=8021
 
       # JobTracker logical name for HA
       ## logical_name=
@@ -645,10 +676,10 @@
       ## thrift_port=9290
 
       # Whether to submit jobs to this cluster
-      submit_to=False
+      #submit_to=False
 
       # Change this if your MapReduce cluster is Kerberos-secured
-       security_enabled={{secure}}
+     #security_enabled={{secure}}
 
     # HA support by specifying multiple clusters
     # e.g.
@@ -671,15 +702,16 @@
 ###########################################################################
 
 [liboozie]
+  
   # The URL where the Oozie service runs on. This is required in order for
   # users to submit jobs. Empty value disables the config check.
-  ## oozie_url=http://localhost:11000/oozie
+   oozie_url=http://{{Oozie_host}}:11000/oozie
 
   # Requires FQDN in oozie_url if enabled
    security_enabled={{secure}}
 
   # Location on HDFS where the workflows/coordinator are deployed when submitted.
-  ## remote_deployement_dir=/user/hue/oozie/deployments
+   remote_deployement_dir=/user/hue/oozie/deployments
 
 
 ###########################################################################
@@ -917,10 +949,10 @@
     [[[default]]]
       # Zookeeper ensemble. Comma separated list of Host/Port.
       # e.g. localhost:2181,localhost:2182,localhost:2183
-      ## host_ports=localhost:2181
+       host_ports={{zk_host_ports}}
 
       # The URL of the REST contrib service (required for znode browsing)
-      ## rest_url=http://localhost:9998
+       rest_url={{zk_rest_url}}
 
 
 ###########################################################################
@@ -954,3 +986,62 @@
 
   # Sentry configuration directory, where sentry-site.xml is located.
   ## sentry_conf_dir=/etc/sentry/conf
+
+###########################################################################
+# Settings for the Kafka application
+###########################################################################
+
+[kafka]
+
+ [[clusters]]
+
+  [[[default]]]
+    # Zookeeper ensemble. Comma separated list of Host/Port.
+    # e.g. localhost:2181,localhost:2182,localhost:2183
+    zk_host_ports={{zk_host_ports}}
+#    zk_host_ports=nn01:2181,nn02:2181,rm01:2181
+
+    # The URL of the REST contrib service (required for znode browsing)
+#    zk_rest_url=http://nn01:9998
+    zk_rest_url={{zk_rest_url}}
+
+    # Path to brokers info in Zookeeper Znode hierarchy
+#    brokers_path=/brokers/ids
+    brokers_path={{brokers_path}}
+
+
+    # Path to consumers info in Zookeeper Znode hierarchy
+#    consumers_path=/consumers
+    consumers_path={{consumers_path}}
+
+    # Ganglia Server
+    # e.g. http://localhost
+#    ganglia_server=http://manager
+    ganglia_server={{Ganglia_server_host}}
+
+    # Ganglia Data Source
+    # e.g. GangliaCluster
+#    ganglia_data_source=KafkaBrokers
+    ganglia_data_source={{ganglia_data_source}}
+
+###########################################################################
+# Settings for the Storm application
+###########################################################################
+
+[storm]
+    # The URL of the STORM REST service
+    # default
+    # storm_ui_server=localhost
+    # storm_ui_port=8080
+    # storm_ui_log_port=8000
+    storm_ui_server={{storm_ui_hosts}}
+    storm_ui_port={{storm_ui_port}}
+    storm_ui_log_port=8000
+
+    # Storm-UI URL paths. Uncomment to modify them if necessary.
+    ## storm_ui_cluster=/cluster/summary
+    ## storm_ui_supervisor=supervisor/summary
+    ## storm_ui_topologies=/topology/summary
+    ## storm_ui_topology=/topology/
+    ## storm_ui_configuration=/cluster/configuration
+

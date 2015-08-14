@@ -42,9 +42,14 @@
               <dictionaryName>hue-env</dictionaryName>
             </configFile>
             <configFile>
-              <type>text</type>
-              <fileName>hue.ini</fileName>
-              <dictionaryName>hue</dictionaryName>
+              <type>xml</type>
+              <fileName>hue-ldap.xml</fileName>
+              <dictionaryName>hue-ldap</dictionaryName>
+            </configFile>
+            <configFile>
+              <type>xml</type>
+              <fileName>hue-mysql.xml</fileName>
+              <dictionaryName>hue-mysql</dictionaryName>
             </configFile>
           </configFiles>
         </component>
@@ -65,11 +70,6 @@
           </packages>
         </osSpecific>
       </osSpecifics>
-      <commandScript>
-        <script>scripts/service_check.py</script>
-        <scriptType>PYTHON</scriptType>
-        <timeout>300</timeout>
-      </commandScript>
     </service>
   </services>
 </metainfo>

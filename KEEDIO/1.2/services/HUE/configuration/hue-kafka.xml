@@ -20,10 +20,24 @@
  */
 -->
 
+
+   
+
+
 <configuration>
   <property>
-    <name>hue_conf_dir</name>
-    <value>/etc/hue/conf/</value>
-    <description>Hue Configuration Dir</description>
+    <name>brokers_path</name>
+    <value>/brokers/ids</value>
+    <description>Path to brokers info in Zookeeper Znode hierarchy</description>
+  </property>
+  <property>
+    <name>consumers_path</name>
+    <value>/consumers</value>
+    <description>Path to consumers info in Zookeeper Znode hierarchy</description>
+  </property>
+  <property>
+    <name>ganglia_data_source</name>
+    <value>KafkaBrokers</value>
+    <description>Ganglia Data Source for Kafka</description>
   </property>
   </configuration>

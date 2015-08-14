@@ -28,9 +28,14 @@ def hue(service=None,action=None):
 
   if action == "install":
     import params 
+    cmd=Popen(['/usr/lib/hue/build/env/bin/hue','syncdb','--noinput'],stdout=PIPE,stderr=PIPE)
+    out,err=cmd.communicate()
+    Logger.info("Hue installation: sync db")
+    Logger.info(out)
+    Logger.info(err)
     cmd=Popen(['/usr/lib/hue/build/env/bin/hue','migrate'],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
-    Logger.info("Hue installation: migrate")
+    Logger.info("Hue installation: migrate tables")
     Logger.info(out) 
     Logger.info(err) 
     
