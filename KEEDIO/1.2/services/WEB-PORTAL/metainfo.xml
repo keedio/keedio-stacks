@@ -29,7 +29,7 @@
           <name>WEB-PORTAL</name>
           <displayName>Web-Portal</displayName>
           <category>MASTER</category>
-          <cardinality>1</cardinality>
+          <cardinality>1+</cardinality>
           <commandScript>
             <script>scripts/portal_handler.py</script>
             <scriptType>PYTHON</scriptType>

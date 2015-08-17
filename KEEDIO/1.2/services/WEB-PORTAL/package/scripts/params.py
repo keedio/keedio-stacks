@@ -25,16 +25,25 @@ config = Script.get_config()
 portal_conf_dir = config['configurations']['portal-env']["portal_conf_dir"]
 portal_www_dir = config['configurations']['portal-env']["portal_www_dir"]
 
+
+security_enabled = config['configurations']['cluster-env']['security_enabled']
+
 webserver_group = "apache"
 
 ganglia_server_host = set(default("/clusterHostInfo/ganglia_server_host", []))
 
 hostname = config["hostname"]
+
+
 namenode_host = set(default("/clusterHostInfo/namenode_host", []))
 namenode_list=list(namenode_host)
 
-namenode_one_host=str(namenode_list[0])
-namenode_two_host=str(namenode_list[1])
+nameservices = str(default("/configurations/hdfs-site/dfs.nameservices", None))
+namenode_ids = str(default("/configurations/hdfs-site/dfs.ha.namenodes." + nameservices, None)).split(',')
+namenode_list=list()
+for id in namenode_ids:
+  namenode_list.append(default("/configurations/hdfs-site/dfs.namenode.http-address." + nameservices + "." + id,[]))
+
 ambari_server_host = str(default("/clusterHostInfo/ambari_server_host", [])[0])
 jtnode_host = set(default("/clusterHostInfo/jtnode_host", []))
 rm_host = set(default("/clusterHostInfo/rm_host", []))
@@ -47,11 +56,12 @@ hbase_rs_hosts = set(default("/clusterHostInfo/hbase_rs_hosts", []))
 flume_hosts = set(default("/clusterHostInfo/flume_hosts", []))
 jn_hosts = set(default("/clusterHostInfo/journalnode_hosts", []))
 nimbus_server_hosts = set(default("/clusterHostInfo/nimbus_hosts", []))
-storm_ui_server_hosts = str(default("/clusterHostInfo/storm_ui_server_hosts", []))
-hue_server_host = str(default("/clusterHostInfo/nimbus_hosts", []))
+storm_ui_server_hosts = set(default("/clusterHostInfo/storm_ui_server_hosts", []))
+hue_server_host = str(default("/clusterHostInfo/hue_hosts", []))
 supervisor_server_hosts = set(default("/clusterHostInfo/supervisor_hosts", []))
 kafka_broker_hosts =  set(default("/clusterHostInfo/kafka_broker_hosts", []))
 kafka_ganglia_port = default("/configurations/kafka-broker/kafka.ganglia.metrics.port", 8671)
+ipa_server_hosts = set(default("/clusterHostInfo/ipa_server_hosts", []))
 
 pure_slave = not hostname in (namenode_host | jtnode_host | rm_host | hs_host | \
                               hbase_master_hosts | datanodes_hosts | tt_hosts | hbase_rs_hosts | \
@@ -73,4 +83,7 @@ has_journalnode = not len(jn_hosts) == 0
 has_nimbus_server = not len(nimbus_server_hosts) == 0
 has_supervisor_server = not len(supervisor_server_hosts) == 0
 has_kafka_broker = not len(kafka_broker_hosts) == 0
-
+has_ipa_server = not len(ipa_server_hosts) == 0
+has_hue_server = not len(hue_server_host) == 0
+has_ganglia_server = not len(ganglia_server_host) == 0
+has_storm_ui_server = not len(storm_ui_server_hosts) == 0

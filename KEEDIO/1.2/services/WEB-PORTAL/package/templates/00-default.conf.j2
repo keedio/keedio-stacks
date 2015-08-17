@@ -44,6 +44,7 @@
         ProxyPass /test http://{{ambari_server_host}}:8080/test
         ProxyPassReverse /test http://{{ambari_server_host}}:8080/test
 
+        {% if has_hue_server %}
 	#DIRECTIVAS PROXY HUE
 #	SetEnv	proxy-nokeepalive 1
 	
@@ -119,7 +120,7 @@
         ProxyPass /sqoop http://{{hue_server_host}}:8888/sqoop
         ProxyPassReverse /sqoop http://{{hue_server_host}}:8888/sqoop
 
-        ProxyPass /storm http://{{hue_server_host}}:8888/storm
+        ProxyPass /storm http://{{ hue_server_host }}:8888/storm
         ProxyPassReverse /storm http://{{hue_server_host}}:8888/storm
 
         ProxyPass /useradmin http://{{hue_server_host}}:8888/useradmin
@@ -130,10 +131,13 @@
 
         ProxyPass /desktop http://{{hue_server_host}}:8888/desktop
         ProxyPassReverse /desktop http://{{hue_server_host}}:8888/desktop
-
+        {% endif %}
+        {% if has_nimbus_server %}
 	#DIRECTIVAS PROXY STORM
-	ProxyPass /storma/(.*) http://{{storm_ui_server_hosts}}:8744/index.html
-        ProxyPassReverse /storma/(.*) http://{{storm_ui_server_hosts}}:8744/index.html
+          {% for storm_ui in storm_ui_server_hosts %}
+	    ProxyPass /storm_{{ storm_ui }}/(.*) http://{{storm_ui}}:8744/index.html
+            ProxyPassReverse /storma_{{ storm_ui }}/(.*) http://{{storm_ui}}:8744/index.html
+          {% endfor %}
 
 	ProxyPass /js http://{{storm_ui_server_hosts}}:8744/js
         ProxyPassReverse /js http://{{storm_ui_server_hosts}}:8744/js
@@ -146,22 +150,7 @@
 
         ProxyPass /images http://{{storm_ui_server_hosts}}:8744/images
         ProxyPassReverse /images http://{{storm_ui_server_hosts}}:8744/images
+        {% endif %}
 
-	#DIRECTIVAS PROXY HDFS NN01
-        ProxyPass /hfdfsnn01/dfshealth.jsp http://{{namenode_one_host}}:50070/dfshealth.jsp
-        ProxyPassReverse /hfdfsnn01/dfshealth.jsp http://{{namenode_one_host}}:50070/dfshealth.jsp
-
-        ProxyPass /nn_browsedfscontent.jsp  http://{{namenode_one_host}}:50070/nn_browsedfscontent.jsp 
-        ProxyPassReverse /nn_browsedfscontent.jsp  http://{{namenode_one_host}}:50070/nn_browsedfscontent.jsp 
-
-        ProxyPass /hfdfsnn01/dfsnodelist.jsp http://{{namenode_one_host}}:50070/dfsnodelist.jsp
-        ProxyPassReverse /hfdfsnn01/dfsnodelist.jsp http://{{namenode_one_host}}:50070/dfsnodelist.jsp
-
-	#DIRECTIVAS PROXY HDFS NN02
-        ProxyPass /hfdfsnn02/dfshealth.jsp http://{{namenode_two_host}}:50070/dfshealth.jsp
-        ProxyPassReverse /hfdfsnn02/dfshealth.jsp http://{{namenode_two_host}}:50070/dfshealth.jsp
-
-        ProxyPass /hfdfsnn02/dfsnodelist.jsp http://{{namenode_two_host}}:50070/dfsnodelist.jsp
-        ProxyPassReverse /hfdfsnn02/dfsnodelist.jsp http://{{namenode_two_host}}:50070/dfsnodelist.jsp
 </VirtualHost>
 

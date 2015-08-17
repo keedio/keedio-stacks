@@ -46,12 +46,11 @@
 <!-- Site navigation menu -->
 <ul class="navbar">
   <li><a href="http://{{hostname}}/ambari/" target="_blank">AMBARI</a>
-  <li><a href="http://{{hostname}}/ipa/ui/" target="_blank">FREEIPA</a>
-  <li><a href="http://{{hostname}}/accounts/login/?next=/about/" target="_blank">HUE</a>
-  <li><a href="http://{{hostname}}/ganglia" target="_blank">GANGLIA</a>
-  <li><a href="http://{{hostname}}/storm" target="_blank">STORM</a>
-  <li><a href="http://{{hostname}}/hfdfsnn01/dfshealth.jsp" target="_blank">HDFS NN01</a>
-  <li><a href="http://{{hostname}}/hfdfsnn02/dfshealth.jsp" target="_blank">HDFS NN02</a>
+  {% for ipa_server in ipa_server_hosts %}<li><a href="http://{{ hostname }}/ipa/ui/" target="_blank">FREEIPA{{ loop.index }}</a>{% endfor %}
+  {% if has_hue_server %}<li><a href="http://{{ hostname }}/accounts/login/?next=/about/" target="_blank">HUE</a>{% endif %}
+  {% if has_ganglia_server %}<li><a href="http://{{ hostname }}/ganglia" target="_blank">GANGLIA</a>{% endif %}
+  {% for storm_ui in storm_ui_server_hosts %}<li><a href="http://{{ hostname }}/storm_{{ storm_ui }}" target="_blank">STORM{{ loop.index }}</a>{% endfor %}
+  {% for nn in namenode_list %}<li><a href="http://{{ nn }}/dfshealth.jsp" target="_blank">HDFS NN{{ loop.index }}</a>{% endfor %}
 </ul>
 
 <!-- Main content -->

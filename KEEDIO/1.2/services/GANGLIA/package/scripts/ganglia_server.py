@@ -36,12 +36,6 @@ class GangliaServer(Script):
     
     functions.turn_off_autostart(params.gmond_service_name) 
     # since the package is installed as well
-    File("/etc/httpd/conf.d/ganglia.conf",
-      content=StaticFile("ganglia.conf"),
-      owner="apache",
-      group="apache"
-    )
-
     functions.turn_off_autostart("gmetad")
 
   def start(self, env):
@@ -73,6 +67,13 @@ class GangliaServer(Script):
          owner="root",
          group=params.user_group
     )
+
+    File("/etc/httpd/conf.d/ganglia.conf",
+      content=StaticFile("ganglia.conf"),
+      owner="apache",
+      group="apache"
+    )
+
 
 
 def server_files():
