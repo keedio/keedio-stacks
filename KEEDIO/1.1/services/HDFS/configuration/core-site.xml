@@ -175,9 +175,17 @@ If you want to treat all principals from APACHE.ORG with /admin as "admin", your
 RULE[2:$1%$2@$0](.%admin@APACHE.ORG)s/./admin/
 DEFAULT
     </description>
+
   </property>
 
-
+<property>
+ <name>hadoop.proxyuser.httpfs.hosts</name>
+ <value>*</value>
+</property>
+<property>
+  <name>hadoop.proxyuser.httpfs.groups</name>
+  <value>*</value>
+</property>
 
 <property>
   <name>hadoop.proxyuser.hue.hosts</name>
