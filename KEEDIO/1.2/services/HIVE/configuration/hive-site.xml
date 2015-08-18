@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+        
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<configuration supports_final="true">
+
+  <!--
+      Refer to the hive-default.xml file for the complete list of
+      hive configuration properties and their default values.
+  -->
+  <property>
+    <name>hive_metastore_port</name>
+    <value>9083</value>
+    <description>
+      Thrift port for the remote metastore. Used by metastore client to connect to remote metastore.
+    </description>
+  </property>
+
+  <property>
+    <name>jdbc_connection</name>
+    <value></value>
+    <description>DBC connect string for a JDBC metastore</description>
+  </property>
+
+  <property>
+    <name>jdbc_driver</name>
+    <value>com.mysql.jdbc.Driver</value>
+    <description></description>
+  </property>
+
+  <property>
+    <name>jdbc_username</name>
+    <value>hive</value>
+    <description>username to use against metastore database</description>
+  </property>
+
+  <property>
+    <name>jdbc_password</name>
+    <value></value>
+    <description>password to use against metastore database</description>
+  </property>
+
+  <property>
+    <name>hive_metastore_warehouse</name>
+    <value>/user/hive/warehouse</value>
+    <description>location of default database for the warehouse in HDFS</description>
+  </property>
+
+  <property>
+    <name>hive_metastore_keytab</name>
+    <value>/etc/security/keytabs/hive_metastore.service.keytab</value>
+    <description>The path to the Kerberos Keytab file containing the metastore Thrift server's service principal.</description>
+  </property>
+
+  <property>
+    <name>hive_metastore_principal</name>
+    <value>hive-metastore/_HOST@REALM</value>
+    <description>The service principal for the metastore Thrift server. The special string _HOST will be replaced automatically with the correct host name.</description>
+  </property>
+
+  <property>
+    <name>hive_admin_users</name>
+    <value>hive</value>
+    <description>Comma separated list of users who are in admin role for bootstrapping. More users can be added in ADMIN role later</description>
+  </property>
+
+  <property>
+    <name>hive_server2_port</name>
+    <value>10000</value>
+    <description>Port number of HiveServer2 Thrift interface.</description>
+  </property>
+
+  <property>
+    <name>hive_server2_principal</name>
+    <value>hive-server2/_HOST@REALM</value>
+    <description></description>
+  </property>
+
+  <property>
+    <name>hive_server2_keytab</name>
+    <value>/etc/security/keytabs/hive_server2.service.keytab</value>
+    <description></description>
+  </property>
+
+  <property>
+    <name>hive_server2_spnego_principal</name>
+    <value>HTTP/_HOST@REALM</value>
+    <description></description>
+  </property>
+
+  <property>
+    <name>hive_server2_spnego_keytab</name>
+    <value>/etc/security/keytabs/spnego.service.keytab</value>
+    <description></description>
+  </property>
+
+</configuration>
