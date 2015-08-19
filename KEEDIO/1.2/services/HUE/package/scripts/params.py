@@ -49,9 +49,13 @@ ganglia_data_source=config['configurations']['hue-kafka']['ganglia_data_source']
 
 zk_port=config['configurations']['zoo.cfg']['clientPort']
 zk_hosts=set(default("/clusterHostInfo/zookeeper_hosts", []))
-zk_rest_url="http://ambari1.ambari.keedio.org:9998"
+zk_rest_hosts=default("/clusterHostInfo/zookeeper_rest_hosts", ["none"])
+zk_rest_port=config['configurations']['rest-env']['rest_port']
+zk_rest_url="http://"+str(zk_rest_hosts[0])+":"+str(zk_rest_port)
 zk_host_ports=""
 for host in zk_hosts:
+    if zk_host_ports != "":
+       zk_host_ports += ","
     zk_host_ports+=host+":"+str(zk_port)
 
 

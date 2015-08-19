@@ -27,7 +27,7 @@
       <components>
         <component>
           <name>HUE</name>
-          <displayName>Hue graphical user interface</displayName>
+          <displayName>Hue UI</displayName>
           <category>MASTER</category>
           <cardinality>1</cardinality>
           <commandScript>
