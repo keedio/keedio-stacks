@@ -53,6 +53,9 @@ zk_pid_dir = status_params.zk_pid_dir
 zk_pid_file = status_params.zk_pid_file
 zk_server_heapsize = "-Xmx1024m"
 
+rest_port=config['configurations']['rest-env']['rest_port']
+rest_https_only=config['configurations']['rest-env']['https_only']
+
 clientPort = config['configurations']['zoo.cfg']['clientPort']
 
 if 'zoo.cfg' in config['configurations']:
@@ -68,6 +71,14 @@ java64_home = config['hostLevelParams']['java_home']
 
 zookeeper_hosts = config['clusterHostInfo']['zookeeper_hosts']
 zookeeper_hosts.sort()
+
+
+rest_hosts=""
+for host in zookeeper_hosts:
+   if rest_hosts != "":
+      rest_hosts += ","
+   rest_hosts+=str(host)+":"+str(clientPort)
+  
 
 zk_keytab_path = config['configurations']['zookeeper-env']['zookeeper_keytab_path']
 zk_server_jaas_file = format("{config_dir}/zookeeper_jaas.conf")
