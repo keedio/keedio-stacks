@@ -21,9 +21,16 @@
 -->
 
 <configuration>
+   <property>
+    <name>hue_user</name>
+    <value>hue</value>
+    <property-type>USER</property-type>
+    <description>Hue user</description>
+  </property>
   <property>
     <name>hue_conf_dir</name>
     <value>/etc/hue/conf/</value>
-    <description>Hue Configuration Dir</description>
+    <description>Hue Configuration dir</description>
   </property>
-  </configuration>
+  
+</configuration>

@@ -23,6 +23,9 @@ import os
 config = Script.get_config()
 
 hue_conf_dir = config['configurations']['hue-env']["hue_conf_dir"]
+hue_principal = default('/configurations/hue-ldap/hue_principal_name',None)
+hue_keytab = default('/configurations/hue-ldap/hue_keytab',None)
+#hue_keytab = config['configurations']['cluster-env']["dfs.hue.keytab.file"]
 
 webserver_group = "apache"
 

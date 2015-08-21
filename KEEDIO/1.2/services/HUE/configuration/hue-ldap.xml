@@ -23,7 +23,7 @@
 <configuration>
    <property>
     <name>use_ldap</name>
-    <value>true</value>
+    <value>false</value>
     <description>LDAP is available</description>
   </property>
   <property>

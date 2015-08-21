@@ -377,11 +377,11 @@
   [[kerberos]]
   {% if security_enabled %}
     # Path to Hue's Kerberos keytab file
-    hue_keytab=hue_keytab
+    hue_keytab={{hue_keytab}}
     # Kerberos principal name for Hue
-    hue_principal=hue_principal
+    hue_principal={{hue_principal}}
     # Path to kinit
-    kinit_path=kinit_path
+    kinit_path=/usr/bin/kinit
   {% endif %}
 
 
