@@ -20,10 +20,25 @@ import os
 
 from resource_management import *
 from subprocess import *
-from utils import check_rc
+from utils import *
+from functools import partial
+
 def hive(action=None,service=None):
   
   if action == 'start' or action == 'stop' or action == 'status':
+    if action != 'status':
+      import params
+      # CREATION OF HDFS DIRECTORY
+      execute_hdfs = partial(execute_sudo_krb,user=params.hdfs_user,principal=params.hdfs_principal_name,keytab=params.hdfs_user_keytab)
+
+      create_warehouse = ["hdfs","dfs","-mkdir","-p",params.hive_metastore_warehouse]
+      chown_warehouse = ["hdfs","dfs","-chown",params.hive_user, params.hive_metastore_warehouse]
+      chmod_warehouse = ["hdfs","dfs","-chmod","750",params.hive_metastore_warehouse]
+  
+      execute_hdfs(create_warehouse)
+      execute_hdfs(chown_warehouse)
+      execute_hdfs(chmod_warehouse)
+    
     cmd=Popen(['service',service,action],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     Logger.info('%s action: %s.\nSTDOUT=%s\nSTDERR=%s' % (service,action,out,err))
@@ -34,6 +49,11 @@ def hive(action=None,service=None):
     import params
     File(params.config_dir + '/hive-site.xml',
       content=Template('hive-site.j2'),
+      owner=params.hive_user,
+      group=params.hive_group,
+      mode=0644)
+    File(params.config_dir + '/hive-env.sh',
+      content=Template('hive-env.j2'),
       owner=params.hive_user,
       group=params.hive_group,
       mode=0644)

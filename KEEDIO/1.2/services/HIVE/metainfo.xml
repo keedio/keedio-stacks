@@ -20,13 +20,13 @@
   <services>
     <service>
       <name>HIVE</name>
-      <displayName>hive</displayName>
+      <displayName>Hive</displayName>
       <comment>The Apache Hive ™ data warehouse software facilitates querying and managing large datasets residing in distributed storage. Hive provides a mechanism to project structure onto this data and query the data using a SQL-like language called HiveQL. At the same time this language also allows traditional map/reduce programmers to plug in their custom mappers and reducers when it is inconvenient or inefficient to express this logic in HiveQL.</comment>
       <version>0.13.1</version>
       <components>
         <component>
-          <name>HIVE_SERVER2</name>
-          <displayName>Hive server2</displayName>
+          <name>HIVE_SERVER</name>
+          <displayName>Hive server</displayName>
           <category>MASTER</category>
           <cardinality>1</cardinality>
           <dependencies>
@@ -64,7 +64,17 @@
               <dictionaryName>hive-site</dictionaryName>
             </configFile>
           </configFiles>
- 
+        </component>
+
+        <component>
+          <name>HIVE_CLIENT</name>
+          <displayName>Hive Client</displayName>
+          <category>CLIENT</category>
+          <cardinality>1+</cardinality>
+          <commandScript>
+            <script>scripts/hive_client.py</script>
+            <scriptType>PYTHON</scriptType>
+          </commandScript>
         </component>
 
         <component>
@@ -107,6 +117,9 @@
           <osFamily>any</osFamily>
           <packages>
             <package>
+              <name>hive</name>
+            </package>
+            <package>
               <name>hive-metastore</name>
             </package>
             <package>
@@ -115,12 +128,16 @@
             <package>
               <name>mysql-connector-java</name>
             </package>
+            <package>
+              <name>mysql</name>
+            </package>
           </packages>
         </osSpecific>
       </osSpecifics>
 
       <commandScript>
         <script>scripts/service_check.py</script>
+        <name>HIVE_SERVICE_CHECK</name>
         <scriptType>PYTHON</scriptType>
         <timeout>300</timeout>
       </commandScript>
@@ -131,6 +148,7 @@
 
       <configuration-dependencies>
         <config-type>hive-site</config-type>
+        <config-type>hive-env</config-type>
         <config-type>yarn-site</config-type>
       </configuration-dependencies>
     </service>

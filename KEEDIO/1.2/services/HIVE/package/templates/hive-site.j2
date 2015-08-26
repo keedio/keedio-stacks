@@ -170,7 +170,7 @@
 
 <property>
   <name>hive.cluster.delegation.token.store.zookeeper.connectString</name>
-  <value>localhost:2181</value>
+  <value>{{ zookeeper_hosts_port }}</value>
   <description>The ZooKeeper token store connect string.</description>
 </property>
 
@@ -194,13 +194,13 @@
 
 <property>
   <name>hive.zookeeper.quorum</name>
-  <value>{{ zookeeper_hosts }}</value>
+  <value>{{ zookeeper_hosts_str }}</value>
   <description>The list of ZooKeeper servers to talk to. This is only needed for read/write locks.</description>
 </property>
 
 <property>
   <name>hive.zookeeper.client.port</name>
-  <value>2181</value>
+  <value>{{ zookeeper_client_port }}</value>
   <description>The port of ZooKeeper servers to talk to. This is only needed for read/write locks.</description>
 </property>
 
@@ -308,14 +308,14 @@
   <name>hive.server2.thrift.port</name>
   <value>{{ hive_server2_port }}</value>
   <description>Port number of HiveServer2 Thrift interface.
-  Can be overridden by setting $HIVE_SERVER2_THRIFT_PORT</description>
+  Can be overridden by setting $HIVE_SERVER_THRIFT_PORT</description>
 </property>
 
 <property>
   <name>hive.server2.thrift.bind.host</name>
   <value>{{ hive_server2_host }}</value>
   <description>Bind host on which to run the HiveServer2 Thrift interface.
-  Can be overridden by setting $HIVE_SERVER2_THRIFT_BIND_HOST</description>
+  Can be overridden by setting $HIVE_SERVER_THRIFT_BIND_HOST</description>
 </property>
 
 <property>

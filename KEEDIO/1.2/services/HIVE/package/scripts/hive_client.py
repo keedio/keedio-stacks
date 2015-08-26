@@ -20,38 +20,16 @@ limitations under the License.
 
 import sys
 from resource_management import *
-from subprocess import *
 
 from hive import hive
-import utils
 
          
-class HiveServerHandler(Script):
+class HiveClient(Script):
   def install(self, env):
     import params
-    self.install_packages(env,params.exclude_packages)
-    self.initialize_db(env)
-    
-  def configure(self, env):
-    import params
     env.set_params(params)
-    hive(action='config',service='hive-metastore')
+    self.install_packages(env,params.exclude_packages)
+    hive(action='config')
     
-  def start(self, env):
-    self.configure(env)
-    hive(action='start',service='hive-metastore')
-    
-  def stop(self, env):
-    hive(action='stop',service='hive-metastore')
-
-  def status(self, env):
-    hive(action='status',service='hive-metastore')
-
-  def initialize_db(self,env):
-    import params
-    executed=Popen(['mysql','-h',params.jdbc_host,'-b',params.jdbc_db,'-u',params.jdbc_username,'--password='+params.jdbc_password,'-e','source /usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.13.0.mysql.sql;'],stdout=PIPE,stderr=PIPE)
-    out,err=executed.communicate()
-    utils.check_rc(executed.returncode,out,err)
-     
 if __name__ == "__main__":
-  HiveServerHandler().execute()
+  HiveClient().execute()

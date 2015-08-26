@@ -26,37 +26,56 @@ config = Script.get_config()
 
 hive_metastore_host = config['clusterHostInfo']['hive_metastore_hosts'][0]
 hive_metastore_port = config['configurations']['hive-site']['hive_metastore_port']
-jdbc_connection = config['configurations']['hive-site']['jdbc_connection']
-jdbc_driver = config['configurations']['hive-site']['jdbc_driver']
-jdbc_username = config['configurations']['hive-site']['jdbc_username']
-jdbc_password = config['configurations']['hive-site']['jdbc_password']
+
+jdbc_driver = config['configurations']['hive-site']['javax.jdo.option.ConnectionDriverName']
+jdbc_connection = config['configurations']['hive-site']['javax.jdo.option.ConnectionURL']
+jdbc_host = jdbc_connection.split('/')[2]
+jdbc_db = config['configurations']['hive-site']['ambari.hive.db.schema.name'] 
+jdbc_username = config['configurations']['hive-site']['javax.jdo.option.ConnectionUserName']
+jdbc_password = default('/configurations/hive-site/javax.jdo.option.ConnectionPassword',None)
+
 hive_metastore_warehouse = config['configurations']['hive-site']['hive_metastore_warehouse']
+hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
+hdfs_principal_name = default('/configurations/hadoop-env/hdfs_principal_name',None)
+hdfs_user_keytab = default('/configurations/hadoop-site/hdfs_user_keytab',None)
+kerberos_cache_file = config['configurations']['cluster-env']['kerberos_cache_file']
+
+
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 hive_metastore_keytab = config['configurations']['hive-site']['hive_metastore_keytab']
 hive_metastore_principal = config['configurations']['hive-site']['hive_metastore_principal']
+zookeeper_client_port = str(config['configurations']['hive-site']['hive.zookeeper.client.port'])
 zookeeper_hosts = config['clusterHostInfo']['zookeeper_hosts']
+zookeeper_hosts_str=', '.join(str(e) for e in zookeeper_hosts)
+aux_join_str=':'+zookeeper_client_port+','
+zookeeper_hosts_port=aux_join_str.join(str(e) for e in zookeeper_hosts)+':'+zookeeper_client_port
 hive_admin_users = config['configurations']['hive-site']['hive_admin_users']
-hive_server2_port = config['configurations']['hive-site']['hive_server2_port']
-hive_server2_host = config['clusterHostInfo']['hive_server2_hosts'][0]
+hive_server2_port = config['configurations']['hive-site']['hive.server2.thrift.port']
+hive_server2_host = config['clusterHostInfo']['hive_server_host'][0]
 hive_server2_principal = config['configurations']['hive-site']['hive_server2_principal']
 hive_server2_keytab = config['configurations']['hive-site']['hive_server2_keytab']
 hive_server2_spnego_principal = config['configurations']['hive-site']['hive_server2_spnego_principal']
 hive_server2_spnego_keytab = config['configurations']['hive-site']['hive_server2_spnego_keytab']
 
+hive_heapsize = config['configurations']['hive-env']['hive.heapsize']
 config_dir = "/etc/hive/conf"
 hive_user = 'hive'
 hive_group = config['configurations']['cluster-env']['user_group']
 
 hostname = config['hostname']
-is_hive_server = hostname in config['clusterHostInfo']['hive_server2_hosts']
+is_hive_server = hostname in config['clusterHostInfo']['hive_server_host']
 is_hive_metastore = hostname in config['clusterHostInfo']['hive_metastore_hosts']
 
 
 exclude_packages=[]
 if not is_hive_metastore:
-  exclude_packages += ['hive-metastore','mysql-connector-java']
+  exclude_packages += ['hive-metastore','mysql-connector-java','mysql']
 if not is_hive_server:
   exclude_packages += ['hive-server2']
 
 
+#service check
+smoke_user =  config['configurations']['cluster-env']['smokeuser']
+smoke_user_principal = default('/configurations/cluster-env/smokeuser_principal_name',None)
+smoke_user_keytab = default('/configurations/cluster-env/smokeuser_keytab',None) 
 
