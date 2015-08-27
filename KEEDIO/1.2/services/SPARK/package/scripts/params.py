@@ -41,3 +41,7 @@ hdfs_user_keytab = default('/configurations/hadoop-site/hdfs_user_keytab',None)
 spark_conf_dir = config['configurations']['spark']['spark_conf_dir']
 spark_assembly = config['configurations']['spark']['spark_assembly']
 spark_examples_jar = config['configurations']['spark']['spark_examples_jar']
+
+namenode_host = default("/clusterHostInfo/namenode_host", ["none"])
+namenode_host =str(namenode_host[0])
+

@@ -19,3 +19,4 @@ spark.master		yarn-cluster
 spark.yarn.jar 		hdfs://{{ spark_hdfs_home }}/lib/{{ spark_assembly }}
 spark.eventLog.enabled	true
 spark.eventLog.dir	hdfs://{{ spark_hdfs_home }}/eventLog
+spark.history.fs.logDirectory    hdfs://{{namenode_host}}:8020{{ spark_hdfs_home }}/eventLog
