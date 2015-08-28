@@ -26,12 +26,15 @@ class ServiceCheck(Script):
   def service_check(self, env):
     import params
     env.set_params(params)
-    execute_smoke = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user_principal,keytab=params.smoke_user_keytab)
-    check_hiveserver2 = ['source','/etc/profile.d/hadoop-env.sh','&&','beeline','-u','jdbc:hive2://'+params.hive_server2_host,'-n',params.smoke_user,'-e','""']
+    execute_smoke = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
+    connection_url = 'jdbc:hive2://'+params.hive_server2_host+':'+str(params.hive_server2_port)+'/default'
+    if params.security_enabled:
+      connection_url += ';principal='+params.hive_server2_principal
+    check_hiveserver2 = ['beeline','-u',connection_url,'-n',params.smoke_user,'-e',' ']
     out,err,rc=execute_smoke(check_hiveserver2)
     print out
     print err
-    if 'Error' in out:
+    if 'Error' in out or 'Error' in err:
       raise Exception(out+err)
 
 if __name__ == "__main__":

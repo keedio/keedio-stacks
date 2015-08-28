@@ -108,7 +108,7 @@
 
 <property>
   <name>hive.hwi.war.file</name>
-  <value>lib/hive-hwi-@VERSION@.war</value>
+  <value>lib/hive-hwi.jar</value>
   <description>This sets the path to the HWI war file, relative to ${HIVE_HOME}. </description>
 </property>
 
@@ -151,7 +151,7 @@
 {% if security_enabled %}
 <property>
   <name>hive.metastore.kerberos.keytab.file</name>
-  <value>{{ hive_keytab }}</value>
+  <value>{{ hive_metastore_keytab }}</value>
   <description>The path to the Kerberos Keytab file containing the metastore Thrift server's service principal.</description>
 </property>
 
@@ -182,7 +182,7 @@
 
 <property>
   <name>hive.cluster.delegation.token.store.zookeeper.acl</name>
-  <value>sasl:hive/host1@EXAMPLE.COM:cdrwa,sasl:hive/host2@EXAMPLE.COM:cdrwa</value>
+  <value>sasl:{{ hive_metastore_principal }}:cdrwa,sasl:{{ hive_server2_principal }}:cdrwa</value>
   <description>ACL for token store entries. List comma separated all server principals for the cluster.</description>
 </property>
 

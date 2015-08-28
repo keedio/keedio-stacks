@@ -97,14 +97,14 @@
   </property>
 
   <property>
-    <name>hive_metastore_keytab</name>
+    <name>hive.metastore.kerberos.keytab.file</name>
     <value>/etc/security/keytabs/hive_metastore.service.keytab</value>
     <description>The path to the Kerberos Keytab file containing the metastore Thrift server's service principal.</description>
   </property>
 
   <property>
-    <name>hive_metastore_principal</name>
-    <value>hive-metastore/_HOST@REALM</value>
+    <name>hive.metastore.kerberos.principal</name>
+    <value>hive-metastore</value>
     <description>The service principal for the metastore Thrift server. The special string _HOST will be replaced automatically with the correct host name.</description>
   </property>
 
@@ -121,25 +121,25 @@
   </property>
 
   <property>
-    <name>hive_server2_principal</name>
-    <value>hive-server2/_HOST@REALM</value>
+    <name>hive.server2.authentication.kerberos.principal</name>
+    <value>hive</value>
     <description></description>
   </property>
 
   <property>
-    <name>hive_server2_keytab</name>
-    <value>/etc/security/keytabs/hive_server2.service.keytab</value>
+    <name>hive.server2.authentication.kerberos.keytab</name>
+    <value>/etc/security/keytabs/hive.service.keytab</value>
     <description></description>
   </property>
 
   <property>
-    <name>hive_server2_spnego_principal</name>
-    <value>HTTP/_HOST@REALM</value>
+    <name>hive.server2.authentication.spnego.principal</name>
+    <value>HTTP</value>
     <description></description>
   </property>
 
   <property>
-    <name>hive_server2_spnego_keytab</name>
+    <name>hive.server2.authentication.spnego.keytab</name>
     <value>/etc/security/keytabs/spnego.service.keytab</value>
     <description></description>
   </property>

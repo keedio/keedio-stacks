@@ -37,13 +37,13 @@ jdbc_password = default('/configurations/hive-site/javax.jdo.option.ConnectionPa
 hive_metastore_warehouse = config['configurations']['hive-site']['hive_metastore_warehouse']
 hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
 hdfs_principal_name = default('/configurations/hadoop-env/hdfs_principal_name',None)
-hdfs_user_keytab = default('/configurations/hadoop-site/hdfs_user_keytab',None)
-kerberos_cache_file = config['configurations']['cluster-env']['kerberos_cache_file']
+hdfs_user_keytab = default('/configurations/hadoop-env/hdfs_user_keytab',None)
+kerberos_cache_file = default('/configurations/cluster-env/kerberos_cache_file','/tmp/ccache_keytab')
 
 
 security_enabled = config['configurations']['cluster-env']['security_enabled']
-hive_metastore_keytab = config['configurations']['hive-site']['hive_metastore_keytab']
-hive_metastore_principal = config['configurations']['hive-site']['hive_metastore_principal']
+hive_metastore_keytab = config['configurations']['hive-site']['hive.metastore.kerberos.keytab.file']
+hive_metastore_principal = config['configurations']['hive-site']['hive.metastore.kerberos.principal'].replace('_HOST',hive_metastore_host)
 zookeeper_client_port = str(config['configurations']['hive-site']['hive.zookeeper.client.port'])
 zookeeper_hosts = config['clusterHostInfo']['zookeeper_hosts']
 zookeeper_hosts_str=', '.join(str(e) for e in zookeeper_hosts)
@@ -52,10 +52,10 @@ zookeeper_hosts_port=aux_join_str.join(str(e) for e in zookeeper_hosts)+':'+zook
 hive_admin_users = config['configurations']['hive-site']['hive_admin_users']
 hive_server2_port = config['configurations']['hive-site']['hive.server2.thrift.port']
 hive_server2_host = config['clusterHostInfo']['hive_server_host'][0]
-hive_server2_principal = config['configurations']['hive-site']['hive_server2_principal']
-hive_server2_keytab = config['configurations']['hive-site']['hive_server2_keytab']
-hive_server2_spnego_principal = config['configurations']['hive-site']['hive_server2_spnego_principal']
-hive_server2_spnego_keytab = config['configurations']['hive-site']['hive_server2_spnego_keytab']
+hive_server2_principal = config['configurations']['hive-site']['hive.server2.authentication.kerberos.principal'].replace('_HOST',hive_server2_host)
+hive_server2_keytab = config['configurations']['hive-site']['hive.server2.authentication.kerberos.keytab']
+hive_server2_spnego_principal = config['configurations']['hive-site']['hive.server2.authentication.spnego.principal'].replace('_HOST',hive_server2_host)
+hive_server2_spnego_keytab = config['configurations']['hive-site']['hive.server2.authentication.spnego.keytab']
 
 hive_heapsize = config['configurations']['hive-env']['hive.heapsize']
 config_dir = "/etc/hive/conf"
