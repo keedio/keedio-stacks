@@ -31,8 +31,12 @@ spark_user = config['configurations']['spark']['spark_user']
 spark_group = config['configurations']['spark']['spark_group']
 spark_hdfs_home = config['configurations']['spark']['spark_hdfs_home']
 spark_local_home = config['configurations']['spark']['spark_local_home']
+
 spark_principal = default('/configurations/spark/spark_principal',None)
 spark_keytab = default('/configurations/spark/spark_keytab',None)
+
+sparkhs_principal_name = default('/configurations/spark/dfs.spark.kerberos.principal',None)
+sparkhs_keytab = default('/configurations/spark/sparkhs_keytab',None)
 
 hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
 hdfs_principal_name = default('/configurations/hadoop-env/hdfs_principal_name',None)

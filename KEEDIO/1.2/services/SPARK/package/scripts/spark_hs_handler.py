@@ -19,6 +19,7 @@ limitations under the License.
 """
 
 from resource_management import *
+from spark_hs import spark_hs
 from spark import spark
 from subprocess import *
 
@@ -31,23 +32,25 @@ class Spark_hs(Script):
   def configure(self, env):
     import params
     env.set_params(params)
+    #This sets up directories
     spark(action="config")
+    spark_hs(action="config")
 
   def start(self, env):
     import params
     env.set_params(params)
-    spark(action="config")
-    spark(action="start")
+    spark_hs(action="config")
+    spark_hs(action="start")
  
   def stop(self, env):
     import params
     env.set_params(params)
-    spark(action="stop")
+    spark_hs(action="stop")
 
   def status(self, env):
     import params
     env.set_params(params)
-    spark(action="status")
+    spark_hs(action="status")
 
 if __name__ == "__main__":
   Spark_hs().execute()

@@ -44,8 +44,9 @@ def execute_sudo_krb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,
   keytab_cache = keytab_cache or params.kerberos_cache_file
   
   auth_token=None
-  
-  if secure:
+ 
+  secured=False 
+  if secured:
     import kerberosWrapper
     auth_token = kerberosWrapper.krb_wrapper(principal,keytab,keytab_cache)
     os.environ['KRB5CCNAME'] = keytab_cache
