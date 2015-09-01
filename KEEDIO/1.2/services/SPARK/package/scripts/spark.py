@@ -31,7 +31,7 @@ def spark(service=None,action=None):
   if action == "config":
     
     execute_hdfs = partial(execute_sudo_krb,user=params.hdfs_user,principal=params.hdfs_principal_name,keytab=params.hdfs_user_keytab)
-    execute_spark = partial(execute_sudo_krb,user=params.spark_user,principal=params.spark_principal,keytab=params.spark_keytab)
+    #execute_spark = partial(execute_sudo_krb,user=params.spark_user,principal=params.spark_principal,keytab=params.spark_keytab)
 
     create_home = ["hdfs","dfs","-mkdir","-p",params.spark_hdfs_home]
     create_eventLog = ["hdfs","dfs","-mkdir","-p",params.spark_hdfs_home+"/eventLog"]
@@ -41,13 +41,15 @@ def spark(service=None,action=None):
 
     chmod_eventLog = ["hdfs","dfs","-chmod","1777",params.spark_hdfs_home+"/eventLog"]   
     upload_jars = ["hdfs","dfs","-put",params.spark_local_home+"/lib",params.spark_hdfs_home]
+    chown_jars = ["hdfs","dfs","-chown","-R",params.spark_user, params.spark_hdfs_home+"/lib"]
  
     execute_hdfs(create_home)
     execute_hdfs(create_eventLog)
     execute_hdfs(chown_home)
     execute_hdfs(chown_eventLog)
     execute_hdfs(chmod_eventLog)
-    execute_spark(upload_jars)
+    execute_hdfs(upload_jars)
+    execute_hdfs(chown_jars)
 
 
   if action == "install":
