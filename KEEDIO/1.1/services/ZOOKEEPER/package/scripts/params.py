@@ -71,7 +71,7 @@ java64_home = config['hostLevelParams']['java_home']
 
 zookeeper_hosts = config['clusterHostInfo']['zookeeper_hosts']
 zookeeper_hosts.sort()
-
+zookeeper_rest_hosts = config['clusterHostInfo']['zookeeper_rest_hosts']
 
 rest_hosts=""
 for host in zookeeper_hosts:
@@ -79,6 +79,12 @@ for host in zookeeper_hosts:
       rest_hosts += ","
    rest_hosts+=str(host)+":"+str(clientPort)
   
+exclude_packages = []
+if hostname not in zookeeper_hosts:
+  exclude_packages +=['zookeeper-server']
+if hostname not in zookeeper_rest_hosts:
+  exclude_packages +=['zookeeper-rest']
+
 
 zk_keytab_path = config['configurations']['zookeeper-env']['zookeeper_keytab_path']
 zk_server_jaas_file = format("{config_dir}/zookeeper_jaas.conf")

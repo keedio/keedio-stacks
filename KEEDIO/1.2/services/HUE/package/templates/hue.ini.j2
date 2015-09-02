@@ -18,14 +18,14 @@
 
   # Set this to a random string, the longer the better.
   # This is used for secure hashing in the session store.
-  secret_key=
+  secret_key={{ secret_key }} 
 
   # Webserver listens on this address and port
   http_host=0.0.0.0
-  http_port=8888
+  http_port={{ hue_port }}
 
   # Time zone name
-  time_zone=America/Los_Angeles
+  time_zone={{ timezone }}
 
   # Enable or disable Django debug mode.
   django_debug_mode=false
@@ -79,7 +79,7 @@
 
   # Help improve Hue with anonymous usage analytics.
   # Use Google Analytics to see how many times an application or specific section of an application is used, nothing more.
-  ## collect_usage=true
+  collect_usage=false
   
   # Support for HTTPS termination at the load-balancer level with SECURE_PROXY_SSL_HEADER.
   ## secure_proxy_ssl_header=false
@@ -606,7 +606,7 @@
 
     [[[default]]]
       # Enter the filesystem uri
-      fs_defaultfs=hdfs://localhost:8020
+      fs_defaultfs={{ fs_defaultsfs }}
 
       # NameNode logical name.
       ## logical_name=
@@ -614,7 +614,7 @@
       # Use WebHdfs/HttpFs as the communication mechanism.
       # Domain should be the NameNode or HttpFs host.
       # Default port is 14000 for HttpFs.
-       webhdfs_url=http://{{namenode_one_host}}:14000/webhdfs/v1
+       webhdfs_url=http://{{namenode_one_host}}:{{ httpfs_port }}/webhdfs/v1
 
       # Change this if your HDFS cluster is Kerberos-secured
        security_enabled={{secure}}
@@ -631,7 +631,7 @@
        resourcemanager_host={{RM_host}}
 
       # The port where the ResourceManager IPC listens on
-       resourcemanager_port=8050
+       resourcemanager_port={{ resourcemanager_port }}
 
       # Whether to submit jobs to this cluster
       submit_to=True
@@ -643,13 +643,13 @@
        security_enabled={{secure}}
 
       # URL of the ResourceManager API
-       resourcemanager_api_url=http://{{RM_host}}:8088
+       resourcemanager_api_url=http://{{RM_host}}:{{ resourcemanager_web_port }}
 
       # URL of the ProxyServer API
-      proxy_api_url=http://{{RM_host}}:8088
+      proxy_api_url=http://{{RM_host}}:{{ resourcemanager_web_port }}
 
       # URL of the HistoryServer API
-      history_server_api_url=http://{{RM_host}}:19888
+      history_server_api_url=http://{{hs_host}}:{{ hs_web_address }}
 
     # HA support by specifying multiple clusters
     # e.g.
@@ -664,7 +664,7 @@
 
     [[[default]]]
       # Enter the host on which you are running the Hadoop JobTracker
-       #jobtracker_host={{JTnode_host}}
+       #jobtracker_host=
 
       # The port where the JobTracker IPC listens on
       # jobtracker_port=8021
@@ -705,7 +705,7 @@
   
   # The URL where the Oozie service runs on. This is required in order for
   # users to submit jobs. Empty value disables the config check.
-   oozie_url=http://{{Oozie_host}}:11000/oozie
+   oozie_url=http://{{Oozie_host}}:{{oozie_port}}/oozie
 
   # Requires FQDN in oozie_url if enabled
    security_enabled={{secure}}

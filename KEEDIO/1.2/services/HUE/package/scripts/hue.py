@@ -26,7 +26,7 @@ from subprocess import *
 
 def hue(service=None,action=None):
 
-  if action == "install":
+  if action == "initdb":
     import params 
     cmd=Popen(['/usr/lib/hue/build/env/bin/hue','syncdb','--noinput'],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()

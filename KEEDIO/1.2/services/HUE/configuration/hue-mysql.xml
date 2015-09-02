@@ -23,7 +23,7 @@
 <configuration>
   <property>
     <name>mysql_host</name>
-    <value>master.ambari.keedio.org</value>
+    <value></value>
     <description>Hue Mysql  server</description>
   </property>
   <property>

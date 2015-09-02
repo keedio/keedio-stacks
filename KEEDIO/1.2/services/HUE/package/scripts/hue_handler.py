@@ -27,8 +27,8 @@ class Hue(Script):
     import params
     env.set_params(params)
     self.install_packages(env)
-    hue(action="install")
     self.configure(env)
+    hue(action="initdb")
 
   def configure(self, env):
     import params

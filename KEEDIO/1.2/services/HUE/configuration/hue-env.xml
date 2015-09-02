@@ -32,5 +32,13 @@
     <value>/etc/hue/conf/</value>
     <description>Hue Configuration dir</description>
   </property>
+  <property>
+    <name>hue_port</name>
+    <value>8888</value>
+  </property>
+  <property>
+    <name>timezone</name>
+    <value>Europe/Madrid</value>
+  </property>
   
 </configuration>
