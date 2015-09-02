@@ -30,7 +30,7 @@ class ServiceCheck(Script):
     connection_url = 'jdbc:hive2://'+params.hive_server2_host+':'+str(params.hive_server2_port)+'/default'
     if params.security_enabled:
       connection_url += ';principal='+params.hive_server2_principal
-    check_hiveserver2 = ['beeline','-u',connection_url,'-n',params.smoke_user,'-e',' ']
+    check_hiveserver2 = ['beeline','-u',connection_url,'-n',params.smoke_user]
     out,err,rc=execute_smoke(check_hiveserver2)
     print out
     print err
