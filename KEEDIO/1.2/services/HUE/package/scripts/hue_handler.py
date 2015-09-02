@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -15,51 +16,39 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-Ambari Agent
-
 """
 
-import sys
 from resource_management import *
-
-from zookeeper import zookeeper
+from hue import hue
 from subprocess import *
-from utils import *
 
-class ZookeeperServer(Script):
+class Hue(Script):
   def install(self, env):
     import params
-    self.install_packages(env,params.exclude_packages)
+    env.set_params(params)
+    self.install_packages(env)
     self.configure(env)
+    hue(action="initdb")
 
   def configure(self, env):
     import params
     env.set_params(params)
-    zookeeper(type='server')
+    hue(action="config")
 
-  def start(self,env):
+  def start(self, env):
+    import params
+    env.set_params(params)
     self.configure(env)
-    cmd=Popen(['service','zookeeper-server','start'],stdout=None,stderr=None)
-    out,err=cmd.communicate()
-    Logger.info("Starting zookeeper server")
-    Logger.info(out)
-    Logger.info(err)
+    hue(action="start")
 
-  def stop(self,env):
-    cmd=Popen(['service','zookeeper-server','stop'],stdout=None,stderr=None)
-    out,err=cmd.communicate()
-    Logger.info("Stopping zookeeper server")
-    Logger.info(out)
-    Logger.info(err)
+  def stop(self, env):
+    import params
+    env.set_params(params)
+    hue(action="stop")
 
   def status(self, env):
-    Logger.info("Checking zookeeper server status")
-    cmd=Popen(['service','zookeeper-server','status'],stdout=PIPE,stderr=PIPE)
-    out,err=cmd.communicate()
-    Logger.info(out)
-    Logger.info(err)
-    rc=cmd.returncode
-    check_rc(rc,out,err)
+    hue(action="status")
 
 if __name__ == "__main__":
-  ZookeeperServer().execute()
+  Hue().execute()
+

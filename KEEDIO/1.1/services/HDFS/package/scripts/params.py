@@ -282,6 +282,9 @@ hadoop_env_sh_template = config['configurations']['hadoop-env']['content']
 #hadoop-env.sh
 java_home = config['hostLevelParams']['java_home']
 
+#httpfs-env.sh
+httpfs_port = config['configurations']['httpfs-env']['httpfs_port']
+
 if hdp_stack_version.startswith('2.0') and System.get_instance().os_family != "suse":
   # deprecated rhel jsvc_path
   jsvc_path = "/usr/lib/jsvcdaemon"

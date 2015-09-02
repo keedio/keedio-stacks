@@ -22,11 +22,10 @@ Ambari Agent
 import sys
 from resource_management import *
 
-from zookeeper import zookeeper
 from subprocess import *
 from utils import *
 
-class ZookeeperServer(Script):
+class zookeeper_rest(Script):
   def install(self, env):
     import params
     self.install_packages(env,params.exclude_packages)
@@ -35,26 +34,36 @@ class ZookeeperServer(Script):
   def configure(self, env):
     import params
     env.set_params(params)
-    zookeeper(type='server')
+    import params
+    Directory(params.config_dir,
+            owner=params.zk_user,
+            recursive=True,
+            group=params.user_group
+    )
+    File(format("{config_dir}/rest/rest.properties"),
+       content=Template("rest.properties.j2"),
+       owner="root",
+       group="root"
+    )
 
   def start(self,env):
     self.configure(env)
-    cmd=Popen(['service','zookeeper-server','start'],stdout=None,stderr=None)
+    cmd=Popen(['service','zookeeper-rest','start'],stdout=None,stderr=None)
     out,err=cmd.communicate()
-    Logger.info("Starting zookeeper server")
+    Logger.info("Starting zookeeper REST API")
     Logger.info(out)
     Logger.info(err)
 
   def stop(self,env):
-    cmd=Popen(['service','zookeeper-server','stop'],stdout=None,stderr=None)
+    cmd=Popen(['service','zookeeper-rest','stop'],stdout=None,stderr=None)
     out,err=cmd.communicate()
-    Logger.info("Stopping zookeeper server")
+    Logger.info("Stopping zookeeper REST API")
     Logger.info(out)
     Logger.info(err)
 
   def status(self, env):
-    Logger.info("Checking zookeeper server status")
-    cmd=Popen(['service','zookeeper-server','status'],stdout=PIPE,stderr=PIPE)
+    Logger.info("Checking zookeeper-rest status")
+    cmd=Popen(['curl','http://localhost:9998/znodes/v1/'],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     Logger.info(out)
     Logger.info(err)
@@ -62,4 +71,4 @@ class ZookeeperServer(Script):
     check_rc(rc,out,err)
 
 if __name__ == "__main__":
-  ZookeeperServer().execute()
+  zookeeper_rest().execute()

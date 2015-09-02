@@ -176,12 +176,24 @@ RULE[2:$1%$2@$0](.%admin@APACHE.ORG)s/./admin/
 DEFAULT
     </description>
   </property>
+
   <property>
     <name>hadoop.proxyuser.httpfs.hosts</name>
     <value>*</value>
   </property>
+
   <property>
     <name>hadoop.proxyuser.httpfs.groups</name>
     <value>*</value>
   </property>
+
+  <property>
+    <name>hadoop.proxyuser.hue.hosts</name>
+    <value>*</value>
+  </property>
+  <property>
+    <name>hadoop.proxyuser.hue.groups</name>
+    <value>*</value>
+  </property>
+
 </configuration>
