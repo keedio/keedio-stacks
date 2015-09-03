@@ -49,9 +49,11 @@ class HiveServerHandler(Script):
 
   def initialize_db(self,env):
     import params
-    executed=Popen(['mysql','-h',params.jdbc_host,'-b',params.jdbc_db,'-u',params.jdbc_username,'--password='+params.jdbc_password,'-e','source /usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.13.0.mysql.sql;'],stdout=PIPE,stderr=PIPE)
-    out,err=executed.communicate()
-    utils.check_rc(executed.returncode,out,err)
+    try:
+        Popen(['mysql','-h',params.jdbc_host,'-b',params.jdbc_db,'-u',params.jdbc_username,'--password='+params.jdbc_password,'-e','source /usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.13.0.mysql.sql;'],stdout=PIPE,stderr=PIPE)
+    except: 
+        Logger.info("Cannot create Hive schema in the backend database, make sure you clean the database before restarting the installation!")
+        exit()
      
 if __name__ == "__main__":
   HiveServerHandler().execute()
