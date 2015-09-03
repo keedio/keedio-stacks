@@ -59,6 +59,40 @@
             </configFile>
           </configFiles>
         </component>
+        <component>
+          <name>SPARK_HISTORY_SERVER</name>
+          <displayName>SPARK History Server</displayName>
+          <category>MASTER</category>
+          <cardinality>1</cardinality>
+          <dependencies>
+            <dependency>
+              <name>HDFS/HDFS_CLIENT</name>
+              <scope>host</scope>
+              <auto-deploy>
+                <enabled>true</enabled>
+              </auto-deploy>
+            </dependency>
+            <dependency>
+              <name>MAPREDUCE2/MAPREDUCE2_CLIENT</name>
+              <scope>host</scope>
+              <auto-deploy>
+                <enabled>true</enabled>
+              </auto-deploy>
+            </dependency>
+          </dependencies>
+          <commandScript>
+            <script>scripts/spark_hs_handler.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+          <configFiles>
+            <configFile>
+              <type>xml</type>
+              <fileName>spark.xml</fileName>
+              <dictionaryName>spark</dictionaryName>
+            </configFile>
+          </configFiles>
+        </component>
       </components>
       <osSpecifics>
         <osSpecific>

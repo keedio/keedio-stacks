@@ -19,26 +19,39 @@ limitations under the License.
 """
 
 from resource_management import *
+from spark_hs import spark_hs
 from spark import spark
 from subprocess import *
 
-class Spark(Script):
+class Spark_hs(Script):
   def install(self, env):
     import params
     env.set_params(params)
     self.install_packages(env)
-    spark(action="install")
-    spark(action="config")
 
   def configure(self, env):
     import params
     env.set_params(params)
+    #This sets up directories
     spark(action="config")
+    spark_hs(action="config")
+
+  def start(self, env):
+    import params
+    env.set_params(params)
+    spark_hs(action="config")
+    spark_hs(action="start")
+ 
+  def stop(self, env):
+    import params
+    env.set_params(params)
+    spark_hs(action="stop")
 
   def status(self, env):
-    self.configure(env)
-    raise ClientComponentHasNoStatus()
+    import params
+    env.set_params(params)
+    spark_hs(action="status")
 
 if __name__ == "__main__":
-  Spark().execute()
+  Spark_hs().execute()
 

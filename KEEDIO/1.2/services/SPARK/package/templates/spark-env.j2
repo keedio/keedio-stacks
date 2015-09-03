@@ -15,8 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #}
-spark.master		yarn-cluster
-spark.yarn.jar 		hdfs://{{ spark_hdfs_home }}/lib/{{ spark_assembly }}
-spark.eventLog.enabled	true
-spark.eventLog.dir	hdfs://{{ spark_hdfs_home }}/eventLog
-spark.history.fs.logDirectory    hdfs://{{ spark_hdfs_home }}/eventLog
+{% if security_enabled %}
+export SPARK_HISTORY_OPTS="-Dspark.history.kerberos.enabled=true -Dspark.history.kerberos.principal={{sparkhs_principal_name}} -Dspark.history.kerberos.keytab={{sparkhs_keytab}}"
+{% endif %}
