@@ -278,7 +278,7 @@
 
   <property>
     <name>dfs.permissions.superusergroup</name>
-    <value>hdfs</value>
+    <value>hadoop</value>
     <description>The name of the group of super-users.</description>
   </property>
 
@@ -332,7 +332,7 @@
 
   <property>
     <name>dfs.cluster.administrators</name>
-    <value> hdfs</value>
+    <value> hadoop</value>
     <description>ACL for who all can view the default servlets in the HDFS</description>
   </property>
 
