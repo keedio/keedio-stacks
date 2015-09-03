@@ -29,7 +29,7 @@
           <name>HUE</name>
           <displayName>Hue UI</displayName>
           <category>MASTER</category>
-          <cardinality>1+</cardinality>
+          <cardinality>1</cardinality>
           <commandScript>
             <script>scripts/hue_handler.py</script>
             <scriptType>PYTHON</scriptType>
