@@ -61,6 +61,18 @@ try:
   with open(input) as f:
     for line in f:
         host,desc,principal,file,directory,owner,group,mode=line.split(',')
+        if ( not host ) or ( not principal ) or ( not file ) or ( not directory ) or ( not owner ) or ( not group ) or ( not mode ):
+          print "============================================"
+          print " SKIPPED "
+          print "Host: %s" % host
+          print "Principal: %s" % principal
+          print "Directory: %s" % directory
+          print "File: %s" % file
+          print "Owner: %s" % owner
+          print "Group: %s" % group
+          print "Mode: %s" % mode
+          print "============================================"
+          continue
         file=directory+'/'+file 
         principal=principal.split('@')[0]
         if not principal in keytabsToGen:
