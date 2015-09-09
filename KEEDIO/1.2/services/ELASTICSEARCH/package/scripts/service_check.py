@@ -18,32 +18,29 @@ limitations under the License.
 
 """
 
-import sys
+import requests
+
+try:
+    import simplejson as json
+    assert json
+except ImportError:
+    import json
+
 from resource_management import *
 
-from elasticsearch import elasticsearch
-
-         
-class EsHandler(Script):
-  def install(self, env):
-    self.install_packages(env)
-    
-  def configure(self, env):
+class ServiceCheck(Script):
+  def service_check(self, env):
     import params
-    env.set_params(params)
-    elasticsearch(action='config')
-    
-  def start(self, env):
-    import params
-    env.set_params(params)
-    self.configure(env)
-    elasticsearch(action='start')
-    
-  def stop(self, env):
-    elasticsearch(action='stop')
+    for host in params.es_master_hosts:
+      url = "http://" + host + ":" + str(params.es_port) + "/_cluster/health"
+      response = requests.get(url)
+      if response.ok:
+        break
+    response.raise_for_status()
+    parsed = json.loads(response.content)
+    if not str(parsed['status']) == 'green':
+      raise Fail(response.content)
+    Logger.info(response.content)
 
-  def status(self, env):
-    elasticsearch(action='status')
-     
 if __name__ == "__main__":
-  EsHandler().execute()
+  ServiceCheck().execute()

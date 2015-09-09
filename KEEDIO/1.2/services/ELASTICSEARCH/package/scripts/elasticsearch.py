@@ -23,7 +23,6 @@ from resource_management import *
 from subprocess import *
 from utils import check_rc
 def elasticsearch(action=None):
-  import params
   
   if action == 'start' or action == 'stop' or action == 'status':
     cmd=Popen(['service','elasticsearch',action],stdout=PIPE,stderr=PIPE)
@@ -33,6 +32,12 @@ def elasticsearch(action=None):
       check_rc(cmd.returncode,stdout=out,stderr=err)
 
   if action == 'config' :
+    import params
+    File('/etc/security/limits.d/elasticsearch.conf',
+      content=Template('limits.j2'),
+      owner='root',
+      group='root'
+    )
     Directory(params.path_data,
       recursive=True,
       owner='elasticsearch',

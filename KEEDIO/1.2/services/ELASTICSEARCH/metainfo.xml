@@ -44,7 +44,7 @@
           <category>SLAVE</category>
           <cardinality>1+</cardinality>
           <commandScript>
-            <script>scripts/es_handler.py</script>
+            <script>scripts/es_handler_slave.py</script>
             <scriptType>PYTHON</scriptType>
             <timeout>600</timeout>
           </commandScript>

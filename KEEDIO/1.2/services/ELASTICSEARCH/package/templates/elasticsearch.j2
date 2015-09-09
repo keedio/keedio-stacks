@@ -44,11 +44,11 @@ node.name: {{ hostname }}
 #
 # Allow this node to be eligible as a master node (enabled by default):
 #
-node.master: {{ is_es_master }}
+node.master: {{ is_es_master_str}}
 #
 # Allow this node to store data (enabled by default):
 #
-node.data: {{ is_es_indexer }}
+node.data: {{ is_es_indexer_str }}
 
 # You can exploit these settings to design advanced cluster topologies.
 #
@@ -221,7 +221,7 @@ bootstrap.mlockall: true
 
 # Set a custom port to listen for HTTP traffic:
 #
-#http.port: 9200
+http.port: {{ es_port }}
 
 # Set a custom allowed content length:
 #

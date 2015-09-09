@@ -23,14 +23,20 @@
 <configuration>
   <property>
     <name>path.data</name>
-    <value>/data/elascisearch</value>
+    <value>/data/elasticsearch</value>
     <description>Path in local filesystem where data will be stored.It is possible to add more than one path with comma separated paths</description>
   </property>
 
   <property>
     <name>allocated.memory</name>
     <value></value>
-    <description>In order to avoid ES use swap, ES will reserve this momory always</description>
+    <description>In order to avoid ES use swap, ES will reserve this memory always. Unit is in megabytes and only an integer value</description>
+  </property>
+
+  <property>
+    <name>service_port</name>
+    <value>9200</value>
+    <description>Port used for http service</description>
   </property>
 
 </configuration>

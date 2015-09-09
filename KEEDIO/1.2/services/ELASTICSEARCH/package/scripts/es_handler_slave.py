@@ -18,24 +18,35 @@ limitations under the License.
 
 """
 
+import sys
 from resource_management import *
 
-# server configurations
-config = Script.get_config()
+from elasticsearch import elasticsearch
 
-cluster_name = config['clusterName']
-es_port = default('/configurations/elasticsearch/service_port',9200)
-es_master_hosts = [ str(elem) for elem in config['clusterHostInfo']['elasticsearch_hosts']]
-es_indexer_hosts = [ str(elem) for elem in default('/clusterHostInfo/elasticsearch_indexer_hosts',[]) ]
-hostname = config['hostname']
+         
+class EsHandler(Script):
+  def install(self, env):
+    self.install_packages(env)
+    
+  def configure(self, env):
+    import params
+    env.set_params(params)
+    elasticsearch(action='config')
+    
+  def start(self, env):
+    import params
+    if not params.is_es_master:
+      env.set_params(params)
+      self.configure(env)
+      elasticsearch(action='start')
+    
+  def stop(self, env):
+    import params
+    if not params.is_es_master:
+      elasticsearch(action='stop')
 
-is_es_master = hostname in es_master_hosts
-is_es_master_str = str(hostname in es_master_hosts).lower()
-is_es_indexer = hostname in es_indexer_hosts
-is_es_indexer_str = str(hostname in es_indexer_hosts).lower()
-allocated_mem = config['configurations']['elasticsearch']['allocated.memory']
-
-path_data = config['configurations']['elasticsearch']['path.data']
-
-min_required_hosts = (len(es_master_hosts)+len(es_indexer_hosts)+1)/2
-
+  def status(self, env):
+    elasticsearch(action='status')
+     
+if __name__ == "__main__":
+  EsHandler().execute()
