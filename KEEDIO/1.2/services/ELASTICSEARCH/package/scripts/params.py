@@ -37,5 +37,5 @@ allocated_mem = config['configurations']['elasticsearch']['allocated.memory']
 
 path_data = config['configurations']['elasticsearch']['path.data']
 
-min_required_hosts = (len(es_master_hosts)+len(es_indexer_hosts)+1)/2
+min_required_hosts = len(set(es_master_hosts + es_indexer_hosts)/2)+1
 
