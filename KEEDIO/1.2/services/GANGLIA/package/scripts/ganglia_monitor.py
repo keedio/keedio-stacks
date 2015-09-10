@@ -92,6 +92,13 @@ class GangliaMonitor(Script):
                     role = "monitor",
                     owner = "root",
                     group = params.user_group)
+    if 'ElasticSearch' in params.clusters:
+      generate_daemon("gmond",
+        name = "ElasticSearch",
+        role = "monitor",
+        owner = "root",
+        group = params.user_group)
+      
 
 
   def generate_master_configs(self):
