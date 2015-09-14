@@ -53,7 +53,7 @@
         <component>
           <name>KIBANA3</name>
           <displayName>Kibana3</displayName>
-          <category>MASTER</category>
+          <category>SLAVE</category>
           <cardinality>0-1</cardinality>
           <commandScript>
             <script>scripts/kibana3_handler.py</script>
@@ -67,7 +67,7 @@
         <component>
           <name>KIBANA4</name>
           <displayName>Kibana4</displayName>
-          <category>MASTER</category>
+          <category>SLAVE</category>
           <cardinality>0-1</cardinality>
           <commandScript>
             <script>scripts/kibana4_handler.py</script>

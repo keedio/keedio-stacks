@@ -41,7 +41,8 @@ allocated_mem = config['configurations']['elasticsearch']['allocated.memory']
 
 path_data = config['configurations']['elasticsearch']['path.data']
 
-min_required_hosts = len(set(es_master_hosts + es_indexer_hosts + kibana3_host + kibana4_host))/2+1
+#min_required_hosts = len(set(es_master_hosts + es_indexer_hosts + kibana3_host + kibana4_host))/2+1
+min_required_hosts = len(set(es_master_hosts))/2+1
 
 exclude_packages = []
 if not is_kibana3:

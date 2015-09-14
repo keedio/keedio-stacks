@@ -48,6 +48,6 @@ def kibana(action=None):
   if action == 'install':
     if not os.path.exists('/var/www/html/kibana'):
       os.symlink('/usr/lib/kibana','/var/www/html/kibana')
-    os.chdir('/var/www/html/kibana')
+    #os.chdir('/var/www/html/kibana')
     cmd=Popen(['gem','install','--no-ri','--no-rdoc','bundle'])
-    cmd=Popen(['bundle','install']) 
+    #cmd=Popen(['bundle','install']) 
