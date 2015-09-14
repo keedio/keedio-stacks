@@ -26,7 +26,8 @@ from elasticsearch import elasticsearch
          
 class EsHandler(Script):
   def install(self, env):
-    self.install_packages(env)
+    import params
+    self.install_packages(env,params.exclude_packages)
     
   def configure(self, env):
     import params

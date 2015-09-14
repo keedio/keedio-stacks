@@ -22,29 +22,38 @@ import sys
 from resource_management import *
 
 from elasticsearch import elasticsearch
+from kibana3 import kibana
 
          
-class EsHandler(Script):
+class Kibana3Handler(Script):
   def install(self, env):
     import params
     self.install_packages(env,params.exclude_packages)
+    kibana(action="install")
     
   def configure(self, env):
     import params
     env.set_params(params)
-    elasticsearch(action='config')
+    kibana(action='config')
     
   def start(self, env):
     import params
     env.set_params(params)
+    if not params.is_es_master and not params.is_es_indexer:
+      elasticsearch(action='config')
+      elasticsearch(action='start')
+    kibana(action="install")
     self.configure(env)
-    elasticsearch(action='start')
+    kibana(action='start')
     
   def stop(self, env):
-    elasticsearch(action='stop')
+    import params
+    if not params.is_es_master and not params.is_es_indexer:
+      elasticsearch(action='stop')
+    kibana(action='stop')
 
   def status(self, env):
-    elasticsearch(action='status')
+    kibana(action='status')
      
 if __name__ == "__main__":
-  EsHandler().execute()
+  Kibana3Handler().execute()

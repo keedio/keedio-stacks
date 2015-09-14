@@ -49,13 +49,41 @@
             <timeout>600</timeout>
           </commandScript>
         </component>
-      </components>
+
+        <component>
+          <name>KIBANA3</name>
+          <displayName>Kibana3</displayName>
+          <category>MASTER</category>
+          <cardinality>0-1</cardinality>
+          <commandScript>
+            <script>scripts/kibana3_handler.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+        </component>
+
+
+
+        <component>
+          <name>KIBANA4</name>
+          <displayName>Kibana4</displayName>
+          <category>MASTER</category>
+          <cardinality>0-1</cardinality>
+          <commandScript>
+            <script>scripts/kibana4_handler.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+        </component>
+     </components>
  
       <configFile>
         <type>xml</type>
         <fileName>elasticsearch.xml</fileName>
-        <dictionaryName>oozie-env</dictionaryName>
+        <dictionaryName>elasticsearch</dictionaryName>
       </configFile>
+
+
 
       <osSpecifics>
         <osSpecific>
@@ -63,6 +91,21 @@
           <packages>
             <package>
               <name>elasticsearch</name>
+            </package>
+            <package>
+              <name>httpd</name>
+            </package>
+            <package>
+              <name>kibana</name>
+            </package>
+            <!--package>
+              <name>kibana4</name>
+            </package-->
+            <package>
+              <name>mod_passenger</name>
+            </package>
+            <package>
+              <name>rubygems</name>
             </package>
           </packages>
         </osSpecific>
