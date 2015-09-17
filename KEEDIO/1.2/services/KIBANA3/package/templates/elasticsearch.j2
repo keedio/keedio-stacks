@@ -44,11 +44,11 @@ node.name: {{ hostname }}
 #
 # Allow this node to be eligible as a master node (enabled by default):
 #
-node.master: {{ is_es_master_str}}
+node.master: false
 #
 # Allow this node to store data (enabled by default):
 #
-node.data: {{ is_es_indexer_str }}
+node.data: false
 
 # You can exploit these settings to design advanced cluster topologies.
 #
@@ -181,7 +181,7 @@ path.logs: /var/log/elasticsearch
 #
 # Set this property to true to lock the memory:
 #
-bootstrap.mlockall: {{ mlockall }}
+bootstrap.mlockall: false
 
 # Make sure that the ES_MIN_MEM and ES_MAX_MEM environment variables are set
 # to the same value, and that the machine has enough memory to allocate

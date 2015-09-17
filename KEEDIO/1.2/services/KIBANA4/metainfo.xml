@@ -20,44 +20,23 @@
   <schemaVersion>2.0</schemaVersion>
   <services>
     <service>
-      <name>ELASTICSEARCH</name>
-      <displayName>ElasticSearch</displayName>
-      <comment>A distributed, highly available, RESTful search engine</comment>
-      <version>1.2.0</version>
+      <name>KIBANA4</name>
+      <displayName>Kibana4</displayName>
+      <comment>Kibana is an open source analytics and visualization platform designed to work with Elasticsearch.</comment>
+      <version>4.1.0</version>
       <components>
-
         <component>
-          <name>ELASTICSEARCH</name>
-          <displayName>ElasticSearch</displayName>
+          <name>KIBANA4</name>
+          <displayName>Kibana4</displayName>
           <category>MASTER</category>
-          <cardinality>1+</cardinality>
+          <cardinality></cardinality>
           <commandScript>
-            <script>scripts/es_handler.py</script>
-            <scriptType>PYTHON</scriptType>
-            <timeout>600</timeout>
-          </commandScript>
-        </component>
-
-        <component>
-          <name>ELASTICSEARCH_INDEXER</name>
-          <displayName>es_indexer</displayName>
-          <category>SLAVE</category>
-          <cardinality>1+</cardinality>
-          <commandScript>
-            <script>scripts/es_handler_slave.py</script>
+            <script>scripts/kibana4_handler.py</script>
             <scriptType>PYTHON</scriptType>
             <timeout>600</timeout>
           </commandScript>
         </component>
       </components>
-
-      <configFile>
-        <type>xml</type>
-        <fileName>elasticsearch.xml</fileName>
-        <dictionaryName>elasticsearch</dictionaryName>
-      </configFile>
-
-
 
       <osSpecifics>
         <osSpecific>
@@ -67,22 +46,22 @@
               <name>elasticsearch</name>
             </package>
             <package>
-              <name>python-requests</name>
+              <name>kibana4</name>
             </package>
           </packages>
         </osSpecific>
       </osSpecifics>
 
-      <commandScript>
-        <script>scripts/service_check.py</script>
-        <scriptType>PYTHON</scriptType>
-        <timeout>600</timeout>
-      </commandScript>
-      
+      <requiredServices>
+        <service>ELASTICSEARCH</service>
+      </requiredServices>
+
+
     </service>
 
     <configuration-dependencies>
       <config-type>elasticsearch</config-type>
     </configuration-dependencies>
+
   </services>
 </metainfo>

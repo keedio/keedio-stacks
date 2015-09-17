@@ -44,11 +44,11 @@ node.name: {{ hostname }}
 #
 # Allow this node to be eligible as a master node (enabled by default):
 #
-node.master: {{ is_es_master_str}}
+node.master: false
 #
 # Allow this node to store data (enabled by default):
 #
-node.data: {{ is_es_indexer_str }}
+node.data: false
 
 # You can exploit these settings to design advanced cluster topologies.
 #
@@ -146,7 +146,7 @@ path.conf: /etc/elasticsearch
 
 # Path to directory where to store index data allocated for this node.
 #
-path.data: {{ path_data }}
+# path.data:  path_data 
 #
 # Can optionally include more than one location, causing data to be striped across
 # the locations (a la RAID 0) on a file level, favouring locations with most free
@@ -181,7 +181,7 @@ path.logs: /var/log/elasticsearch
 #
 # Set this property to true to lock the memory:
 #
-bootstrap.mlockall: {{ mlockall }}
+bootstrap.mlockall: false
 
 # Make sure that the ES_MIN_MEM and ES_MAX_MEM environment variables are set
 # to the same value, and that the machine has enough memory to allocate
@@ -252,7 +252,7 @@ http.port: {{ es_port }}
 
 # Allow recovery process after N nodes in a cluster are up:
 #
-gateway.recover_after_nodes: {{ min_required_hosts }}
+#gateway.recover_after_nodes: min_required_hosts 
 
 # Set the timeout to initiate the recovery process, once the N nodes
 # from previous setting are up (accepts time value):
@@ -301,7 +301,7 @@ gateway.recover_after_nodes: {{ min_required_hosts }}
 # operational within the cluster. Its recommended to set it to a higher value
 # than 1 when running more than 2 nodes in the cluster.
 #
-discovery.zen.minimum_master_nodes: {{ min_required_hosts }}
+#discovery.zen.minimum_master_nodes:  min_required_hosts 
 
 # Set the time to wait for ping responses from other nodes when discovering.
 # Set this option to a higher value on a slow or congested network
