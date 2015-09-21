@@ -53,7 +53,7 @@ def flume(action = None):
         content = json.dumps(ambari_meta(agent, flume_agents[agent])),
         mode = 0644)
       flume_env = flume_agents_env[agent] if flume_agents_env.has_key(agent) else flume_agents_env['default']
-      File(os.path.join(params.flume_agent_conf_dir,'%s.sh' % agent),
+      File(os.path.join(params.flume_agent_conf_dir,'%s-env.sh' % agent),
         content = InlineTemplate(flume_env),
         mode = 0644)
       flume_agent_conf_file = os.path.join(params.flume_agent_conf_dir, '%s.conf' % agent)

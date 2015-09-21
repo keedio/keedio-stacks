@@ -52,13 +52,28 @@ def generate_daemon(ganglia_service,
       content=StaticFile("gmond.init"),
       mode=0755 )
     functions.turn_off_autostart("gmond."+name)
-    File("/etc/ganglia/gmond."+name+".conf",
-      content=Template("gmond.conf.j2",
-        clusterName=name,
-        gmond_server=params.ganglia_server_host,
-        gmond_port=gmond_port,
-        is_master_server=role=="server"),
-      mode=0644)
+    if name == "ElasticSearch":
+      File("/etc/ganglia/conf.d/elasticsearch.pyconf",
+        content=Template("elasticsearch.pyconf.j2"),
+        mode=0644)
+      File("/usr/lib64/ganglia/python_modules/elasticsearch.py",
+        content=StaticFile("elasticsearch.py"),
+          mode=0644)
+      File("/etc/ganglia/gmond.ElasticSearch.conf",
+        content=Template("gmond.ElasticSearch.j2",
+          clusterName=name,
+          gmond_server=params.ganglia_server_host,
+          gmond_port=gmond_port,
+          is_master_server=role=="server"),
+        mode=0644)
+    else:
+      File("/etc/ganglia/gmond."+name+".conf",
+        content=Template("gmond.conf.j2",
+          clusterName=name,
+          gmond_server=params.ganglia_server_host,
+          gmond_port=gmond_port,
+          is_master_server=role=="server"),
+        mode=0644)
     Directory("/var/run/gmond",
       owner="root",
       group="root",

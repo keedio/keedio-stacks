@@ -63,6 +63,61 @@ tcp_accept_channel {
   port = {{gmond_port}}
 }
 
+
+
+
+
+{% if clusterName == "ElasticSearch" %}
+modules {
+  module {
+    name = "python_module"
+    path = "modpython.so"
+    params = "/usr/lib64/ganglia/python_modules"
+  }
+}
+
+modules {
+  module {
+    name = "elasticsearch"
+    language = "python"
+
+    param metric_group {
+      value = "elasticsearch"
+    }
+
+    param host {
+        value = "http://localhost:{{ es_service_port }}/"
+    }
+
+    param version {
+	value = "1.2"
+    }
+
+    # In order to get index specific stats specify each index seperated by
+    # whitespace.
+    # 
+    # indices can be grouped by using comma,
+    # e.g. index3,index4 will give statistics (docs_count, etc.) for both
+    # index1 and index2
+    param indices {
+        value = "*"
+#       value = "index1 index2 index3,index4"
+    }
+  }
+}
+
+collection_group {
+  collect_every = 30
+  time_threshold = 60
+
+  metric {
+    name_match = "es_(.+)"
+  }
+}
+
+
+{% else %}
+
 /* Each metrics module that is referenced by gmond must be specified and
    loaded. If the module has been statically linked with gmond, it does
    not require a load path. However all dynamically loadable modules must
@@ -351,14 +406,4 @@ collection_group {
   }
 }
 
-{% if clusterName == "ElasticSearch" %}
-modules {
-  module {
-    name = "python_module"
-    path = "modpython.so"
-    params = "/usr/lib64/ganglia/python_modules"
-  }
-}
-
-include ('/etc/ganglia/conf.d/elasticsearch.pyconf')
 {% endif %}
