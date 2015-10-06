@@ -49,7 +49,7 @@ class CassandraServiceCheck(Script):
     output=dict()
     for line in lines:
       cutted = line.split()
-      if len(cutted) == 8:
+      if len(cutted) == 8 and cutted[0] != '--':
         status,server,load,unit,tokens,owns,id,rack=cutted
         output[server]={"status":status,"load":load,"tokens":tokens,"owns":owns,"id":id,"rack":rack}
     return output
