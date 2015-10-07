@@ -206,6 +206,9 @@
              <package>
               <name>hadoop-httpfs</name>
             </package>
+            <package>
+              <name>hadoop-client</name>
+            </package>
           </packages>
         </osSpecific>
         
