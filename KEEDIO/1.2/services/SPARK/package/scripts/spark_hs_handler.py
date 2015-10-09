@@ -33,13 +33,13 @@ class Spark_hs(Script):
     import params
     env.set_params(params)
     #This sets up directories
-    spark(action="config")
     spark_hs(action="config")
 
   def start(self, env):
     import params
     env.set_params(params)
-    spark_hs(action="config")
+    self.configure(env)
+    spark(action="upload_jar")
     spark_hs(action="start")
  
   def stop(self, env):

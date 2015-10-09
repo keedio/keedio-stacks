@@ -30,7 +30,6 @@ class ServiceCheck(Script):
   def service_check(self, env):
     import params
     env.set_params(params)
-    spark(action="config")
     execute_spark = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
     Logger.info("Sourcing /etc/profile.d/hadoop-env.sh")
     cmd=Popen('/bin/grep export  /etc/profile.d/hadoop-env.sh ',stdout=PIPE,stderr=PIPE,shell=True)
