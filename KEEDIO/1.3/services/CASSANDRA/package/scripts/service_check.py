@@ -21,6 +21,7 @@ limitations under the License.
 from resource_management import *
 from utils import *
 from subprocess import *
+import time
 
 class CassandraServiceCheck(Script):
   def service_check(self, env):
@@ -28,9 +29,17 @@ class CassandraServiceCheck(Script):
     env.set_params(params)
     
     status_cmd = ["source /etc/default/cassandra && /usr/lib/cassandra/bin/nodetool status -r"]
-    cmd = Popen(status_cmd,stdout=PIPE,stderr=PIPE,shell=True)
-    out,err=cmd.communicate()
-    rc=cmd.returncode
+    rc = 1
+    for i in range(1,20):
+      cmd = Popen(status_cmd,stdout=PIPE,stderr=PIPE,shell=True)
+      out,err=cmd.communicate()
+      rc=cmd.returncode
+      if rc >0:
+        Logger.info("Attemp %i. Waiting 3 seconds to retry check" % i)
+        time.sleep(3)
+      else:
+        break
+    
     # out,err,rc=execute_sudo_krb(status_cmd,user=params.cassandra_user,principal=params.cassandra_principal_name,keytab=params.cassandra_keytab_file)
     check_rc(rc,stdout=out,stderr=err)
     status = self.parse_status(out)
