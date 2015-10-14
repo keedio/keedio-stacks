@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -15,43 +14,20 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
 """
 
 from resource_management import *
-from spark_hs import spark_hs
-from spark import spark
 from subprocess import *
 
-class Spark_hs(Script):
-  def install(self, env):
-    import params
-    env.set_params(params)
-    self.install_packages(env)
-
-  def configure(self, env):
-    import params
-    env.set_params(params)
-    #This sets up directories
-    spark_hs(action="config")
-
-  def start(self, env):
-    import params
-    env.set_params(params)
-    self.configure(env)
-    spark(action="upload_jar")
-    spark_hs(action="start")
- 
-  def stop(self, env):
-    import params
-    env.set_params(params)
-    spark_hs(action="stop")
-
-  def status(self, env):
-    import params
-    env.set_params(params)
-    spark_hs(action="status")
-
-if __name__ == "__main__":
-  Spark_hs().execute()
-
+def gmetad(action=None):
+  # 'start' or 'stop'
+  cmd=Popen(['service','gmetad',action],stdout=PIPE,stderr=PIPE)
+  out,err=cmd.communicate()
+  rc=cmd.returncode
+  Logger.info("Ganglia gmetad service %s: %s" % (action, cmd.returncode == 0))
+   
+  if action == "status":
+    from functions import check_rc
+    check_rc(rc,stdout=out,stderr=err)
+  if action =="start" or action == "stop":
+    MonitorWebserver("restart")

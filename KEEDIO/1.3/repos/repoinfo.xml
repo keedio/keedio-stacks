@@ -18,19 +18,14 @@
 <reposinfo>
   <os type="redhat6">
     <repo>
-      <baseurl>http://repo.keedio.org/openbus/1.2/rpm</baseurl>
-      <repoid>keedio-1.2</repoid>
+      <baseurl>http://repo.keedio.org/openbus/1.3/base</baseurl>
+      <repoid>keedio-1.3</repoid>
       <reponame>keedio</reponame>
     </repo>
     <repo>
-      <baseurl>http://repo.keedio.org/openbus/1.2/updates</baseurl>
-      <repoid>keedio-1.2-updates</repoid>
+      <baseurl>http://repo.keedio.org/openbus/1.3/updates</baseurl>
+      <repoid>keedio-1.3-updates</repoid>
       <reponame>keedio-updates</reponame>
-    </repo>
-    <repo>
-      <baseurl>http://repo.keedio.org/openbus/1.3/develop</baseurl>
-      <repoid>keedio-1.3-develop</repoid>
-      <reponame>keedio-develop</reponame>
     </repo>
     <repo>
       <baseurl>http://mirror.de.leaseweb.net/epel/6/x86_64/</baseurl>

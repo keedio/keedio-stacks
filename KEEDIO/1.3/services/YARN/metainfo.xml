@@ -130,6 +130,9 @@
             <package>
               <name>hadoop-mapreduce</name>
             </package>
+            <package>
+              <name>hadoop-client</name>
+            </package>
           </packages>
         </osSpecific>
       </osSpecifics>
@@ -223,6 +226,9 @@
             </package>
             <package>
               <name>hadoop-mapreduce-historyserver</name>
+            </package>
+            <package>
+              <name>hadoop-client</name>
             </package>
           </packages>
         </osSpecific>

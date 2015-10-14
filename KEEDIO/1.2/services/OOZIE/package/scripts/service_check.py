@@ -84,7 +84,7 @@ class OozieServiceCheck(Script):
     import params
 
     if params.security_enabled:
-         cmd_set_namenode_8020=['/bin/sed','-i',"s|nameNode=hdfs://localhost:8020|nameNode=%s:8020|g" % namenode, job_properties_file]
+         cmd_set_namenode_8020=['/bin/sed','-i',"s|nameNode=hdfs://localhost:8020|nameNode=%s|g" % namenode, job_properties_file]
          # cmd_set_namenode_8020=['sed','-i',str('"s|\${nameNode}|nameNode=%s|g"' % namenode), job_properties_file]
          cmd_set_namenode_9000=['/bin/sed','-i',"s|nameNode=hdfs://localhost:9000|nameNode=%s|g" % namenode, job_properties_file]
          cmd_set_jobtracker_8021=['/bin/sed','-i',"s|jobTracker=localhost:8021|jobTracker=%s|g" % resourcemanager, job_properties_file]

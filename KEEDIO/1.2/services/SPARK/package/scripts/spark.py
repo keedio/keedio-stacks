@@ -28,7 +28,7 @@ from utils import execute_sudo_krb
 
 def spark(service=None,action=None):
   import params
-  if action == "config":
+  if action == "upload_jar":
     
     execute_hdfs = partial(execute_sudo_krb,user=params.hdfs_user,principal=params.hdfs_principal_name,keytab=params.hdfs_user_keytab)
     #execute_spark = partial(execute_sudo_krb,user=params.spark_user,principal=params.spark_principal,keytab=params.spark_keytab)
@@ -52,7 +52,7 @@ def spark(service=None,action=None):
     execute_hdfs(chown_jars)
 
 
-  if action == "install":
+  if action == "config":
     configurations = params.config['configurations']['spark']
     File(format(params.spark_conf_dir+"/spark-defaults.conf"),
        content=Template("spark_defaults.j2",configurations=configurations),

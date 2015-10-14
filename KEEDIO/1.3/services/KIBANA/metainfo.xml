@@ -20,18 +20,18 @@
   <schemaVersion>2.0</schemaVersion>
   <services>
     <service>
-      <name>KIBANA3</name>
-      <displayName>Kibana3</displayName>
+      <name>KIBANA</name>
+      <displayName>Kibana</displayName>
       <comment>Kibana is an open source analytics and visualization platform designed to work with Elasticsearch.</comment>
-      <version>3.1.0</version>
+      <version>4.1.0</version>
       <components>
         <component>
-          <name>KIBANA3</name>
-          <displayName>Kibana3</displayName>
+          <name>KIBANA</name>
+          <displayName>Kibana</displayName>
           <category>MASTER</category>
           <cardinality></cardinality>
           <commandScript>
-            <script>scripts/kibana3_handler.py</script>
+            <script>scripts/kibana4_handler.py</script>
             <scriptType>PYTHON</scriptType>
             <timeout>600</timeout>
           </commandScript>
@@ -46,16 +46,7 @@
               <name>elasticsearch</name>
             </package>
             <package>
-              <name>httpd</name>
-            </package>
-            <package>
-              <name>kibana</name>
-            </package>
-            <package>
-              <name>mod_passenger</name>
-            </package>
-            <package>
-              <name>rubygems</name>
+              <name>kibana4</name>
             </package>
           </packages>
         </osSpecific>

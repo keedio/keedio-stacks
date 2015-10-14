@@ -26,7 +26,7 @@ from functools import partial
 def hive(action=None,service=None):
   
   if action == 'start' or action == 'stop' or action == 'status':
-    if action != 'status':
+    if action == 'start':
       import params
       # CREATION OF HDFS DIRECTORY
       execute_hdfs = partial(execute_sudo_krb,user=params.hdfs_user,principal=params.hdfs_principal_name,keytab=params.hdfs_user_keytab)

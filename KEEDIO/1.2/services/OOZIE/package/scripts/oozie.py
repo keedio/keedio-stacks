@@ -25,6 +25,12 @@ from utils import check_rc
 def oozie(action=None,is_server=False):
   import params
   
+  if action == 'install':
+    cmd=Popen(['/usr/sbin/usermod','-a','-G','hadoop','oozie'],stdout=PIPE,stderr=PIPE)
+    out,err=cmd.communicate()
+    Logger.info('Oozie action: %s.\nSTDOUT=%s\nSTDERR=%s' % (action,out,err))
+
+
   if action == 'start' or action == 'stop' or action == 'status':
     cmd=Popen(['service','oozie',action],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
