@@ -102,7 +102,7 @@ class OozieServiceCheck(Script):
          execute_oozie(cmd_set_jobtracker_9001) 
          execute_oozie(cmd_set_user_path) 
     else:
-         cmd_set_namenode_8020=['sed','-i',str('"s|nameNode=hdfs://localhost:8020|nameNode=%s|g"' % namenode), job_properties_file]
+         cmd_set_namenode_8020=['sed','-i',str('"s|nameNode=hdfs://localhost|nameNode=%s|g"' % namenode), job_properties_file]
          # cmd_set_namenode_8020=['sed','-i',str('"s|\${nameNode}|nameNode=%s|g"' % namenode), job_properties_file]
          cmd_set_namenode_9000=['sed','-i',str('"s|nameNode=hdfs://localhost:9000|nameNode=%s|g"' % namenode), job_properties_file]
          cmd_set_jobtracker_8021=['sed','-i',str('"s|jobTracker=localhost:8021|jobTracker=%s|g"' % resourcemanager), job_properties_file]
