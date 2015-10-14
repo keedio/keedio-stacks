@@ -24,20 +24,31 @@ from resource_management import *
 config = Script.get_config()
 
 security_enabled = config['configurations']['cluster-env']['security_enabled']
+kerberos_cache_file = default('/configurations/cluster-env/kerberos_cache_file','/tmp/ccache_keytab')
+kerberos_domain = config['configurations']['cluster-env']['kerberos_domain']
 
-kerberos_cache_file = config['configurations']['cluster-env']['kerberos_cache_file']
+smoke_user_keytab = default('/configurations/cluster-env/smokeuser_keytab',None)
+smoke_user = config['configurations']['cluster-env']['smokeuser']
 
 spark_user = config['configurations']['spark']['spark_user']
 spark_group = config['configurations']['spark']['spark_group']
 spark_hdfs_home = config['configurations']['spark']['spark_hdfs_home']
 spark_local_home = config['configurations']['spark']['spark_local_home']
+
 spark_principal = default('/configurations/spark/spark_principal',None)
 spark_keytab = default('/configurations/spark/spark_keytab',None)
 
+sparkhs_principal_name = default('/configurations/spark/dfs.spark.kerberos.principal',None)
+sparkhs_keytab = default('/configurations/spark/sparkhs_keytab',None)
+
 hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
 hdfs_principal_name = default('/configurations/hadoop-env/hdfs_principal_name',None)
-hdfs_user_keytab = default('/configurations/hadoop-site/hdfs_user_keytab',None)
+hdfs_user_keytab = default('/configurations/hadoop-env/hdfs_user_keytab',None)
 
 spark_conf_dir = config['configurations']['spark']['spark_conf_dir']
 spark_assembly = config['configurations']['spark']['spark_assembly']
 spark_examples_jar = config['configurations']['spark']['spark_examples_jar']
+
+namenode_host = default("/clusterHostInfo/namenode_host", ["none"])
+namenode_host =str(namenode_host[0])
+

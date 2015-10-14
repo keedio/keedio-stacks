@@ -91,8 +91,8 @@ def execute_sudo_krb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,
   
   if secure:
     import kerberosWrapper
-    auth_token = kerberosWrapper.krb_wrapper(params.hdfs_principal_name, params.hdfs_user_keytab,params.kerberos_cache_file)
-    os.environ['KRB5CCNAME'] = params.kerberos_cache_file
+    auth_token = kerberosWrapper.krb_wrapper(principal, keytab, ccache_file=keytab_cache)
+    os.environ['KRB5CCNAME'] = keytab_cache
   else:
     cmd_aux = ["su","-s","/bin/bash",params.hdfs_user,"-c"]
     cmd_aux.append(' '.join(cmd))

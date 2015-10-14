@@ -33,6 +33,15 @@ def hdfs(name=None):
             owner='root',
             group='root'
   )
+  
+  if params.security_enabled:
+        File('/etc/default/hadoop-hdfs-datanode',
+        owner='root',
+        content=StaticFile("hadoop-hdfs-datanode2.j2"))
+  else:
+        File('/etc/default/hadoop-hdfs-datanode',
+        owner='root',
+        content=StaticFile("hadoop-hdfs-datanode1.j2"))
 
   File(os.path.join(params.limits_conf_dir, 'hdfs.conf'),
        owner='root',

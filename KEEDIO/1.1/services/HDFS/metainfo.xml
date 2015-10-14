@@ -111,6 +111,11 @@
               <fileName>hadoop-env.sh</fileName>
               <dictionaryName>hadoop-env</dictionaryName>
             </configFile>
+            <configFile>
+              <type>xml</type>
+              <fileName>httpfs-env.xml</fileName>
+              <dictionaryName>httpfs-env</dictionaryName>
+            </configFile>
           </configFiles>
         </component>
 
@@ -194,6 +199,12 @@
             </package>
             <package>
               <name>monit</name>
+            </package>
+            <package>
+              <name>jsvcdaemon</name>
+            </package>
+             <package>
+              <name>hadoop-httpfs</name>
             </package>
           </packages>
         </osSpecific>

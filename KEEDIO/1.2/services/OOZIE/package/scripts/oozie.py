@@ -25,6 +25,12 @@ from utils import check_rc
 def oozie(action=None,is_server=False):
   import params
   
+  if action == 'install':
+    cmd=Popen(['/usr/sbin/usermod','-a','-G','hadoop','oozie'],stdout=PIPE,stderr=PIPE)
+    out,err=cmd.communicate()
+    Logger.info('Oozie action: %s.\nSTDOUT=%s\nSTDERR=%s' % (action,out,err))
+
+
   if action == 'start' or action == 'stop' or action == 'status':
     cmd=Popen(['service','oozie',action],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
@@ -53,7 +59,7 @@ def oozie(action=None,is_server=False):
 
     if is_server :
       #File('/usr/lib/oozie/libext/ext-2.2.1.zip',
-       # content=StaticFile('ext-2.2.1.zip'))
+      # content=StaticFile('ext-2.2.1.zip'))
       ## oozie expect ext-2.2 directory and looks to be hardcoded
       #extract_cmd=[ 'unzip', '/usr/lib/oozie/libext/ext-2.2.1.zip','-d','/usr/lib/oozie/libext/ext-2.2' ]
       #Popen(extract_cmd)

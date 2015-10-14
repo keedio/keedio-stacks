@@ -27,7 +27,7 @@ class Spark(Script):
     import params
     env.set_params(params)
     self.install_packages(env)
-    spark(action="install")
+    self.configure(env)
 
   def configure(self, env):
     import params

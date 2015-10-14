@@ -110,7 +110,7 @@ if str(config['hostLevelParams']['stack_version']).startswith('2.0') and System.
   # deprecated rhel jsvc_path
   jsvc_path = "/usr/libexec/bigtop-utils"
 else:
-  jsvc_path = "/usr/lib/bigtop-utils"
+  jsvc_path = "/usr/lib/jsvcdaemon"
 
 hadoop_heapsize = config['configurations']['hadoop-env']['hadoop_heapsize']
 namenode_heapsize = config['configurations']['hadoop-env']['namenode_heapsize']

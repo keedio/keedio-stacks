@@ -34,7 +34,7 @@ class OozieServiceCheck(Script):
     import params
   
     Directory(params.tmp_dir,
-      owner=params.oozie_user,
+      owner=params.smoke_user,
       group=params.oozie_group
     )
 
@@ -50,26 +50,32 @@ class OozieServiceCheck(Script):
 
     # Define partial aux functions 
     execute_hdfs = partial(execute_sudo_krb,user=params.hdfs_user,principal=params.hdfs_principal_name,keytab=params.hdfs_user_keytab) 
-    execute_oozie = partial(execute_sudo_krb,user=params.oozie_user,principal=params.oozie_principal,keytab=params.oozie_keytab)
-
-    cmd_untar=['tar','xzf','%s' % oozie_examples_file,'-C',params.tmp_dir]
+    execute_oozie = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
+    
+    if params.security_enabled:
+         cmd_untar=['su','-s','/bin/bash',params.smoke_user,'-c','/bin/tar xozf %s -C %s' % (oozie_examples_file, params.tmp_dir)]
+    else:
+         cmd_untar=['/bin/tar xozf %s -C %s' % (oozie_examples_file, params.tmp_dir)]
     execute_oozie(cmd_untar)
 
     # HDFS oozie user init
-    cmd_create_dir_hdfs=['hdfs','dfs','-mkdir','-p','/user/oozie']
-    cmd_chown_dir_hdfs=['hdfs','dfs','-chown','oozie:','/user/oozie']
+    cmd_create_dir_hdfs=['hdfs','dfs','-mkdir','-p','/user/%s' % (params.smoke_user)]
+    cmd_chown_dir_hdfs=['hdfs','dfs','-chown','%s:' % params.smoke_user ,'/user/%s' % params.smoke_user]
     execute_hdfs(cmd_create_dir_hdfs)
     execute_hdfs(cmd_chown_dir_hdfs)
   
     # Examples upload
-    cmd_upload_examples=['hdfs','dfs','-put',params.tmp_dir+'/examples']
-    execute_oozie(cmd_upload_examples)
+    cmd_rm_examples=['hdfs','dfs','-rm','-r','examples'] 
+    execute_oozie(cmd_rm_examples)
     # Example properties setup
     example_job_properties=params.tmp_dir+'/examples/apps/'+params.example_job+'/job.properties'
     self.set_job_properties(example_job_properties,params.namenode,params.resourcemanager)
 
+    cmd_upload_examples=['hdfs','dfs','-put',params.tmp_dir+'/examples']
+    execute_oozie(cmd_upload_examples)
+
     # Job submit
-    cmd_oozie_submit =['source','/etc/oozie/conf/oozie-env.sh',';','oozie','job','-oozie','http://%s:%d/oozie' % (params.oozie_server,params.oozie_port),'-config',example_job_properties,'-run']
+    cmd_oozie_submit =['oozie','job','-oozie','http://%s:%d/oozie' % (params.oozie_server,params.oozie_port),'-config',example_job_properties,'-run']
     out,err,rc=execute_oozie(cmd_oozie_submit)
     jobId=out[5:-1]
     if self.check_oozie_job_status(jobId) != 0: raise Exception('JOB doesn\'t succeeded')
@@ -77,25 +83,50 @@ class OozieServiceCheck(Script):
   def set_job_properties(self,job_properties_file,namenode,resourcemanager):
     import params
 
-    cmd_set_namenode_8020=['sed','-i','"s|nameNode=hdfs://localhost:8020|nameNode=%s|g"' % namenode, job_properties_file]
-    cmd_set_namenode_9000=['sed','-i','"s|nameNode=hdfs://localhost:9000|nameNode=%s|g"' % namenode, job_properties_file]
-    cmd_set_jobtracker_8021=['sed','-i','"s|jobTracker=localhost:8021|jobTracker=%s|g"' % resourcemanager, job_properties_file]
-    cmd_set_jobtracker_8032=['sed','-i','"s|jobTracker=localhost:8032|jobTracker=%s|g"' % resourcemanager, job_properties_file]
-    cmd_set_jobtracker_9001=['sed','-i','"s|jobTracker=localhost:9001|jobTracker=%s|g"' % resourcemanager, job_properties_file]
+    if params.security_enabled:
+         cmd_set_namenode_8020=['/bin/sed','-i',"s|nameNode=hdfs://localhost:8020|nameNode=%s|g" % namenode, job_properties_file]
+         # cmd_set_namenode_8020=['sed','-i',str('"s|\${nameNode}|nameNode=%s|g"' % namenode), job_properties_file]
+         cmd_set_namenode_9000=['/bin/sed','-i',"s|nameNode=hdfs://localhost:9000|nameNode=%s|g" % namenode, job_properties_file]
+         cmd_set_jobtracker_8021=['/bin/sed','-i',"s|jobTracker=localhost:8021|jobTracker=%s|g" % resourcemanager, job_properties_file]
+         cmd_set_jobtracker_8032=['/bin/sed','-i',"s|jobTracker=localhost:8032|jobTracker=%s|g" % resourcemanager, job_properties_file]
+         cmd_set_jobtracker_9001=['/bin/sed','-i',"s|jobTracker=localhost:9001|jobTracker=%s|g" % resourcemanager, job_properties_file]
+         cmd_set_user_path=['/bin/sed','-i',"s|\${user.name}|%s|g" % params.smoke_user, job_properties_file]
+     
 
-    execute_oozie = partial(execute_sudo_krb,user=params.oozie_user,principal=params.oozie_principal,keytab=params.oozie_keytab)
+         execute_oozie = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
 
-    execute_oozie(cmd_set_namenode_8020) 
-    execute_oozie(cmd_set_namenode_9000) 
-    execute_oozie(cmd_set_jobtracker_8021) 
-    execute_oozie(cmd_set_jobtracker_8032) 
-    execute_oozie(cmd_set_jobtracker_9001) 
+         execute_oozie(cmd_set_namenode_8020) 
+         execute_oozie(cmd_set_namenode_9000) 
+         execute_oozie(cmd_set_jobtracker_8021) 
+         execute_oozie(cmd_set_jobtracker_8032) 
+         execute_oozie(cmd_set_jobtracker_9001) 
+         execute_oozie(cmd_set_user_path) 
+    else:
+         cmd_set_namenode_8020=['sed','-i',str('"s|nameNode=hdfs://localhost:8020|nameNode=%s|g"' % namenode), job_properties_file]
+         # cmd_set_namenode_8020=['sed','-i',str('"s|\${nameNode}|nameNode=%s|g"' % namenode), job_properties_file]
+         cmd_set_namenode_9000=['sed','-i',str('"s|nameNode=hdfs://localhost:9000|nameNode=%s|g"' % namenode), job_properties_file]
+         cmd_set_jobtracker_8021=['sed','-i',str('"s|jobTracker=localhost:8021|jobTracker=%s|g"' % resourcemanager), job_properties_file]
+         cmd_set_jobtracker_8032=['sed','-i',str('"s|jobTracker=localhost:8032|jobTracker=%s|g"' % resourcemanager), job_properties_file]
+         cmd_set_jobtracker_9001=['sed','-i',str('"s|jobTracker=localhost:9001|jobTracker=%s|g"' % resourcemanager), job_properties_file]
+         cmd_set_user_path=['sed','-i',str('"s|\${user.name}|%s|g"') % params.smoke_user, job_properties_file]
+
+
+         execute_oozie = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
+
+         execute_oozie(cmd_set_namenode_8020)
+         execute_oozie(cmd_set_namenode_9000)
+         execute_oozie(cmd_set_jobtracker_8021)
+         execute_oozie(cmd_set_jobtracker_8032)
+         execute_oozie(cmd_set_jobtracker_9001)
+         execute_oozie(cmd_set_user_path)  
+
+
 
   def check_oozie_job_status(self,jobId):
     import params
     import re,time
     pattern=re.compile('Status\s*\:\s*(\w+)')
-    execute_oozie = partial(execute_sudo_krb,user=params.oozie_user,principal=params.oozie_principal,keytab=params.oozie_keytab)
+    execute_oozie = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
     
     cmd_check_status=['oozie','job','-oozie','http://%s:%d/oozie' % (params.oozie_server,params.oozie_port),'-info','%s' % jobId]
     status="RUNNING"

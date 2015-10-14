@@ -28,10 +28,13 @@ import re
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
 
+print config
+
 stack_version_unformatted = str(config['hostLevelParams']['stack_version'])
 hdp_stack_version = format_hdp_stack_version(stack_version_unformatted)
 security_enabled = config['configurations']['cluster-env']['security_enabled']
-kerberos_cache_file = config['configurations']['cluster-env']['kerberos_cache_file']
+kerberos_cache_file = default('/configurations/cluster-env/kerberos_cache_file','/tmp/ccache_keytab')
+kerberos_domain = config['configurations']['cluster-env']['kerberos_domain']
 stack_is_hdp22_or_further = hdp_stack_version != "" and compare_versions(hdp_stack_version, '2.2') >= 0
 hdfs_user = status_params.hdfs_user
 hadoop_pid_dir_prefix = status_params.hadoop_pid_dir_prefix
@@ -260,6 +263,7 @@ if not is_journalnode:
   exclude_packages += [format("hadoop-hdfs-journalnode")]
 if not is_namenode_master:
   exclude_packages += [format("hadoop-hdfs-namenode")]
+  exclude_packages += [format("hadoop-httpfs")]
 if not dfs_ha_enabled or not is_namenode_master:
   exclude_packages += [format("hadoop-hdfs-zkfc")]
   exclude_packages += [format("monit")]
@@ -278,11 +282,14 @@ hadoop_env_sh_template = config['configurations']['hadoop-env']['content']
 #hadoop-env.sh
 java_home = config['hostLevelParams']['java_home']
 
+#httpfs-env.sh
+httpfs_port = config['configurations']['httpfs-env']['httpfs_port']
+
 if hdp_stack_version.startswith('2.0') and System.get_instance().os_family != "suse":
   # deprecated rhel jsvc_path
-  jsvc_path = "/usr/libexec/bigtop-utils"
+  jsvc_path = "/usr/lib/jsvcdaemon"
 else:
-  jsvc_path = "/usr/lib/bigtop-utils"
+  jsvc_path = "/usr/lib/jsvcdaemon"
 
 hadoop_heapsize = config['configurations']['hadoop-env']['hadoop_heapsize']
 namenode_heapsize = config['configurations']['hadoop-env']['namenode_heapsize']

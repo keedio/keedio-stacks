@@ -21,7 +21,7 @@ from resource_management import *
 from resource_management.libraries.functions.dfs_datanode_helper import handle_dfs_data_dir
 from utils import * 
 from subprocess import *
-
+import os
 
 def datanode(action=None):
 
@@ -50,7 +50,7 @@ def datanode(action=None):
     check_rc(rc,stdout=out,stderr=err)
 
   if action == "stop":
-    Logger.info("Datanode service %s")
+    Logger.info("Datanode service stop")
     cmd=Popen(['service','hadoop-hdfs-datanode',action],stdout=PIPE,stderr=STDOUT)
     out,err=cmd.communicate()
     Logger.info("Stopping datanode")

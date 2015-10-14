@@ -27,7 +27,8 @@ from oozie import oozie
 class OozieHandler(Script):
   def install(self, env):
     self.install_packages(env)
-    
+    oozie(action='install')     
+
   def configure(self, env):
     import params
     env.set_params(params)

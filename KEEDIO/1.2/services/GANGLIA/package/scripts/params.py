@@ -73,7 +73,11 @@ jn_hosts = set(default("/clusterHostInfo/journalnode_hosts", []))
 nimbus_server_hosts = set(default("/clusterHostInfo/nimbus_hosts", []))
 supervisor_server_hosts = set(default("/clusterHostInfo/supervisor_hosts", []))
 kafka_broker_hosts =  set(default("/clusterHostInfo/kafka_broker_hosts", []))
+es_master_hosts =  str(default("/clusterHostInfo/elasticsearch_hosts", ['none']))
+print "Alessioes",es_master_hosts
+
 kafka_ganglia_port = default("/configurations/kafka-broker/kafka.ganglia.metrics.port", 8671)
+es_service_port = default('/configurations/elasticsearch/service_port',9200)
 
 pure_slave = not hostname in (namenode_host | jtnode_host | rm_host | hs_host | \
                               hbase_master_hosts | datanodes_hosts | tt_hosts | hbase_rs_hosts | \
@@ -95,6 +99,11 @@ has_journalnode = not len(jn_hosts) == 0
 has_nimbus_server = not len(nimbus_server_hosts) == 0
 has_supervisor_server = not len(supervisor_server_hosts) == 0
 has_kafka_broker = not len(kafka_broker_hosts) == 0
+if 'none' in es_master_hosts: 
+    has_elasticsearch_server = False
+else:
+    has_elasticsearch_server = True
+print 'Alessioes2:',has_elasticsearch_server
 
 clusters=["Slaves"]
 if has_namenodes:
@@ -121,6 +130,8 @@ if has_flume:
   clusters.append("FlumeServer")
 if has_journalnode:
   clusters.append("JournalNode")
+if has_elasticsearch_server:
+  clusters.append("ElasticSearch")
 
 exclude_packages = []
 if not is_ganglia_server_host:
@@ -143,7 +154,9 @@ ganglia_cluster_names = {
   "kafka_broker_hosts": [("Kafka", kafka_ganglia_port)],
   "ReservedPort1": [("ReservedPort1", 8667)],
   "ReservedPort2": [("ReservedPort2", 8668)],
-  "ReservedPort3": [("ReservedPort3", 8669)]
+  "ReservedPort3": [("ReservedPort3", 8669)],
+  "ReservedPort4": [("ReservedPort3", 8670)],
+  "elasticsearch_hosts": [("ElasticSearch", 8671)]
 }
 
 ganglia_clusters = [("Slaves", 8653)]

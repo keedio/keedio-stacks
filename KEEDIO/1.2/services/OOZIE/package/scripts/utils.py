@@ -55,7 +55,8 @@ def execute_sudo_krb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,
     cmd = cmd_aux
   Logger.info("Executing %s" % str(cmd)) 
   executed=Popen(cmd,stdin=PIPE,stdout=PIPE,stderr=PIPE)
-  out,err=executed.communicate(input=input)
+#  out,err=executed.communicate(input=input)
+  out,err=executed.communicate()
   if secure and auth_token:
     auth_token.destroy()
 

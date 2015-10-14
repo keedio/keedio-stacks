@@ -59,6 +59,28 @@
             </configFile>            
           </configFiles>
         </component>
+         <component>
+          <name>ZOOKEEPER_REST</name>
+          <displayName>ZooKeeper Rest</displayName>
+          <category>MASTER</category>
+          <cardinality>1+</cardinality>
+          <commandScript>
+            <script>scripts/zookeeper_rest.py</script>
+            <scriptType>PYTHON</scriptType>
+          </commandScript>
+          <configFiles>
+            <configFile>
+              <type>env</type>
+              <fileName>zookeeper-env.sh</fileName>
+              <dictionaryName>zookeeper-env</dictionaryName>
+            </configFile>
+            <configFile>
+              <type>env</type>
+              <fileName>rest-env.xml</fileName>
+              <dictionaryName>rest-env</dictionaryName>
+            </configFile>
+          </configFiles>
+        </component>
       </components>
 
       <osSpecifics>
