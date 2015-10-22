@@ -72,6 +72,18 @@
         </component>
 
         <component>
+          <name>APP_TIMELINE_SERVER</name>
+          <displayName>Timeline server</displayName>
+          <category>MASTER</category>
+          <cardinality>1</cardinality>
+          <commandScript>
+            <script>scripts/timelineserver.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+        </component>
+
+        <component>
           <name>YARN_CLIENT</name>
           <displayName>YARN Client</displayName>
           <category>CLIENT</category>
