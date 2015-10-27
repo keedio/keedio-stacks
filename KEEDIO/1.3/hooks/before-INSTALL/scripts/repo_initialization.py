@@ -58,7 +58,6 @@ def _alter_repo(action, repo_string, repo_template):
 
 def install_repos():
   from params import *
-  Logger.info(activation_key)
   if has_spacewalk_client:
        Repository('Spacewalk',
                action = 'create',
@@ -69,9 +68,9 @@ def install_repos():
 
   else:  
       template = "repo_suse_rhel.j2" if System.get_instance().os_family in ["suse", "redhat"] else "repo_ubuntu.j2"
-      _alter_repo("create", params.repo_info, template)
-      if params.service_repo_info:
-         _alter_repo("create", params.service_repo_info, template)
+      _alter_repo("create", repo_info, template)
+      if service_repo_info:
+         _alter_repo("create", service_repo_info, template)
 
 
 
