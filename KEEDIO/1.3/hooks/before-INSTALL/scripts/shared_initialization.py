@@ -88,7 +88,7 @@ def install_spacewalk_client():
       Logger.info(out)
       Logger.info(err)
       if cmd.returncode > 0:
-         raise Exception ("Cannot retrieve spacewalk certificate, check the address in the configuration!")
+         Logger.info("Problems with Spacewalk certificate, check the address in the configuration!")
 
       cmd=Popen(['/usr/sbin/rhnreg_ks','--serverUrl='+spacewalk_server,'--sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT','--activationkey='+activation_key],stdout=PIPE,stderr=PIPE)
       out,err= cmd.communicate()
