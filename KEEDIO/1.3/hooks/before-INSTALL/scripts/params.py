@@ -30,6 +30,8 @@ hdp_stack_version = str(config['hostLevelParams']['stack_version'])
 hdp_stack_version = format_hdp_stack_version(hdp_stack_version)
 stack_is_hdp22_or_further = hdp_stack_version != "" and compare_versions(hdp_stack_version, '2.2') >= 0
 
+keedio_stack_version = str(config['hostLevelParams']['stack_version']) 
+
 #users and groups
 hbase_user = config['configurations']['hbase-env']['hbase_user']
 nagios_user = config['configurations']['nagios-env']['nagios_user']
@@ -43,6 +45,9 @@ proxyuser_group = default("/configurations/hadoop-env/proxyuser_group","users")
 nagios_group = config['configurations']['nagios-env']['nagios_group']
 
 hdfs_log_dir_prefix = config['configurations']['hadoop-env']['hdfs_log_dir_prefix']
+
+repodisable=[]
+repoenable=[]
 
 #hosts
 hostname = config["hostname"]
@@ -65,16 +70,20 @@ falcon_host =  default('/clusterHostInfo/falcon_server_hosts', [])
 has_spacewalk_client = False
 has_spacewalk_client = 'spacewalk' in config['configurations']
 
+
+gpgcheck=0
+spacewalk_timeout=180
 if has_spacewalk_client:
     spacewalk_server = config['configurations']['spacewalk']['spacewalk_server']    
     spacewalk_certificate = config['configurations']['spacewalk']['spacewalk_certificate']    
     activation_key = config['configurations']['spacewalk']['activation_key']    
     spacewalk_pub_url = config['configurations']['spacewalk']['spacewalk_pub_url']
+    gpgcheck=0 
     if  config['configurations']['spacewalk']['gpgcheck']:
          gpgcheck=1
     else: 
          gpgcheck=0
-    spacewalk_timeout = config['configurations']['spacewalk']['spacewalk_timeout']
+    spacewalk_timeout = default("/configurations/spacewalk/spacewalk_timeout",[180])
 
 has_sqoop_client = 'sqoop-env' in config['configurations']
 has_namenode = not len(namenode_host) == 0

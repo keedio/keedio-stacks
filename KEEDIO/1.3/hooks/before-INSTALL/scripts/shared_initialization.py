@@ -18,7 +18,7 @@ limitations under the License.
 """
 
 import os
-
+import os.path
 from resource_management import *
 from subprocess import *
 
@@ -81,7 +81,12 @@ def install_packages():
 
 def install_spacewalk_client():
    from params import *
-   if has_spacewalk_client:
+
+   if os.path.exists('/etc/sysconfig/rhn/systemid'):
+      Logger.info ('This machine is already registered with a Red Hat satellite server, skipping client installation')
+      has_external_spacewalk = True 
+
+   if has_spacewalk_client and not has_external_spacewalk:
       cmd=Popen(['/bin/rpm','-Uvh',spacewalk_certificate],stdout=PIPE,stderr=PIPE)
       out,err= cmd.communicate() 
       Logger.info("Installing certificate for the Spacewalk client")
@@ -98,7 +103,36 @@ def install_spacewalk_client():
       if cmd.returncode == 1:
          raise Exception ("Invalid Spacewalk activation key, stopping")         
 
-      Logger.info("Configuring Spacewalk client")
+
+   if has_spacewalk_client or has_external_spacewalk : 
+      # get repo keedio list by piping commands 
+      command1=["/usr/sbin/rhn-channel","-l"]
+      command2=["/bin/grep","-i","keedio"]
+   
+     
+      cmd1=Popen(command1,stderr=PIPE,stdout=PIPE) 
+      cmd2=Popen(command2,stdin=cmd1.stdout,stderr=PIPE,stdout=PIPE)
+      cmd1.stdout.close() 
+      out,err= cmd2.communicate()
+ 
+      Logger.info("Getting list of Keedio repos")
+      Logger.info(out)
+      Logger.info(err)
+      repolist=out.split('\n')
+      repolist=filter(None, repolist)
+      # repoenable and repodisable are define in params, so they can be used inside a template
+      for repo in repolist:
+          if keedio_stack_version in repo:
+             repoenable.append(repo) 
+          else:
+             repodisable.append(repo)
+      Logger.info("Configuring Spacewalk client\n")
+      Logger.info("Disabling the following channels because they are not compatible with the selected stack")
+      Logger.info(repodisable)
+      if len(repoenable) == 0:
+          raise Exception ("No Keedio repo is available for the installation")
+      Logger.info("Keedio repos used for the installation")
+      Logger.info(repoenable)   
       File('/etc/yum/pluginconf.d/rhnplugin.conf',
       content=Template("rhnplugin.j2"),
       mode=0755
