@@ -84,7 +84,9 @@ def install_spacewalk_client():
 
    if os.path.exists('/etc/sysconfig/rhn/systemid'):
       Logger.info ('This machine is already registered with a Red Hat satellite server, skipping client installation')
-      has_external_spacewalk = True 
+      has_external_spacewalk = True
+   else:
+      has_external_spacewalk = False 
 
    if has_spacewalk_client and not has_external_spacewalk:
       cmd=Popen(['/bin/rpm','-Uvh',spacewalk_certificate],stdout=PIPE,stderr=PIPE)

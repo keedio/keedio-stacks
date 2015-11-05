@@ -61,6 +61,9 @@ def install_repos():
   import os.path
   if os.path.exists('/etc/sysconfig/rhn/systemid'):
       has_external_spacewalk = True
+  else:
+      has_external_spacewalk = False
+
   if has_spacewalk_client :
        Repository('Spacewalk',
                action = 'create',
