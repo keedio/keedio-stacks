@@ -19,11 +19,12 @@ limitations under the License.
 
 from resource_management.libraries.functions.version import format_hdp_stack_version, compare_versions
 from resource_management import *
+from kazoo.client import KazooClient
+from time import sleep
 
-exclude_packages=[]
+#exclude_packages=[]
 config = Script.get_config()
-zookeeper_server_hosts = default("/clusterHostInfo/zookeeper_hosts", [])
-zookeeper_port = default("/configurations/zoo.cfg/clientPort","2181")
+zookeeper_server_hosts = str(default("/configurations/kafka-server-properties/zookeeper.connect",None))
 kafka_broker_hosts = default("/clusterHostInfo/kafka_broker_hosts",[])
 log_dirs = default("/configurations/kafka-server-properties/log.dirs","")
 
@@ -35,15 +36,34 @@ if has_ganglia_server:
   gmondServer = ganglia_server_hosts[0]
   jmxPort = default("/configurations/kafka-env/jmxPort","9999")
   gmondPort = default("/configurations/kafka-broker/kafka.ganglia.metrics.port", 8671)
-else:
-  exclude_packages.append('jmxtrans')
+#else:
+#  exclude_packages.append('jmxtrans')
 hostname = None
 if config.has_key('hostname'):
-  hostname = config['hostname']
+  hostname = str(config['hostname'])
 
+znode_kafka_path=default("/configurations/kafka-env/znode_path","/ambari/kafka")
 kafka_id=None
-if hostname is not None and len(kafka_broker_hosts) > 0:
-  for id in range(len(kafka_broker_hosts)):
-    if hostname == kafka_broker_hosts[id]:
-      kafka_id = id
-      break
+
+
+zk = KazooClient(hosts=zookeeper_server_hosts)
+zk.start()
+Logger.error("Open kazoo client")
+zk.ensure_path(znode_kafka_path)
+tries=0
+while tries < 10:
+  Logger.error("Trying to adquire lock: %i" % tries)
+  tries+=1
+  try:
+    zk.create(znode_kafka_path+'/lock',value=hostname,ephemeral=True,makepath=True)
+    break
+  except NodeExistsError:
+    sleep(5)
+    continue
+if zk.exists(znode_kafka_path+'/brokers/'+hostname):
+  kafka_id=zk.get(znode_kafka_path+'/brokers/'+hostname)[0]
+else:
+  kafka_id=str(zk.create(znode_kafka_path+'/ids/',sequence=True,value=hostname).rsplit('/',1)[1])
+  zk.create(znode_kafka_path+'/brokers/'+hostname,value=kafka_id,makepath=True)
+zk.stop()
+

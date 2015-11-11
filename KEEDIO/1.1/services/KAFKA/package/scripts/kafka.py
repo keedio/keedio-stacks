@@ -22,16 +22,16 @@ from kafka_handler import kafka
 
 class Kafka(Script):
   def install(self, env):
-    import params
-    self.install_packages(env,params.exclude_packages)
-    env.set_params(params)
-    self.configure(env)
+    #import params
+    self.install_packages(env)
+    #env.set_params(params)
+    #self.configure(env)
 
   def start(self, env):
     import params
     env.set_params(params)
     
-    kafka(action='config')
+    self.configure(env)
     kafka(action='start')
 
   def stop(self, env):
@@ -47,9 +47,6 @@ class Kafka(Script):
     kafka(action='config')
 
   def status(self, env):
-    import params
-    env.set_params(params)
-
     kafka(action='status')
 
 
