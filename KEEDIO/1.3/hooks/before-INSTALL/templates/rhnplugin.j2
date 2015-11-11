@@ -11,3 +11,9 @@ timeout = {{ spacewalk_timeout }}
 #
 #[some-unsigned-custom-channel]
 #gpgcheck = 0
+
+{% for repo in repodisable %}
+[{{ repo }}]
+enabled = 0
+
+{% endfor %}

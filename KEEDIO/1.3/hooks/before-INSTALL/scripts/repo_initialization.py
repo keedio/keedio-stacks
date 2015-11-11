@@ -58,14 +58,21 @@ def _alter_repo(action, repo_string, repo_template):
 
 def install_repos():
   from params import *
-  if has_spacewalk_client:
+  import os.path
+  if os.path.exists('/etc/sysconfig/rhn/systemid'):
+      has_external_spacewalk = True
+  else:
+      has_external_spacewalk = False
+
+  if has_spacewalk_client :
        Repository('Spacewalk',
                action = 'create',
                base_url = spacewalk_pub_url,
                repo_file_name = 'Spacewalk',
                repo_template = 'spacewalk.j2',
                )
-
+  elif has_external_spacewalk:
+      Logger.info ('This machine is registered with a Red Hat satellite server, skipping repo creation') 
   else:  
       template = "repo_suse_rhel.j2" if System.get_instance().os_family in ["suse", "redhat"] else "repo_ubuntu.j2"
       _alter_repo("create", repo_info, template)
