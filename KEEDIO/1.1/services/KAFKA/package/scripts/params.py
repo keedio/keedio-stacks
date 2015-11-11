@@ -42,28 +42,27 @@ hostname = None
 if config.has_key('hostname'):
   hostname = str(config['hostname'])
 
-znode_kafka_path=default("/configurations/kafka-env/znode_path","/ambari/kafka")
+znode_kafka_path=str(default("/configurations/kafka-env/znode_path","/ambari/kafka"))
 kafka_id=None
 
 
 zk = KazooClient(hosts=zookeeper_server_hosts)
 zk.start()
-Logger.error("Open kazoo client")
 zk.ensure_path(znode_kafka_path)
 tries=0
 while tries < 10:
-  Logger.error("Trying to adquire lock: %i" % tries)
   tries+=1
+  Logger.info("Locking zookeeper znode: %s" % znode_kafka_path)
   try:
     zk.create(znode_kafka_path+'/lock',value=hostname,ephemeral=True,makepath=True)
     break
-  except NodeExistsError:
+  except zookeeper.exceptions.NodeExistsError:
     sleep(5)
     continue
 if zk.exists(znode_kafka_path+'/brokers/'+hostname):
-  kafka_id=zk.get(znode_kafka_path+'/brokers/'+hostname)[0]
+  kafka_id=int(zk.get(znode_kafka_path+'/brokers/'+hostname)[0])
 else:
-  kafka_id=str(zk.create(znode_kafka_path+'/ids/',sequence=True,value=hostname).rsplit('/',1)[1])
-  zk.create(znode_kafka_path+'/brokers/'+hostname,value=kafka_id,makepath=True)
+  kafka_id=int(zk.create(znode_kafka_path+'/ids/',sequence=True,value=hostname,makepath=True).rsplit('/',1)[1])
+  zk.create(znode_kafka_path+'/brokers/'+hostname,value=str(kafka_id),makepath=True)
 zk.stop()
 
