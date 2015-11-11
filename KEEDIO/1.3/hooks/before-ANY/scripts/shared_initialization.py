@@ -64,13 +64,13 @@ def setup_users():
   import params
   
   for group in params.group_list:
-    Logger.info("Alessio:"+group)
+    Logger.info("Group:"+group)
     Group(group,
         ignore_failures = params.ignore_groupsusers_create
     )
     
   for user in params.user_list:
-    Logger.info("Alessiou:"+user)
+    Logger.info("User:"+user)
     User(user,
         gid = params.user_to_gid_dict[user],
         groups = params.user_to_groups_dict[user],

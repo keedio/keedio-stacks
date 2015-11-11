@@ -74,7 +74,6 @@ nimbus_server_hosts = set(default("/clusterHostInfo/nimbus_hosts", []))
 supervisor_server_hosts = set(default("/clusterHostInfo/supervisor_hosts", []))
 kafka_broker_hosts =  set(default("/clusterHostInfo/kafka_broker_hosts", []))
 es_master_hosts =  str(default("/clusterHostInfo/elasticsearch_hosts", ['none']))
-print "Alessioes",es_master_hosts
 
 kafka_ganglia_port = default("/configurations/kafka-broker/kafka.ganglia.metrics.port", 8671)
 es_service_port = default('/configurations/elasticsearch/service_port',9200)
@@ -103,7 +102,6 @@ if 'none' in es_master_hosts:
     has_elasticsearch_server = False
 else:
     has_elasticsearch_server = True
-print 'Alessioes2:',has_elasticsearch_server
 
 clusters=["Slaves"]
 if has_namenodes:

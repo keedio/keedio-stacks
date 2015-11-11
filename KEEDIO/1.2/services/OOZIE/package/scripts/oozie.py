@@ -70,7 +70,6 @@ def oozie(action=None,is_server=False):
       Logger.info(out)
       Logger.info(err)
           
-      Logger.info("AlessioDB")
       Logger.info(params.oozie_jdbc_driver)
       if params.oozie_jdbc_driver == "com.mysql.jdbc.Driver":
         create_db_cmd = format('su --shell=/bin/bash -l oozie -c "source /etc/profile.d/java.sh && /usr/lib/oozie/bin/ooziedb.sh create -sqlfile oozie.sql -run"') 
