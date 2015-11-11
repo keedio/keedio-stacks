@@ -45,7 +45,7 @@ def kafka(action):
         Logger.info(action)
         Logger.info(out)
         Logger.info(err)
-  else action == "status":
+  elif action == "status":
     executed = Popen(["service","kafka",action],stdout=PIPE,stderr=PIPE)
     out,err = executed.communicate()
     rc = executed.returncode
