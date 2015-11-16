@@ -33,6 +33,7 @@ realm = str(config['configurations']['cluster-env']['kerberos_domain'])
 ipa_realm = str(config['configurations']['freeipa']['realm'])
 domain = str(config['configurations']['freeipa']['domain'])
 ipa_password = str(config['configurations']['freeipa']['ipa_password'])
+manual_configuration = str(config['configurations']['freeipa']['manual_configuration'])
 
 ipa_server_host = str(default('/clusterHostInfo/ipa_server_hosts',['none'])[0])
 
