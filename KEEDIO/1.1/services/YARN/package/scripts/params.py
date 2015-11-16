@@ -68,6 +68,8 @@ smoke_user_keytab = config['configurations']['cluster-env']['smokeuser_keytab']
 yarn_executor_container_group = config['configurations']['yarn-site']['yarn.nodemanager.linux-container-executor.group']
 kinit_path_local = functions.get_kinit_path(["/usr/bin", "/usr/kerberos/bin", "/usr/sbin"])
 rm_hosts = config['clusterHostInfo']['rm_host']
+nm_hosts= config['clusterHostInfo']['nm_hosts']
+hs_host= config['clusterHostInfo']['hs_host']
 rm_host = rm_hosts[0]
 rm_port = config['configurations']['yarn-site']['yarn.resourcemanager.webapp.address'].split(':')[-1]
 rm_https_port = "8090"
@@ -147,6 +149,25 @@ yarn_nm_app_log_dir =  config['configurations']['yarn-site']['yarn.nodemanager.r
 mapreduce_jobhistory_intermediate_done_dir = config['configurations']['mapred-site']['mapreduce.jobhistory.intermediate-done-dir']
 mapreduce_jobhistory_done_dir = config['configurations']['mapred-site']['mapreduce.jobhistory.done-dir']
 jobhistory_heapsize = default("/configurations/mapred-env/jobhistory_heapsize", "900")
+
+
+is_rm = hostname in rm_hosts 
+is_nm = hostname in nm_hosts 
+is_hs = hostname in hs_host
+
+
+# Exclude packages
+exclude_packages = []
+
+if not is_rm:
+  exclude_packages += [format("hadoop-yarn-resourcemanager")]
+  exclude_packages += [format("hadoop-yarn-proxyserver")]
+if not is_nm:
+  exclude_packages += [format("hadoop-yarn-nodemanager")]
+if not is_hs:
+  exclude_packages += [format("hadoop-mapreduce-historyserver")]
+
+
 
 #for create_hdfs_directory
 hostname = config["hostname"]

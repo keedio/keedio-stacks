@@ -27,7 +27,7 @@ class HistoryServer(Script):
   def install(self, env):
     import params
 
-    self.install_packages(env)
+    self.install_packages(env,params.exclude_packages)
     env.set_params(params)
     #historyserver(action="configure")
 
