@@ -37,4 +37,9 @@
     <value>ambari.keedio.org</value>
     <description>Domain name</description>
   </property>
+  <property>
+    <name>manual_configuration</name>
+    <value>false</value>
+    <description>Enables manual configuration, which stops ambari from setting the Free IPA configuration</description>
+  </property>
 </configuration>

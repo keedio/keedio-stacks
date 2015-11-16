@@ -39,38 +39,60 @@ def freeipa(action=None):
     Logger.info(out)
     Logger.info(err)
     if cmd.returncode > 0 : 
-       raise Fail("IPA Server installation Failed")       
+       Logger.info("IPA Server installation Failed")       
+ 
 
   if action == 'config':
     from params import *
-    Logger.info("configuring ipa using ipa CLI")
-    command="/bin/echo "+ipa_password+"|/usr/bin/kinit admin"
-    cmd=Popen([command],stdout=PIPE,stderr=PIPE)
-    out,err=cmd.communicate()
-    Logger.info("Configuring FreeIPA server \nLogging in as admin")
-    Logger.info(out)
-    Logger.info(err)
-    if cmd.returncode > 0 :
-       raise Fail("IPA Server installation Failed")
+    if manual_configuration != True:
+    	Logger.info("configuring ipa using ipa CLI")
+    	kinit = '/usr/bin/kinit'
+    	kinit_args = [ kinit, '%s@%s' % ('admin', ipa_realm) ]
+    	cmd= Popen(kinit_args, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    	cmd.stdin.write('%s\n' % ipa_password)
+    	cmd.stdin.flush()
+    	out,err=cmd.communicate()
+    	Logger.info("Authenticating to  FreeIPA server")
+    	Logger.info(out)
+    	Logger.info(err)
+    	if cmd.returncode > 0 :
+       		raise Fail("IPA Server installation Failed")
+    	cmd= Popen(['/usr/bin/klist'], stdout=PIPE, stderr=PIPE)
+    	out,err=cmd.communicate()
+    	Logger.info(out)
+    	Logger.info(err)
+ 
 
-    command="/usr/bin/ipa krbtpolicy-mod --maxlife="+maxlife+" --maxrenew="+maxrenew
-    cmd=Popen([command],stdout=PIPE,stderr=PIPE)
-    out,err=cmd.communicate()
-    Logger.info("Setting tickets lifetime policy")
-    Logger.info(out)
-    Logger.info(err)
-    if cmd.returncode > 0 :
-       raise Fail("IPA Server  configuration Failed")
+    	command=['/usr/bin/ipa','krbtpolicy-mod','--maxlife='+maxlife,'--maxrenew='+maxrenew]
 
-    command="/usr/bin/kdestroy"
-    cmd=Popen([command],stdout=PIPE,stderr=PIPE)
-    out,err=cmd.communicate()
-    Logger.info("Destroying temporary tickets")
-    Logger.info(out)
-    Logger.info(err)
-    if cmd.returncode > 0 :
-       raise Fail("IPA Server  configuration Failed")
+    	Logger.info(command)
+    	cmd=Popen(command,stdout=PIPE,stderr=PIPE)
+    	out,err=cmd.communicate()
+    	Logger.info("Setting tickets lifetime policy")
+    	Logger.info(out)
+    	Logger.info(err)
 
+        command=['/usr/bin/ipa','krbtpolicy-show']
+
+        Logger.info(command)
+        cmd=Popen(command,stdout=PIPE,stderr=PIPE)
+        out,err=cmd.communicate()
+        Logger.info(out)
+        Logger.info(err)
+        
+
+    	command="/usr/bin/kdestroy"
+        Logger.info(command)
+    	cmd=Popen([command],stdout=PIPE,stderr=PIPE)
+    	out,err=cmd.communicate()
+    	Logger.info("Destroying temporary tickets")
+    	Logger.info(out)
+    	Logger.info(err)
+    	if cmd.returncode > 0 :
+       		raise Fail("IPA Server  configuration Failed")
+    
+    else:
+        Logger.info("Manual configuration enabled for Free IPA")
    
 
 def freeipaclient(action=None):
@@ -87,7 +109,7 @@ def freeipaclient(action=None):
     	Logger.info(out)
     	Logger.info(err)
     	if cmd.returncode > 0 :
-       		raise Fail("IPA Server installation Failed")
+       		Logger.info("IPA Server installation Failed")
 
 
   if action == 'config':
