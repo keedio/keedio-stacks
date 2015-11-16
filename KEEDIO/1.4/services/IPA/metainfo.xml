@@ -50,6 +50,25 @@
           </configFiles>
         </component>
         <component>
+          <name>IPA_REPLICA</name>
+          <displayName>FreeIPA replica</displayName>
+          <category>SLAVE</category>
+          <cardinality>0+</cardinality>
+          <commandScript>
+            <script>scripts/ipa_replica_handler.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+
+          <configFiles>
+            <configFile>
+              <type>xml</type>
+              <fileName>freeipa.xml</fileName>
+              <dictionaryName>freeipa</dictionaryName>
+            </configFile>
+          </configFiles>
+        </component>
+        <component>
           <name>IPA_CLIENT</name>
           <displayName>FreeIPA client</displayName>
           <category>CLIENT</category>
