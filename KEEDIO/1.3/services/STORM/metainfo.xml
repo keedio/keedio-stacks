@@ -123,6 +123,9 @@
             <package>
               <name>storm-logviewer</name>
             </package>
+            <package>
+              <name>monit</name>
+            </package>
           </packages>
         </osSpecific>
       </osSpecifics>
