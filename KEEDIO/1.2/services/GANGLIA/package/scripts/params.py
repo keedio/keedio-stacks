@@ -149,12 +149,12 @@ ganglia_cluster_names = {
   "hs_host": [("HistoryServer", 8662)],
   "nimbus_hosts": [("Nimbus", 8663)],
   "supervisor_hosts": [("Supervisor", 8664)],
-  "kafka_broker_hosts": [("Kafka", kafka_ganglia_port)],
   "ReservedPort1": [("ReservedPort1", 8667)],
   "ReservedPort2": [("ReservedPort2", 8668)],
   "ReservedPort3": [("ReservedPort3", 8669)],
   "ReservedPort4": [("ReservedPort3", 8670)],
-  "elasticsearch_hosts": [("ElasticSearch", 8671)]
+  "kafka_broker_hosts": [("Kafka", kafka_ganglia_port)],
+  "elasticsearch_hosts": [("ElasticSearch", 8672)]
 }
 
 ganglia_clusters = [("Slaves", 8653)]
