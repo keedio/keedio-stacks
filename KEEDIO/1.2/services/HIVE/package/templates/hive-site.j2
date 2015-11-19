@@ -306,14 +306,14 @@
 
 <property>
   <name>hive.server2.thrift.port</name>
-  <value>0.0.0.0</value>
+  <value>{{ hive_server2_port }}</value>
   <description>Port number of HiveServer2 Thrift interface.
   Can be overridden by setting $HIVE_SERVER_THRIFT_PORT</description>
 </property>
 
 <property>
   <name>hive.server2.thrift.bind.host</name>
-  <value>{{ hive_server2_host }}</value>
+  <value>0.0.0.0</value>
   <description>Bind host on which to run the HiveServer2 Thrift interface.
   Can be overridden by setting $HIVE_SERVER_THRIFT_BIND_HOST</description>
 </property>
