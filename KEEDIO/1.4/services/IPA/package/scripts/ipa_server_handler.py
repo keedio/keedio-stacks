@@ -21,12 +21,13 @@ limitations under the License.
 import sys
 from resource_management import *
 
-from freeipa import freeipa
+from freeipa import *
 
          
 class FreeIPAHandler(Script):
   def install(self, env):
-    self.install_packages(env)
+    import params
+    self.install_packages(env,params.exclude_packages)
     freeipa(action='install')
     freeipa(action='config')
     
@@ -38,9 +39,9 @@ class FreeIPAHandler(Script):
   def start(self, env):
     import params
     env.set_params(params)
-    self.configure(env)
     freeipa(action='start')
-    
+    self.configure(env)
+ 
   def stop(self, env):
     import params
     freeipa(action='stop')

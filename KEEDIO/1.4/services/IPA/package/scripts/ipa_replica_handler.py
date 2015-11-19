@@ -24,22 +24,28 @@ from resource_management import *
 from freeipa import freeipaclient
 
          
-class IPAClientHandler(Script):
+class IPAReplicaHandler(Script):
   def install(self, env):
-    import params
-    env.set_params(params)
-    self.install_packages(env,params.exclude_packages)
-    freeipaclient(action='install')
-    freeipaclient(action='config')
+      Logger.info("No install")
+     
+#    self.install_packages(env)
+#    freeipaclient(action='install')
     
   def configure(self, env):
-    import params
-    env.set_params(params)
-    #freeipaclient(action='config')
+     Logger.info("No configure")
+#    import params
+#    env.set_params(params)
+#    freeipaclient(action='config')
     
+
+  def start(self, env):
+     Logger.info("No start")
+
+  def stop(self, env):
+     Logger.info("No stop")
 
   def status(self, env):
     raise ClientComponentHasNoStatus()
      
 if __name__ == "__main__":
-  IPAClientHandler().execute()
+  IPAReplicaHandler().execute()

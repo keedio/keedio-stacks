@@ -23,7 +23,7 @@
       <name>FREEIPA</name>
       <displayName>Free IPA</displayName>
       <comment>FreeIPA is an integrated security information management solution combining Linux (Fedora), 389 Directory Server, MIT Kerberos, NTP, DNS, Dogtag (Certificate System). It consists of a web interface and command-line administration tools.</comment>
-      <version>1.2.0</version>
+      <version>3.0.0</version>
       <components>
         <component>
           <name>IPA_SERVER</name>
@@ -43,13 +43,19 @@
               <dictionaryName>freeipa</dictionaryName>
             </configFile>
             <configFile>
+            <configFile>
+              <type>xml</type>
+              <fileName>ipa-dns.xml</fileName>
+              <dictionaryName>dns</dictionaryName>
+            </configFile>
               <type>xml</type>
               <fileName>krbpolicy.xml</fileName>
               <dictionaryName>krbpolicy</dictionaryName>
             </configFile>
+             
           </configFiles>
         </component>
-        <component>
+        <!--<component>
           <name>IPA_REPLICA</name>
           <displayName>FreeIPA replica</displayName>
           <category>SLAVE</category>
@@ -67,7 +73,7 @@
               <dictionaryName>freeipa</dictionaryName>
             </configFile>
           </configFiles>
-        </component>
+        </component> -->
         <component>
           <name>IPA_CLIENT</name>
           <displayName>FreeIPA client</displayName>
@@ -109,7 +115,11 @@
             </packages>
           </osSpecific>
       </osSpecifics>
-
+      <commandScript>
+          <script>scripts/service_check.py</script>
+             <scriptType>PYTHON</scriptType>
+          <timeout>300</timeout>
+      </commandScript>
 
     </service>
   </services>

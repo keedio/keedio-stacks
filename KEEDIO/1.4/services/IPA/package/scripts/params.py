@@ -20,6 +20,7 @@ limitations under the License.
 
 from resource_management import *
 import multiprocessing
+import socket
 cpu_count = multiprocessing.cpu_count()
 
 config = Script.get_config()
@@ -36,12 +37,29 @@ ipa_password = str(config['configurations']['freeipa']['ipa_password'])
 manual_configuration = str(config['configurations']['freeipa']['manual_configuration'])
 
 ipa_server_host = str(default('/clusterHostInfo/ipa_server_hosts',['none'])[0])
+ipa_client_hosts = default('/clusterHostInfo/slave_hosts',[])
+
+ipa_server_address = str(socket.gethostbyname(ipa_server_host))
 
 is_ipa_server=False
 if hostname in ipa_server_host:
 	is_ipa_server=True
 maxlife =str(config['configurations']['krbpolicy']['maxlife'])
 maxrenew =str(config['configurations']['krbpolicy']['maxrenew'])
+
+
+dns=str(config['configurations']['ipa-dns']['dns'])
+dns_forwarders=str(config['configurations']['ipa-dns']['dns_forwarders'])
+reverse_dns=str(config['configurations']['ipa-dns']['reverse_dns'])
+
+ipa_replica_hosts=default('/clusterHostInfo/ipa_replica_hosts',[])
+
+
+# Exclude packages
+exclude_packages = []
+
+if not is_ipa_server:
+  exclude_packages += [format("ipa-server")]
 
 #cassandra_hosts = ",".join([str(elem) for elem in default('/clusterHostInfo/cassandra_hosts',[])])
 

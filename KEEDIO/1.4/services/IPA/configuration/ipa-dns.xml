@@ -22,24 +22,18 @@
 
 <configuration>
   <property>
-    <name>realm</name>
-    <value></value>
-    <description>Kerberos REALM</description>
+    <name>dns</name>
+    <value>true</value>
+    <description>Enable DNS service </description>
+  </property> 
+  <property>
+    <name>dns_forwarders</name>
+    <value>none</value>
+    <description>DNS forwarders</description>
   </property>
   <property>
-    <name>ipa_password</name>
-    <value>adminadmin</value>
-    <property-type>PASSWORD</property-type>
-    <description>Kerberos REALM</description>
-  </property>
-   <property>
-    <name>domain</name>
-    <value>ambari.keedio.org</value>
-    <description>Domain name</description>
-  </property>
-  <property>
-    <name>manual_configuration</name>
-    <value>false</value>
-    <description>Enables manual configuration which stops ambari from setting the Free IPA configuration</description>
+    <name>reverse_dns</name>
+    <value>true</value>
+     <description>Enable reverse DNS</description>
   </property>
 </configuration>
