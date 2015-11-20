@@ -173,7 +173,7 @@ def freeipaclient(action=None):
 
   if action == 'config':
     from params import *
-    if manual_configuration != True and not os.path.exists(""):
+    if manual_configuration != True and not os.path.exists("/var/lib/ipa-client/ambari-lock"):
           Logger.info("configuring ipa client  using ipa CLI")
           if dns and reverse_dns: 
 		# Authentication with KDC
@@ -239,10 +239,10 @@ def freeipaclient(action=None):
                
                 # Creating lockfile 
                 File('/var/lib/ipa-client/ambari-lock',
-                content=Template("lock"),
+                content="lock",
                 owner='root',
                 group='root')
                 
 
     else:
-        Logger.info("Manual configuration enabled for Free IPA") 
+        Logger.info("Skipping configuration, either the client has been already configured or the manual configuration has been chosen") 
