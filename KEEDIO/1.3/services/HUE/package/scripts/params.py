@@ -42,11 +42,12 @@ yarn_ha=default('/configurations/yarn-site/yarn.resourcemanager.ha.enabled',Fals
 resourcemanagers=[]
 if yarn_ha:
   yarn_logical_name=config['configurations']['yarn-site']['yarn.resourcemanager.cluster-id']
-  rm_ids=set(config['configurations']['yarn-site']['yarn.resourcemanager.ha.rm-ids'])
+  rm_ids=set(config['clusterHostInfo']['rm_host'])
   for rm_id in rm_ids:
-    resourcemanagers.append(str(config['configurations']['yarn-site']['yarn.resourcemanager.'+str(rm_id)+'address']))
+    resourcemanagers.append(str(rm_id)+":8088")
+    #resourcemanagers.append(str(config['configurations']['yarn-site']['yarn.resourcemanager.'+str(rm_id)+'.webapp.address']))
 else:
-  resourcemanagers.append(str(config['configurations']['yarn-site']['yarn.resourcemanager.address']))
+  resourcemanagers.append(str(config['configurations']['yarn-site']['yarn.resourcemanager.webapp.address']))
   #resourcemanager_address=str(config['configurations']['yarn-site']['yarn.resourcemanager.address']).split(':')[1]
   #resourcemanager_web_port=str(config['configurations']['yarn-site']['yarn.resourcemanager.webapp.address']).split(':')[1]
 hs_address = str(config['configurations']['mapred-site']['mapreduce.jobhistory.webapp.address'])

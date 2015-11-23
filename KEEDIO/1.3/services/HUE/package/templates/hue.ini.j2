@@ -628,16 +628,14 @@
 
     [[[default]]]
       # Enter the host on which you are running the ResourceManager
-      # resourcemanager_host={{RM_host}}
 
       # The port where the ResourceManager IPC listens on
-      # resourcemanager_port={{ resourcemanager_port }}
 
       # Whether to submit jobs to this cluster
       submit_to=True
 
       # Resource Manager logical name (required for HA)
-      {% if %}
+      {% if yarn_ha %}
       logical_name={{ yarn_logical_name }}
       {% endif %}
 
