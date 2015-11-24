@@ -22,7 +22,7 @@
       <name>KAFKA</name>
       <displayName>Kafka</displayName>
       <comment>A distributed service for collecting large amounts of streaming data</comment>
-      <version>0.8.2</version>
+      <version>0.8.2.1</version>
       <components>
         <component>
           <name>KAFKA_BROKER</name>
@@ -46,6 +46,9 @@
             </package>
             <package>
               <name>jmxtrans</name>
+            </package>
+            <package>
+              <name>python-kazoo</name>
             </package>
           </packages>
         </osSpecific>

@@ -21,7 +21,10 @@
     <description></description>
   </property>
 
-
+  <property>
+    <name>znode_path</name>
+    <value>/ambari/kafka</value>
+  </property>
 
 </configuration>
 

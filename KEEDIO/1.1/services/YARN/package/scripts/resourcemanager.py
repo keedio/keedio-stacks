@@ -25,8 +25,7 @@ from yarn_resourcemanager import resourcemanager
 class Resourcemanager(Script):
   def install(self, env):
     import params
-    self.install_packages(env)
-    #self.install_packages(env,params.exclude_packages)
+    self.install_packages(env,params.exclude_packages)
     env.set_params(params)
     #resourcemanager(action="configure")
 

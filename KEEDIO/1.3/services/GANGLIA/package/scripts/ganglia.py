@@ -38,13 +38,9 @@ def generate_daemon(ganglia_service,
     Logger.info(gmond_server) 
     if gmond_server[0] == name:
       gmond_port = gmond_server[1]
-      Logger.info('Estamos dentro')
       break
   params.gmond_server=gmond_server[0]
   params.gmond_port=gmond_server[1]
-  Logger.info("Alessio")
-  Logger.info(name)
-  Logger.info(gmond_server)
   cmd = ""
   if ganglia_service == "gmond":
     # When multi daemon gmond where packaged, should be changeb by only a synbolic link with service name
