@@ -71,7 +71,7 @@
               <name>ganglia-gmond</name>
             </package>
             <package>
-              <name>ganglia-gmond-modules-python</name>
+              <name>ganglia-gmond-python</name>
             </package>
           </packages>
         </osSpecific>
