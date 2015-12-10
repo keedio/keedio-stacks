@@ -21,6 +21,7 @@ from resource_management.libraries.functions.version import format_hdp_stack_ver
 from resource_management import *
 from kazoo.client import KazooClient
 from time import sleep
+import kazoo
 
 #exclude_packages=[]
 config = Script.get_config()
@@ -45,24 +46,17 @@ if config.has_key('hostname'):
 znode_kafka_path=str(default("/configurations/kafka-env/znode_path","/ambari/kafka"))
 kafka_id=None
 
-
 zk = KazooClient(hosts=zookeeper_server_hosts)
 zk.start()
-zk.ensure_path(znode_kafka_path)
-tries=0
-while tries < 10:
-  tries+=1
-  Logger.info("Locking zookeeper znode: %s" % znode_kafka_path)
-  try:
-    zk.create(znode_kafka_path+'/lock',value=hostname,ephemeral=True,makepath=True)
-    break
-  except zookeeper.exceptions.NodeExistsError:
-    sleep(5)
-    continue
+
+lock = zk.Lock("/kafka-lock", hostname)
+lock.acquire(timeout=60)
+
 if zk.exists(znode_kafka_path+'/brokers/'+hostname):
   kafka_id=int(zk.get(znode_kafka_path+'/brokers/'+hostname)[0])
 else:
   kafka_id=int(zk.create(znode_kafka_path+'/ids/',sequence=True,value=hostname,makepath=True).rsplit('/',1)[1])
   zk.create(znode_kafka_path+'/brokers/'+hostname,value=str(kafka_id),makepath=True)
+lock.release()
 zk.stop()
 
