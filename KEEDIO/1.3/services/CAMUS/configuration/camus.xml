@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+
+<configuration>
+ <property>
+    <name>camus.configuration.directory</name>
+    <value>/etc/camus/conf</value>
+    <description>Path in local file system containing Camus configurations</description>
+  </property>
+  <property>
+    <name>camus_user</name>
+    <value>camus</value>
+    <property-type>USER</property-type>
+    <description>User to submit camus jobs</description>
+  </property>
+  <property>
+    <name>camus_group</name>
+    <value>camus</value>
+    <property-type>GROUP</property-type>
+    <description>Camus's user group</description>
+  </property>
+  <property>
+    <name>camus.job.name</name>
+    <value>Camus Job</value>
+    <description>Camus's job name</description>
+  </property>
+  <property>
+    <name>etl.destination.path</name>
+    <value>/user/camus/data</value>
+    <description>Final top-level data output directory, sub-directory will be dynamically created for each topic pulled</description>
+  </property>
+  <property>
+    <name>etl.execution.base.path</name>
+    <value>/user/camus/exec</value>
+    <description>HDFS location where you want to keep execution files, i.e. offsets, error logs, and count files</description>
+  </property>
+  <property>
+    <name>etl.execution.history.path</name>
+    <value>/user/camus/exec/history</value>
+    <description>Where completed Camus job output directories are kept, usually a sub-dir in the base.path</description>
+  </property>
+  <property>
+    <name>camus.message.decoder.class</name>
+    <value>com.linkedin.camus.etl.kafka.coders.StringMessageDecoder</value>
+    <description>Concrete implementation of the Decoder class to use</description>
+  </property>
+  <property>
+    <name>etl.record.writer.provider.class</name>
+    <value>com.linkedin.camus.etl.kafka.common.StringRecordWriterProvider</value>
+    <description>RecordWriter to write records to HDFS</description>
+  </property>
+  <property>
+    <name>etl.partitioner.class</name>
+    <value>com.linkedin.camus.etl.kafka.partitioner.TimeBasedPartitioner</value>
+    <description>Class for distribute output data over HDFS data path (by time by default)</description>
+  </property>
+  <property>
+    <name>etl.destination.path.topic.sub.dirformat</name>
+    <value>YYYY/MM</value>
+    <description>Subdirectory destination for output data (default: monthly)</description>
+  </property>
+  <property>
+    <name>etl.output.file.time.partition.mins</name>
+    <value>60</value>
+    <description>Output file partition minutes, every X minutes the events will be write to a new file</description>
+  </property>
+  <property>
+    <name>mapred.map.tasks</name>
+    <value>32</value>
+    <description>Max hadoop tasks to use, each task can pull multiple topic partitions</description>
+  </property>
+  <property>
+    <name>mapreduce.output.fileoutputformat.compress</name>
+    <value>true</value>
+    <description>Output compression enable (true | false)</description>
+  </property>
+  <property>
+    <name>etl.output.codec</name>
+    <value>deflate</value>
+    <description>Compression codec</description>
+  </property>
+  <property>
+    <name>etl.deflate.level</name>
+    <value>6</value>
+    <description>Compression level for deflate codec</description>
+  </property>
+  <property>
+    <name>kafka.whitelist.topics</name>
+    <value> </value>
+    <description>Kafka topics to be pulled (if blank all topics will be pulled)</description>
+  </property>
+  <property>
+    <name>kafka.blacklist.topics</name>
+    <value> </value>
+    <description>Kafka topics to exclude</description>
+  </property>
+  <property>
+    <name>kafka.client.name</name>
+    <value>camus</value>
+    <description>Kafka client name</description>
+  </property>
+  <property>
+    <name>kafka.brokers</name>
+    <value>-----VALOR DE KAFKA---------</value>
+    <description>Kafka brokers list</description>
+  </property>
+  <property>
+    <name>kafka.max.pull.hrs</name>
+    <value>-1</value>
+    <description>Max historical time that will be pulled from each partition based on event timestamp (-1 means no limit)</description>
+  </property>
+  <property>
+    <name>kafka.max.pull.minutes.per.task</name>
+    <value>-1</value>
+    <description>Max minutes for each mapper to pull messages (-1 means no limit)</description>
+  </property>
+  <property>
+    <name>kafka.max.historical.days</name>
+    <value>-1</value>
+    <description>Events with a timestamp older than this will be discarded (-1 means no limit)</description>
+  </property>
+  <property>
+    <name>kafka.fetch.buffer.size</name>
+    <value>---VALOR DE KAFKA---</value>
+    <description>Fetch Request Buffer size (at least same as Kafka brokers configured)</description>
+  </property>
+  <property>
+    <name>kafka.fetch.request.correlationid</name>
+    <value> </value>
+  </property>
+  <property>
+    <name>kafka.fetch.request.max.wait</name>
+    <value> </value>
+  </property>
+  <property>
+    <name>kafka.fetch.request.min.bytes</name>
+    <value> </value>
+  </property>
+  <property>
+    <name>kafka.timeout.value</name>
+    <value>30000</value>
+  </property>
+  <property>
+    <name>kafka.move.to.earliest.offset</name>
+    <value>false</value>
+    <description>If it's set to true all topic messages will be pull</description>
+  </property>
+  <property>
+    <name>log4j.configuration</name>
+    <value>false</value>
+    <description>If it's set to true log4j.xml file will be load</description>
+  </property>
+  <property>
+    <name>etl.default.timezone</name>
+    <value>Europe/Madrid</value>
+  </property>
+</configuration>
