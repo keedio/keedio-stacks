@@ -1,0 +1,224 @@
+define service{
+        use                             generic-service
+        hostgroup_name                  namenodes
+        service_description             check hdfs general status
+        servicegroups                   batch,hdfs
+        check_command                   check_nrpe!check_hdfs
+        }
+
+define service{
+        use                             generic-service
+        hostgroup_name                  journalnodes
+        service_description             check hdfs qjm status
+        servicegroups                   batch,hdfs
+        check_command                   check_nrpe!check_qjm
+        }
+
+define service{
+        use                             generic-service
+        hostgroup_name                  namenodes
+        service_description             check httpfs status
+        servicegroups                   batch,hdfs
+        check_command                   check_nrpe!check_httpfs_tmp
+        }
+
+define service{
+        use                             generic-service
+        hostgroup_name                  resourcemanager
+        service_description             check yarn status
+        servicegroups                   batch,batch_processing
+        check_command                   check_nrpe!check_yarn
+        }
+
+define service{
+        use                             generic-service
+        hostgroup_name                  hbasemasters
+        service_description             check hbase status
+        servicegroups                   serving
+        check_command                   check_nrpe!check_hbase
+}
+
+define service{
+	use				generic-service
+	hostgroup_name			esservers
+	service_description		check elasticsearch status
+	servicegroups			serving
+	check_command			check_nrpe!check_elasticsearch
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  historyservers
+        service_description             check historyserver status
+        servicegroups                   batch,batch_processing
+        check_command                   check_nrpe!check_historyserver
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  nimbusservers     
+        service_description             check storm bolts load
+        servicegroups                   speed
+        check_command                   check_nrpe!check_storm
+        }
+
+define service{
+        use                             generic-service
+        hostgroup_name                  kafkaservers
+        service_description             check kafka topic TOPIC
+        servicegroups                   bus
+        check_command                   check_nrpe!check_kafka_topic_test
+        }
+
+define service{
+        use                             generic-service
+        hostgroup_name                  zookeeperservers     
+        service_description             check zookeeper servers status
+        servicegroups                   bus,batch,hdfs,batch_processing,serving
+        check_command                   check_nrpe!check_zookeeper
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  zookeeperservers
+        service_description             check hdfs znodes
+        servicegroups                   batch,hdfs
+        check_command                   check_nrpe!check_hdfs_znode
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  zookeeperservers
+        service_description             check hbase znodes
+        servicegroups                   serving
+        check_command                   check_nrpe!check_hbase_znode
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  zookeeperservers
+        service_description             check kafka znodes
+        servicegroups                   bus
+        check_command                   check_nrpe!check_kafka_znode
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  oozieservers
+        service_description             check oozie
+        servicegroups                   batch
+        check_command                   check_nrpe!check_oozie
+}
+
+define service{
+	use				generic-service
+	hostgroup_name			commons
+	service_description		PING
+	servicegroups			so_status
+	check_command			check_ping!100.0,20%!500.0,60%
+}
+
+define service{
+	use				generic-service
+	hostgroup_name			namenodes,datanodes
+	service_description		PING NN1
+	servicegroups			batch,hdfs
+	check_command			check_nrpe!check_ping_nn1
+}
+
+{% if  dfs_ha_enabled %}
+define service{
+        use                             generic-service
+        hostgroup_name                  namenodes,datanodes
+        service_description		PING NN2
+	servicegroups			batch,hdfs
+        check_command                   check_nrpe!check_ping_nn2
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  namenodes
+        service_description		PING QJM1
+	servicegroups			batch,hdfs
+        check_command                   check_nrpe!check_ping_qjm1
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  namenodes
+        service_description             PING QJM2
+	servicegroups			batch,hdfs
+        check_command                   check_nrpe!check_ping_qjm2
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  namenodes
+        service_description             PING QJM3
+	servicegroups			batch,hdfs
+        check_command                   check_nrpe!check_ping_qjm3
+}
+{% endif %}
+define service{
+        use                             generic-service
+        hostgroup_name                  commons
+        service_description             Logged users
+        servicegroups                   so_status
+        check_command                   check_nrpe!check_users
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  commons
+        service_description             system load
+        servicegroups                   so_status
+        check_command                   check_nrpe!check_load
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  namenodes,datanodes
+        service_description             disk usage
+	servicegroups			batch,hdfs,so_status
+        check_command                   check_nrpe!check_disk1
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  datanodes
+        service_description             disk usage
+	servicegroups			batch,hdfs,so_status
+        check_command                   check_nrpe!check_disk2
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  datanodes
+        service_description             disk usage
+	servicegroups			batch,hdfs,so_status
+        check_command                   check_nrpe!check_disk3
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  datanodes
+        service_description             disk usage
+	servicegroups			batch,hdfs,so_status
+        check_command                   check_nrpe!check_disk4
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  datanodes
+        service_description             disk usage
+	servicegroups			batch,hdfs,so_status
+        check_command                   check_nrpe!check_disk5
+}
+
+define service{
+        use                             generic-service
+        hostgroup_name                  datanodes
+        service_description             disk usage
+	servicegroups			batch,hdfs,so_status
+        check_command                   check_nrpe!check_disk6
+}

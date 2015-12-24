@@ -1,0 +1,71 @@
+allowed_hosts={{ nagios_server_host }}
+
+command[check_users]=/usr/lib64/nagios/plugins/check_users -w 5 -c 10
+command[check_load]=/usr/lib64/nagios/plugins/check_load -w {{ cpus * 3 }},{{ cpus * 2 }},{{ cpus }} -c {{ cpus * 5 }},{{ cpus * 4 }},{ cpus * 3 }}
+{% for path in data_path %}
+  command[check_disk{{loop.index}}]=/usr/lib64/nagios/plugins/check_disk -w 20% -c 10% -p {{ path }}
+{% endfor %}
+command[check_zombie_procs]=/usr/lib64/nagios/plugins/check_procs -w 5 -c 10 -s Z
+command[check_total_procs]=/usr/lib64/nagios/plugins/check_procs -w 150 -c 200 
+{% if has_namenodes %}
+  {% if security_enabled %}
+    command[check_hdfs_kerberos]=/usr/lib64/nagios/plugins/check_hadoop_hdfs.py -s -p "{{ hdfs_princ }}" -k "{{ hdfs_keytab }}" -nn nn1{% if dfs_ha_enabled %},nn2{% endif %}
+  {% else %}
+    command[check_hdfs]=/usr/bin/sudo -u hdfs /usr/lib64/nagios/plugins/check_hadoop_hdfs.py -nn nn1{% if dfs_ha_enabled %},nn2{% endif %}
+  {% endif %}
+{% endif %}
+{% if dfs_ha_enabled %}
+  command[check_qjm]=/usr/lib64/nagios/plugins/check_hadoop_journalnode.py --qjm {{ journalnode_hosts_port }}
+{% endif %}
+{% if has_namenodes %}
+  {% for nn in namenode_host %}
+    command[check_httpfs_tmp_nn{{loop.index}}]=/usr/lib64/nagios/plugins/check_hadoop_httpfs.py --namenode {{ nn }} --path /tmp --type DIRECTORY --permission 1777
+  {% endfor %}
+{% endif %}
+{% if has_hbase %}
+  {% if security_enabled %}
+    command[check_hbase_kerberos]=/usr/lib64/nagios/plugins/check_hbase.py -s -p "hbase_princ" -k "hbase_keytab" 2>/dev/null
+  {% else %}
+    command[check_hbase]=/usr/bin/sudo -u hbase /usr/lib64/nagios/plugins/check_hbase.py 2>/dev/null
+  {% endif %}
+{% endif %}
+{% if has_historyserver %}
+  command[check_yarn]=/usr/lib64/nagios/plugins/check_yarn_api.py --rm {{ rm_host }} {% if security_enabled %}-s -p "yarn_princ" -k "yarn_keytab"{% endif %}
+{% endif %}
+{% if has_historyserver %}
+  command[check_historyserver]=/usr/lib64/nagios/plugins/check_historyserver.py --historyserver {{ hs_host }} {% if security_enabled %}-s -p "{{ hs_princ }}" -k "{{ hs_keytab }}"{% endif %}
+{% endif %}
+{% if has_storm %}
+  command[check_storm]=/usr/lib64/nagios/plugins/check_storm.py  --nimbus_serv {{ nimbus_hosts }}
+{% endif %}
+{% if has_kafka %}
+  command[check_kafka_topic_test]=/usr/lib64/nagios/plugins/check_kafka --hosts {{ zookeeper_connection_list }} --topic test
+{% endif %}
+{% if has_zookeeper %}
+  command[check_zookeeper]=/usr/lib64/nagios/plugins/check_zookeeper.py --hosts {{ zookeeper_connection_list }} --version "3.4.5--1, built on 03/03/2014 20:08 GMT"
+{% endif %}
+{% if has_namenodes %}
+  command[check_hdfs_znode]=/usr/lib64/nagios/plugins/check_zookeeper_znode.py --hosts {{ zookeeper_connection_list }} --test hdfs --hdfs_cluster_name {{ cluster_name }} {% if security_enabled %}-s -p "{{ hdfs_princ }}" -k "{{ hdfs_keytab }}"{% endif %}
+{% endif %}
+{% if has_hbase %}
+  command[check_hbase_znode]=/usr/lib64/nagios/plugins/check_zookeeper_znode.py --hosts {{ zookeeper_connection_list }} --test hbase {% if security_enabled %}-s -p "{{ hbase_princ }}" -k "{{ hbase_keytab }}"{% endif %}
+{% endif %}
+{% if has_kafka %}
+  command[check_kafka_znode]=/usr/lib64/nagios/plugins/check_zookeeper_znode.py --hosts {{ zookeeper_connection_list }} --test kafka {% if security_enabled %}-s -p "{{ kafka_princ }}" -k "{{ kafka_keytab }}"{% endif %}
+{% endif %}
+{% if has_oozie %}
+  command[check_oozie]=/usr/lib64/nagios/plugins/check_oozie.py -H {{ oozie_server_hosts }} -P {{ oozie_port }} {% if security_enabled %}-s -p "{{ oozie_princ }}" -k "{{ oozie_keytab }}"{% endif %}
+{% endif %}
+{% if has_elasticsearch %}
+  command[check_elasticsearch]=/usr/bin/check_elasticsearch -m 2
+{% endif %}
+{% if has_namenodes %}
+  {% for nn in namenode_host %}
+    command[check_ping_nn{{ loop.index }}]=/usr/lib64/nagios/plugins/check_ping -H {{ nn }} -w 100.0,20% -c 500.0,60% -p 5
+  {% endfor %}
+  {% if dfs_ha_enabled %}
+    {% for node in journalnode_hosts %}
+      command[check_ping_qjm{{ loop.index }}]=/usr/lib64/nagios/plugins/check_ping -H {{ node }} -w 100.0,20% -c 500.0,60% -p 5
+    {% endfor %}
+  {% endif %}
+{% endif %}
