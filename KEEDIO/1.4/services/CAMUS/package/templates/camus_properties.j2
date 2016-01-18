@@ -1,0 +1,49 @@
+{#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#}
+
+
+camus.configuration.directory={{ camus_configuration_directory }}
+camus.job.name={{ camus_job_name }}
+etl.destination.path={{ etl_destination_path }}
+etl.execution.base.path={{ etl_execution_base_path }}
+etl.execution.history.path={{ etl_execution_history_path }}
+camus.message.decoder.class={{ camus_message_decoder_class }}
+etl.record.writer.provider.class={{ etl_record_writer_provider_class }}
+etl.partitioner.class={{ etl_partitioner_class }}
+etl.destination.path.topic.sub.dirformat={{ etl_destination_path_topic_sub_dirformat }}
+etl.output.file.time.partition.mins={{ etl_output_file_time_partition_mins }}
+mapred.map.tasks={{ mapred_map_tasks }}
+mapreduce.output.fileoutputformat.compress={{ mapreduce_output_fileoutputformat_compress }}
+etl.output.codec={{ etl_output_codec }}
+etl.deflate.level={{ etl_deflate_level }}
+kafka.whitelist.topics={{ kafka_whitelist_topics }}
+kafka.blacklist.topics={{ kafka_blacklist_topics }}
+kafka.client.name={{ kafka_client_name }}
+kafka.max.pull.hrs={{ kafka_max_pull_hrs }}
+kafka.max.pull.minutes.per.task={{ kafka_max_pull_minutes_per_task }}
+kafka.max.historical.days={{ kafka_max_historical_days }}
+kafka.fetch.buffer.size={{ kafka_fetch_buffer_size }}
+kafka.fetch.request.correlationid={{ kafka_fetch_request_correlationid }}
+kafka.fetch.request.max.wait={{ kafka_fetch_request_max_wait }}
+kafka.fetch.request.min.bytes={{ kafka_fetch_request_min_bytes }}
+kafka.timeout.value={{ kafka_timeout_value }}
+kafka.move.to.earliest.offset={{ kafka_move_to_earliest_offset }}
+log4j.configuration={{ log4j_configuration }}
+etl.default.timezone={{ etl_default_timezone }}
+kafka.brokers={{ kafka_broker_hosts }}
+
