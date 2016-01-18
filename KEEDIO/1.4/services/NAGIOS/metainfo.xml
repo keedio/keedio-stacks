@@ -79,7 +79,10 @@
             </package>           
             <package>
               <name>nagios-plugins-nrpe</name>
-            </package> 
+            </package>
+            <package>
+              <name>python-kazoo</name>
+            </package>
           </packages>
         </osSpecific>
       </osSpecifics>

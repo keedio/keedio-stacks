@@ -1,1 +1,1 @@
-exclude_packages=['nrpe','nagios-plugins','nagios-plugins-all','nagios-hadoop','nagiosplugin','nagios-plugins-nrpe']
+exclude_packages=['nrpe','nagios-plugins','nagios-plugins-all','nagios-hadoop','nagiosplugin','nagios-plugins-nrpe','python-kazoo']
