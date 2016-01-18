@@ -31,7 +31,6 @@ cluster_name=str(config['clusterName'])
 
 all_hosts =set(default("/clusterHostInfo/all_hosts",[]))
 zookeeper_server_hosts = set(default("/clusterHostInfo/zookeeper_hosts",[]))
-Logger.info("jcfernandez: " + str(zookeeper_server_hosts))
 namenode_host = set(default("/clusterHostInfo/namenode_host", []))
 jtnode_host = set(default("/clusterHostInfo/jtnode_host", []))
 rm_host = set(default("/clusterHostInfo/rm_host", []))
@@ -46,9 +45,9 @@ jn_hosts = set(default("/clusterHostInfo/journalnode_hosts", []))
 nimbus_server_hosts = set(default("/clusterHostInfo/nimbus_hosts", []))
 supervisor_server_hosts = set(default("/clusterHostInfo/supervisor_hosts", []))
 kafka_broker_hosts =  set(default("/clusterHostInfo/kafka_broker_hosts", []))
-es_master_hosts =  str(default("/clusterHostInfo/elasticsearch_hosts", ['none']))
+es_master_hosts =  set(default("/clusterHostInfo/elasticsearch_hosts", ['none']))
 oozie_server_hosts = set(default('/clusterHostInfo/oozie_server',[]))
-nagios_server_host = str(config['clusterHostInfo']['nagios_server_hosts'])
+nagios_server_host = set(config['clusterHostInfo']['nagios_server_hosts'])
 
 has_namenodes = not len(namenode_host) == 0
 has_zookeeper = not len(zookeeper_server_hosts) == 0
@@ -61,7 +60,7 @@ has_tasktracker = not len(tt_hosts) == 0
 has_nodemanager = not len(nm_hosts) == 0
 #has_hbase_rs = not len(hbase_rs_hosts) == 0
 has_flume = not len(flume_hosts) == 0
-has_journalnode = not len(jn_hosts) == 0
+has_journalnodes = not len(jn_hosts) == 0
 has_storm = not len(nimbus_server_hosts) == 0
 #has_supervisor_server = not len(supervisor_server_hosts) == 0
 has_kafka = not len(kafka_broker_hosts) == 0
@@ -73,7 +72,7 @@ else:
 host_list=dict()
 for host in all_hosts:
   ip = socket.gethostbyname(str(host))
-  host_list[str(host)]={'groups':[],'ip':ip}
+  host_list[str(host)]={'groups':['commons'],'ip':ip}
 
 for nn in namenode_host:
   host_list[nn]['groups'].append("namenodes")
@@ -90,7 +89,7 @@ for dn in datanodes_hosts:
 for hbase_rs in hbase_rs_hosts:
   host_list[hbase_rs]['groups'].append("hbasers")
 for nimbus in nimbus_server_hosts:
-  host_list[nimbus]['groups'].append("nimbuservers")
+  host_list[nimbus]['groups'].append("nimbusservers")
 for kb in kafka_broker_hosts:
   host_list[kb]['groups'].append("kafkaservers")
 for jn in jn_hosts:
@@ -98,6 +97,13 @@ for jn in jn_hosts:
 for oozie in oozie_server_hosts:
   host_list[oozie]['groups'].append('oozieservers')
 
+if not 'none' in es_master_hosts:
+  for es in es_master_hosts:
+    host_list[es]['groups'].append('esservers')
+
+# conversion from set to str
+for host in host_list.keys():
+  host_list[host]['groups_str']= ', '.join(str(aux) for aux in host_list[host]['groups'])
 
 cpus=multiprocessing.cpu_count()
 #for es in elasticsearch_server:
@@ -111,9 +117,9 @@ cpus=multiprocessing.cpu_count()
 
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 if has_namenodes:
-  data_path_nn = set(config['configurations']['hdfs-site']['dfs.namenode.name.dir'])
-  data_path_dn = set(config['configurations']['hdfs-site']['dfs.datanode.data.dir'])
-  data_path = data_path_nn.union(data_path_dn)
+  data_path_nn = set(str(config['configurations']['hdfs-site']['dfs.namenode.name.dir']).split(','))
+  data_path_dn = set(str(config['configurations']['hdfs-site']['dfs.datanode.data.dir']).split(','))
+  #data_path = data_path_nn.union(data_path_dn)
 
   dfs_ha_enabled  = False
   dfs_ha_nameservices = default("/configurations/hdfs-site/dfs.nameservices", None)
@@ -134,7 +140,7 @@ if has_zookeeper:
   for zk in zookeeper_server_hosts:
     if zookeeper_connection_list != "":
       zookeeper_connection_list += ","
-    zookeeper_connection_list+=host+":"+zk_port
+    zookeeper_connection_list+=zk+":"+zk_port
 
 if has_oozie:
   oozie_port=str(config['configurations']['oozie-env']['oozie_port'])

@@ -11,6 +11,6 @@ define host{
         host_name               {{ host }}
         alias                   {{ host }}
         address                 {{ host_list[host]['ip'] }}
-	hostgroups		{{ host_list[host]['groups'] }}
+	hostgroups		{{ host_list[host]['groups_str'] }}
         }
 {% endfor %}

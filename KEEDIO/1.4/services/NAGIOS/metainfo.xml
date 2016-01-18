@@ -76,7 +76,10 @@
             </package>
             <package>
               <name>nagiosplugin</name>
-            </package>            
+            </package>           
+            <package>
+              <name>nagios-plugins-nrpe</name>
+            </package> 
           </packages>
         </osSpecific>
       </osSpecifics>

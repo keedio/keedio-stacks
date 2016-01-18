@@ -1,3 +1,4 @@
+{% if has_namenodes %}
 define service{
         use                             generic-service
         hostgroup_name                  namenodes
@@ -5,7 +6,9 @@ define service{
         servicegroups                   batch,hdfs
         check_command                   check_nrpe!check_hdfs
         }
+{% endif %}
 
+{% if has_journalnodes %}
 define service{
         use                             generic-service
         hostgroup_name                  journalnodes
@@ -13,15 +16,19 @@ define service{
         servicegroups                   batch,hdfs
         check_command                   check_nrpe!check_qjm
         }
+{% endif %}
 
+{% if has_namenodes %}
 define service{
         use                             generic-service
         hostgroup_name                  namenodes
         service_description             check httpfs status
         servicegroups                   batch,hdfs
-        check_command                   check_nrpe!check_httpfs_tmp
+        check_command                   check_nrpe!check_httpfs_tmp_nn1
         }
+{% endif %}
 
+{% if has_resourcemanager %}
 define service{
         use                             generic-service
         hostgroup_name                  resourcemanager
@@ -29,7 +36,9 @@ define service{
         servicegroups                   batch,batch_processing
         check_command                   check_nrpe!check_yarn
         }
+{% endif %}
 
+{% if has_hbase %}
 define service{
         use                             generic-service
         hostgroup_name                  hbasemasters
@@ -37,7 +46,9 @@ define service{
         servicegroups                   serving
         check_command                   check_nrpe!check_hbase
 }
+{% endif %}
 
+{% if has_elasticsearch %}
 define service{
 	use				generic-service
 	hostgroup_name			esservers
@@ -45,7 +56,9 @@ define service{
 	servicegroups			serving
 	check_command			check_nrpe!check_elasticsearch
 }
+{% endif %}
 
+{% if has_historyserver %}
 define service{
         use                             generic-service
         hostgroup_name                  historyservers
@@ -53,7 +66,9 @@ define service{
         servicegroups                   batch,batch_processing
         check_command                   check_nrpe!check_historyserver
 }
+{% endif %}
 
+{% if has_storm %}
 define service{
         use                             generic-service
         hostgroup_name                  nimbusservers     
@@ -61,7 +76,9 @@ define service{
         servicegroups                   speed
         check_command                   check_nrpe!check_storm
         }
+{% endif %}
 
+{% if has_kafka %}
 define service{
         use                             generic-service
         hostgroup_name                  kafkaservers
@@ -69,7 +86,9 @@ define service{
         servicegroups                   bus
         check_command                   check_nrpe!check_kafka_topic_test
         }
+{% endif %}
 
+{% if has_zookeeper %}
 define service{
         use                             generic-service
         hostgroup_name                  zookeeperservers     
@@ -78,6 +97,7 @@ define service{
         check_command                   check_nrpe!check_zookeeper
 }
 
+{% if has_namenodes and dfs_ha_enabled %}
 define service{
         use                             generic-service
         hostgroup_name                  zookeeperservers
@@ -85,7 +105,9 @@ define service{
         servicegroups                   batch,hdfs
         check_command                   check_nrpe!check_hdfs_znode
 }
+{% endif %}
 
+{% if has_hbase %}
 define service{
         use                             generic-service
         hostgroup_name                  zookeeperservers
@@ -93,7 +115,9 @@ define service{
         servicegroups                   serving
         check_command                   check_nrpe!check_hbase_znode
 }
+{% endif %}
 
+{% if has_kafka %}
 define service{
         use                             generic-service
         hostgroup_name                  zookeeperservers
@@ -101,7 +125,10 @@ define service{
         servicegroups                   bus
         check_command                   check_nrpe!check_kafka_znode
 }
+{% endif %}
+{% endif %}
 
+{% if has_oozie %}
 define service{
         use                             generic-service
         hostgroup_name                  oozieservers
@@ -109,6 +136,7 @@ define service{
         servicegroups                   batch
         check_command                   check_nrpe!check_oozie
 }
+{% endif %}
 
 define service{
 	use				generic-service
@@ -118,6 +146,7 @@ define service{
 	check_command			check_ping!100.0,20%!500.0,60%
 }
 
+{% if has_namenodes or has_datanodes %}
 define service{
 	use				generic-service
 	hostgroup_name			namenodes,datanodes
@@ -125,7 +154,7 @@ define service{
 	servicegroups			batch,hdfs
 	check_command			check_nrpe!check_ping_nn1
 }
-
+{% endif %}
 {% if  dfs_ha_enabled %}
 define service{
         use                             generic-service
@@ -158,6 +187,14 @@ define service{
 	servicegroups			batch,hdfs
         check_command                   check_nrpe!check_ping_qjm3
 }
+
+define service{
+        use                             generic-service
+        hostgroup_name                  namenodes
+        service_description             check httpfs status
+        servicegroups                   batch,hdfs
+        check_command                   check_nrpe!check_httpfs_tmp_nn2
+        }
 {% endif %}
 define service{
         use                             generic-service
@@ -175,50 +212,26 @@ define service{
         check_command                   check_nrpe!check_load
 }
 
+{% if has_namenodes %}
+{% for path in data_path_nn %}
 define service{
         use                             generic-service
         hostgroup_name                  namenodes,datanodes
         service_description             disk usage
 	servicegroups			batch,hdfs,so_status
-        check_command                   check_nrpe!check_disk1
+        check_command                   check_nrpe!check_disk_nn{{loop.index}}
 }
+{% endfor %}
+{% endif %}
 
+{% if has_datanodes %}
+{% for path in data_path_dn %}
 define service{
         use                             generic-service
         hostgroup_name                  datanodes
         service_description             disk usage
 	servicegroups			batch,hdfs,so_status
-        check_command                   check_nrpe!check_disk2
+        check_command                   check_nrpe!check_disk_dn{{loop.index}}
 }
-
-define service{
-        use                             generic-service
-        hostgroup_name                  datanodes
-        service_description             disk usage
-	servicegroups			batch,hdfs,so_status
-        check_command                   check_nrpe!check_disk3
-}
-
-define service{
-        use                             generic-service
-        hostgroup_name                  datanodes
-        service_description             disk usage
-	servicegroups			batch,hdfs,so_status
-        check_command                   check_nrpe!check_disk4
-}
-
-define service{
-        use                             generic-service
-        hostgroup_name                  datanodes
-        service_description             disk usage
-	servicegroups			batch,hdfs,so_status
-        check_command                   check_nrpe!check_disk5
-}
-
-define service{
-        use                             generic-service
-        hostgroup_name                  datanodes
-        service_description             disk usage
-	servicegroups			batch,hdfs,so_status
-        check_command                   check_nrpe!check_disk6
-}
+{% endfor %}
+{% endif %}

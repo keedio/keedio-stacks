@@ -18,7 +18,11 @@ def nrpe(action):
       group="nagios",
       recursive=True
     )
+
     File('/etc/nagios/nrpe.cfg',
       content=Template('nrpe.j2')
     )
+
+    File("/etc/sudoers.d/91-nrpe",
+      content=StaticFile('91-nrpe'))
   
