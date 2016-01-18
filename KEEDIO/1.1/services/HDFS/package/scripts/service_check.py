@@ -42,7 +42,7 @@ class HdfsServiceCheck(Script):
     execute_smoke = partial(execute_sudo_krb,user=smoke_user,principal=smoke_user,keytab=smoke_keytab)
 
     create_dir_cmd = ["hdfs","dfs","-mkdir",dir]
-    chmod_command = ["hdfs","dfs","-chmod","777",dir]
+    chmod_command = ["hdfs","dfs","-chmod","1777",dir]
     test_dir_exists = ["hdfs","dfs","-test","-e",dir]
     cleanup_cmd = ["hdfs","dfs","-rm",tmp_file]
     #cleanup put below to handle retries; if retrying there wil be a stale file

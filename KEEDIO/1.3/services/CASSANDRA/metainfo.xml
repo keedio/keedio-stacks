@@ -23,7 +23,7 @@
       <name>CASSANDRA</name>
       <displayName>Cassandra</displayName>
       <comment>Cassandra is a scalable and high availabe database without compromising performance.</comment>
-      <version>1.2.0</version>
+      <version>2.1.0</version>
       <components>
         <component>
           <name>CASSANDRA</name>
