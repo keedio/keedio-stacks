@@ -41,19 +41,19 @@
 
   <property>
     <name>socket.send.buffer.bytes</name>
-    <value>1048576</value>
+    <value>102400</value>
     <description>The send buffer (SO:SNDBUF) used by socket server</description>
   </property>
 
   <property>
     <name>socket.receive.buffer.bytes</name>
-    <value>1048576</value>
+    <value>102400</value>
     <description>The receive buffer (SO_RCVBUF) used by socket server</description>
   </property>
 
   <property>
     <name>socket.request.max.bytes</name>
-    <value>1048576</value>
+    <value>104857600</value>
     <description>The maximum size of a request that the socket server will accept (rotection against OOM)</description>
   </property>
 
