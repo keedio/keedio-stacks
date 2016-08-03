@@ -63,10 +63,20 @@ def oozie(action=None,is_server=False):
       ## oozie expect ext-2.2 directory and looks to be hardcoded
       #extract_cmd=[ 'unzip', '/usr/lib/oozie/libext/ext-2.2.1.zip','-d','/usr/lib/oozie/libext/ext-2.2' ]
       #Popen(extract_cmd)
-      extract_cmd=[ 'ln', '-s','/usr/share/java/mysql-connector-java.jar','/usr/lib/oozie/libext/mysql-connector-java.jar' ] 
+      extract_cmd=[ 'ln', '-s','/usr/share/java/postgresql-jdbc.jar','/usr/lib/oozie/libext/postgresql-jdbc.jar' ]
+      Logger.info(params.oozie_jdbc_driver)
+      if params.oozie_jdbc_driver == "com.mysql.jdbc.Driver":
+         Logger.info('Oozie DB: MySQL')
+         extract_cmd=[ 'ln', '-s','/usr/share/java/mysql-connector-java.jar','/usr/lib/oozie/libext/mysql-connector-java.jar' ] 
+      if params.oozie_jdbc_driver == "org.postgresql.Driver":
+         Logger.info('Oozie DB: PostgreSQL')
+         extract_cmd=[ 'ln', '-s','/usr/share/java/postgresql-jdbc.jar','/usr/lib/oozie/libext/postgresql-jdbc.jar' ] 
+      if params.oozie_jdbc_driver == "oracle.jdbc.driver.OracleDriver":
+         Logger.info('Oozie DB: Oracle')
+         extract_cmd=[ 'ln', '-s','/usr/share/java/oracle-connector-java.jar','/usr/lib/oozie/libext/oracle-connector-java.jar' ] 
       cmd=Popen(extract_cmd)
       out,err=cmd.communicate() 
-      Logger.info("Creating mysql-connector-java.jar symbolic link in /usr/lib/oozie/libext/")
+      Logger.info("Creating jdbc symbolic link in /usr/lib/oozie/libext/")
       Logger.info(out)
       Logger.info(err)
           
@@ -75,10 +85,10 @@ def oozie(action=None,is_server=False):
         create_db_cmd = format('su --shell=/bin/bash -l oozie -c "source /etc/profile.d/java.sh && /usr/lib/oozie/bin/ooziedb.sh create -sqlfile oozie.sql -run"') 
       
       if params.oozie_jdbc_driver == "org.postgresql.Driver":
-        pass
+        create_db_cmd = format('su --shell=/bin/bash -l oozie -c "source /etc/profile.d/java.sh && /usr/lib/oozie/bin/ooziedb.sh create -sqlfile oozie.sql -run"') 
       
       if params.oozie_jdbc_driver == "oracle.jdbc.driver.OracleDriver":
-        pass
+        create_db_cmd = format('su --shell=/bin/bash -l oozie -c "source /etc/profile.d/java.sh && /usr/lib/oozie/bin/ooziedb.sh create -sqlfile oozie.sql -run"') 
 
       cmd=Popen(create_db_cmd, shell=True)
       out,err=cmd.communicate()
