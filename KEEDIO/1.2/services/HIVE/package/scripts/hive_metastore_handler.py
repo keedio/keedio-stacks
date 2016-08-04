@@ -50,7 +50,34 @@ class HiveServerHandler(Script):
   def initialize_db(self,env):
     import params
     try:
-        Popen(['mysql','-h',params.jdbc_host,'-b',params.jdbc_db,'-u',params.jdbc_username,'--password='+params.jdbc_password,'-e','source /usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.13.0.mysql.sql;'],stdout=PIPE,stderr=PIPE)
+      if params.jdbc_driver == "com.mysql.jdbc.Driver":
+        Logger.info('Using MySQL, importing schema')
+        cmd=Popen(['mysql','-h',params.jdbc_host,'-b',params.jdbc_db,'-u',params.jdbc_username,'--password='+params.jdbc_password,'-e','source /usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.14.0.mysql.sql;'],stdout=PIPE,stderr=PIPE)
+        out,err=cmd.communicate()
+        Logger.info(out)
+        Logger.info(err)
+
+      elif params.jdbc_driver == "org.postgresql.Driver":
+        Logger.info('Using Postgres, creating symlink /usr/lib/hive/lib/postgresql.jar')
+        cmd=Popen(['ln','-s','/usr/share/java/postgresql-jdbc.jar','/usr/lib/hive/lib/postgresql.jar'])
+        out,err=cmd.communicate()
+        Logger.info(out)
+        Logger.info(err)
+        Logger.info('Importing schema')
+        cmd=Popen(['psql','-h',params.jdbc_hostname,'-U',params.jdbc_username,'-d',params.jdbc_db,'-f','/usr/lib/hive/scripts/metastore/upgrade/postgres/hive-schema-0.14.0.postgres.sql'],stdout=PIPE,stderr=PIPE)
+        out,err=cmd.communicate()
+        Logger.info(out)
+        Logger.info(err)
+
+      elif params.jdbc_driver == "oracle.jdbc.driver.OracleDriver":
+        Logger.info('Using Oracle DB, importing schema')
+        cmd=Popen(['psql','-h',params.jdbc_hostname,'-U',params.jdbc_username,'-d',params.jdbc_db,'\connect',params.jdbc_db,'\i /usr/lib/hive/scripts/metastore/upgrade/postgres/hive-schema-0.14.0.postgres.sql'],stdout=PIPE,stderr=PIPE)
+        out,err=cmd.communicate()
+        Logger.info(out)
+        Logger.info(err)
+#    psql -U <HIVEUSER> -d <HIVEDATABASE> \connect <HIVEDATABASE>; \i hive-schema-0.13.0.postgres.sql;
+
+    
     except: 
         Logger.info("Cannot create Hive schema in the backend database, make sure you clean the database before restarting the installation!")
         exit()

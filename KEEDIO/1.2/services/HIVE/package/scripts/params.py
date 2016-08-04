@@ -30,6 +30,7 @@ hive_metastore_port = config['configurations']['hive-site']['hive_metastore_port
 jdbc_driver = config['configurations']['hive-site']['javax.jdo.option.ConnectionDriverName']
 jdbc_connection = config['configurations']['hive-site']['javax.jdo.option.ConnectionURL']
 jdbc_host = jdbc_connection.split('/')[2]
+jdbc_hostname=jdbc_host.split(':')[0]
 jdbc_db = config['configurations']['hive-site']['ambari.hive.db.schema.name'] 
 jdbc_username = config['configurations']['hive-site']['javax.jdo.option.ConnectionUserName']
 jdbc_password = default('/configurations/hive-site/javax.jdo.option.ConnectionPassword',None)
