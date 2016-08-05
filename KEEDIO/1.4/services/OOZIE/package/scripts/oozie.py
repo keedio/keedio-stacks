@@ -79,7 +79,7 @@ def oozie(action=None,is_server=False):
          extract_cmd=[ 'ln', '-s','/usr/share/java/postgresql-jdbc.jar','/usr/lib/oozie/libext/postgresql-jdbc.jar' ] 
       if params.oozie_jdbc_driver == "oracle.jdbc.driver.OracleDriver":
          Logger.info('Oozie DB: Oracle')
-         extract_cmd=[ 'ln', '-s','/usr/share/java/oracle-connector-java.jar','/usr/lib/oozie/libext/oracle-connector-java.jar' ] 
+         extract_cmd=[ 'ln', '-s','/usr/lib/ambari-agent/oracle-jdbc-driver.jar','/usr/lib/oozie/libext/oracle-jdbc-driver.jar' ] 
       cmd=Popen(extract_cmd)
       out,err=cmd.communicate() 
       Logger.info("Creating jdbc symbolic link in /usr/lib/oozie/libext/")
