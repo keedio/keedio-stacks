@@ -51,6 +51,13 @@ class HiveServerHandler(Script):
     import params
     try:
       if params.jdbc_driver == "com.mysql.jdbc.Driver":
+        Logger.info('Using Mysql, creating symlink /usr/lib/hive/lib/mysql-jdbc-driver.jar')
+#        cmd=Popen(['ln','-s','/usr/share/java/postgresql-jdbc.jar','/usr/lib/hive/lib/postgresql.jar'])
+        extract_cmd=[ 'ln', '-s','/usr/lib/ambari-agent/mysql-jdbc-driver.jar','/usr/lib/hive/lib/mysql-jdbc-driver.jar']
+        cmd=Popen(extract_cmd)
+        out,err=cmd.communicate()
+        Logger.info(out)
+        Logger.info(err)
         Logger.info('Using MySQL, importing schema')
         cmd=Popen(['mysql','-h',params.jdbc_host,'-b',params.jdbc_db,'-u',params.jdbc_username,'--password='+params.jdbc_password,'-e','source /usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.14.0.mysql.sql;'],stdout=PIPE,stderr=PIPE)
         out,err=cmd.communicate()
@@ -58,8 +65,10 @@ class HiveServerHandler(Script):
         Logger.info(err)
 
       elif params.jdbc_driver == "org.postgresql.Driver":
-        Logger.info('Using Postgres, creating symlink /usr/lib/hive/lib/postgresql.jar')
-        cmd=Popen(['ln','-s','/usr/share/java/postgresql-jdbc.jar','/usr/lib/hive/lib/postgresql.jar'])
+        Logger.info('Using Postgres, creating symlink /usr/lib/hive/lib/postgres-jdbc-driver.jar')
+#        cmd=Popen(['ln','-s','/usr/share/java/postgresql-jdbc.jar','/usr/lib/hive/lib/postgresql.jar'])
+        extract_cmd=[ 'ln', '-s','/usr/lib/ambari-agent/postgres-jdbc-driver.jar','/usr/lib/hive/lib/postgres-jdbc-driver.jar']
+        cmd=Popen(extract_cmd)
         out,err=cmd.communicate()
         Logger.info(out)
         Logger.info(err)
@@ -70,12 +79,16 @@ class HiveServerHandler(Script):
         Logger.info(err)
 
       elif params.jdbc_driver == "oracle.jdbc.driver.OracleDriver":
-        Logger.info('Using Oracle DB, importing schema')
-        cmd=Popen(['psql','-h',params.jdbc_hostname,'-U',params.jdbc_username,'-d',params.jdbc_db,'\connect',params.jdbc_db,'\i /usr/lib/hive/scripts/metastore/upgrade/postgres/hive-schema-0.14.0.postgres.sql'],stdout=PIPE,stderr=PIPE)
+        Logger.info('Using Oracle DB, creating symlink /usr/lib/hive/lib/oracle-jdbc-driver.jar')
+        extract_cmd=[ 'ln', '-s','/usr/lib/ambari-agent/oracle-jdbc-driver.jar','/usr/lib/hive/lib/oracle-jdbc-driver.jar']
+        cmd=Popen(extract_cmd)
         out,err=cmd.communicate()
+        Logger.info("Creating jdbc symbolic link in /usr/lib/hive/lib/")
         Logger.info(out)
         Logger.info(err)
-#    psql -U <HIVEUSER> -d <HIVEDATABASE> \connect <HIVEDATABASE>; \i hive-schema-0.13.0.postgres.sql;
+        Logger.info("Warning:####################################################")
+        Logger.info("Warning:You must preload Hive schema into Oracle DB manually")
+        Logger.info("Warning:####################################################")
 
     
     except: 

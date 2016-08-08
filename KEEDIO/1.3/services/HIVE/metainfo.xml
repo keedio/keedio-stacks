@@ -125,12 +125,12 @@
             <package>
               <name>hive-server2</name>
             </package>
-            <package>
+            <!--package>
               <name>mysql-connector-java</name>
             </package>
             <package>
               <name>postgresql-jdbc</name>
-            </package>
+            </package-->
             <package>
               <name>mysql</name>
             </package>
