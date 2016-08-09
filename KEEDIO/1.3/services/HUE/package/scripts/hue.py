@@ -27,17 +27,22 @@ from subprocess import *
 def hue(service=None,action=None):
 
   if action == "initdb":
-    import params 
-    cmd=Popen(['/usr/lib/hue/build/env/bin/hue','syncdb','--noinput'],stdout=PIPE,stderr=PIPE)
+    import params
+    create_db_cmd = format('/usr/lib/hue/build/env/bin/hue syncdb --noinput') 
+    cmd=Popen(create_db_cmd,stdout=PIPE,stderr=PIPE,shell=True)
     out,err=cmd.communicate()
     Logger.info("Hue installation: sync db")
     Logger.info(out)
     Logger.info(err)
-    cmd=Popen(['/usr/lib/hue/build/env/bin/hue','migrate'],stdout=PIPE,stderr=PIPE)
+    create_db_cmd = format('/usr/lib/hue/build/env/bin/hue migrate') 
+    cmd=Popen(create_db_cmd,stdout=PIPE,stderr=PIPE,shell=True)
     out,err=cmd.communicate()
+    rc=cmd.returncode
     Logger.info("Hue installation: migrate tables")
     Logger.info(out) 
     Logger.info(err) 
+    Logger.info(rc) 
+ 
     
     Logger.info("Hue installation: Installation of kafka-hue")
     os.chmod('/usr/lib/hue/tools/app_reg/app_reg.py',0755)
@@ -49,12 +54,54 @@ def hue(service=None,action=None):
     Logger.info("Hue installation: Installation of storm-hue")
     cmd=Popen(['../tools/app_reg/app_reg.py','--install','storm','--relative-paths'],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
+    rc=cmd.returncode
     Logger.info(out)
     Logger.info(err)
+    Logger.info(rc) 
 
   if action == "config":
     import params
     #configurations = params.config['configurations']['spark']
+    if params.db_type not in ['mysql','postgresql_psycopg2','oracle']:
+       Logger.info('Error: db_type must be one of mysql, postgres or oracle')
+       raise Fail(err)
+    if params.db_type == 'postgresql_psycopg2':
+       Logger.info('Installing postgres python modules')
+       cmd=Popen(['/usr/lib/hue/build/env/bin/pip','install','--upgrade','setuptools'],stdout=PIPE,stderr=PIPE)
+       out,err=cmd.communicate()
+       Logger.info(out)
+       Logger.info(err)
+       cmd=Popen(['/usr/lib/hue/build/env/bin/pip','install','psycopg2'],stdout=PIPE,stderr=PIPE)
+       out,err=cmd.communicate()
+       Logger.info(out)
+       Logger.info(err)
+    if params.db_type == 'oracle':
+       File(format("/etc/ld.so.conf.d/oracle.conf"), 
+       content="/usr/lib/oracle/11.2/client64/lib/",
+       owner="root",
+       group="root"
+       )
+       cmd=Popen(['/sbin/ldconfig','-v'],stdout=PIPE,stderr=PIPE)
+       out,err=cmd.communicate()
+       Logger.info(out)
+       Logger.info(err)
+
+     
+       my_env = os.environ.copy()
+       my_env["ORACLE_HOME"] = "/usr/lib/oracle/11.2/client64/"
+       Logger.info('Installing oracle python modules')
+       cmd=Popen(['/usr/lib/hue/build/env/bin/pip','install','cx_Oracle'],stdout=PIPE,stderr=PIPE,env=my_env)
+       out,err=cmd.communicate()
+       Logger.info(out)
+       Logger.info(err)
+       cmd=Popen(['/usr/lib/hue/build/env/bin/pip','install','south','--upgrade'],stdout=PIPE,stderr=PIPE,env=my_env)
+       out,err=cmd.communicate()
+       Logger.info(out)
+       Logger.info(err)
+
+    
+    Logger.info('Connecting to Database using port')
+    Logger.info(params.db_port)
     File(format(params.hue_conf_dir+"hue.ini"),
        content=Template("hue.ini.j2"),
        owner="root",
