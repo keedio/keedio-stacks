@@ -22,28 +22,38 @@
 
 <configuration>
   <property>
-    <name>mysql_host</name>
+    <name>db_type</name>
     <value></value>
-    <description>Hue Mysql  server</description>
+    <description>Hue DB  type, allowed values are mysql, postgresql_psycopg2, oracle</description>
   </property>
   <property>
-    <name>mysql_port</name>
-    <value>3306</value>
-    <description>Mysql  server port</description>
+    <name>db_host</name>
+    <value></value>
+    <description>Hue DB  server</description>
   </property>
   <property>
-    <name>mysql_name</name>
+    <name>db_port</name>
+    <value>default</value>
+    <description>Hue DB port, default specifies the default port for the different database type.</description>
+  </property>
+  <property>
+    <name>db_name</name>
     <value>hue</value>
-    <description>Mysql  server port</description>
+    <description>DB Name</description>
   </property>
   <property>
-    <name>mysql_user</name>
+    <name>db_user</name>
     <value>hue</value>
-    <description>Hue Mysql user</description>
+    <description>Hue DB user</description>
   </property>
   <property>
-    <name>mysql_password</name>
+    <name>db_password</name>
     <value>hue</value>
-    <description>Hue Mysql password</description>
+    <description>Hue DB password</description>
+  </property>
+  <property>
+    <name>oracle_home</name>
+    <value>none</value>
+    <description>Oracle path, necessary if you are using oracle as backend DB. </description>
   </property>
   </configuration>

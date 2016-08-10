@@ -313,12 +313,12 @@
   # see http://docs.djangoproject.com/en/1.4/ref/settings/#database-engine
   # ------------------------------------------------------------------------
   [[database]]
-    engine=mysql
-    host={{mysql_host}}
-    port={{mysql_port}}
-    user={{mysql_user}}
-    password={{mysql_password}}
-    name={{mysql_name}}
+    engine={{db_type}}
+    host={{db_host}}
+    port={{db_port}}
+    user={{db_user}}
+    password={{db_password}}
+    name={{db_name}}
     #engine=sqlite3
     #name=/var/lib/hue/desktop.db
     # Database engine is typically one of:

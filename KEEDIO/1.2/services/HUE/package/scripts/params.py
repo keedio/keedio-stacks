@@ -47,11 +47,30 @@ fs_defaultsfs = str(config['configurations']['core-site']['fs.defaultFS'])
 
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 
-mysql_host=config['configurations']['hue-mysql']['mysql_host']
-mysql_port=config['configurations']['hue-mysql']['mysql_port']
-mysql_name=config['configurations']['hue-mysql']['mysql_name']
-mysql_user=config['configurations']['hue-mysql']['mysql_user']
-mysql_password=config['configurations']['hue-mysql']['mysql_password']
+db_type=config['configurations']['hue-database']['db_type']
+db_host=config['configurations']['hue-database']['db_host']
+db_port_config=config['configurations']['hue-database']['db_port']
+db_port='3306'
+db_name=config['configurations']['hue-database']['db_name']
+db_user=config['configurations']['hue-database']['db_user']
+db_password=config['configurations']['hue-database']['db_password']
+oracle_home=config['configurations']['hue-database']['oracle_home']
+
+if db_port_config == 'default':
+#setting default port value
+     if db_type == 'mysql':
+        db_port='3306'
+     if db_type == 'postgresql_psycopg2':
+        db_port='5432'
+     if db_type == 'oracle':
+        db_port='1521'
+else:
+     try:
+           int(db_port_config)
+     except:
+           Logger.info('db_port must be either a number or default')
+           raise Fail(stderr)
+     db_port=db_port_config  
 
 brokers_path=config['configurations']['hue-kafka']['brokers_path']
 consumers_path=config['configurations']['hue-kafka']['consumers_path']
