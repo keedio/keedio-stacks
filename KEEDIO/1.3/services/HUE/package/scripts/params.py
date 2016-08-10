@@ -64,6 +64,7 @@ db_port='3306'
 db_name=config['configurations']['hue-database']['db_name']
 db_user=config['configurations']['hue-database']['db_user']
 db_password=config['configurations']['hue-database']['db_password']
+oracle_home=config['configurations']['hue-database']['oracle_home']
 
 if db_port_config == 'default':
 #setting default port value

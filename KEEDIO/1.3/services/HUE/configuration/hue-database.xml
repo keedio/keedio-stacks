@@ -51,4 +51,9 @@
     <value>hue</value>
     <description>Hue DB password</description>
   </property>
+  <property>
+    <name>oracle_home</name>
+    <value>none</value>
+    <description>Oracle path, necessary if you are using oracle as backend DB. </description>
+  </property>
   </configuration>

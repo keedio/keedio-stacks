@@ -76,8 +76,11 @@ def hue(service=None,action=None):
        Logger.info(out)
        Logger.info(err)
     if params.db_type == 'oracle':
+       if params.oracle_home == 'none':
+          raise Fail('You must specify oracle_home when you choose oracle as backend DB!') 
+       oracle_lib=params.oracle_home+'/lib/'
        File(format("/etc/ld.so.conf.d/oracle.conf"), 
-       content="/usr/lib/oracle/11.2/client64/lib/",
+       content=oracle_lib,
        owner="root",
        group="root"
        )
@@ -88,7 +91,7 @@ def hue(service=None,action=None):
 
      
        my_env = os.environ.copy()
-       my_env["ORACLE_HOME"] = "/usr/lib/oracle/11.2/client64/"
+       my_env["ORACLE_HOME"] = params.oracle_home
        Logger.info('Installing oracle python modules')
        cmd=Popen(['/usr/lib/hue/build/env/bin/pip','install','cx_Oracle'],stdout=PIPE,stderr=PIPE,env=my_env)
        out,err=cmd.communicate()
