@@ -34,6 +34,24 @@
             <scriptType>PYTHON</scriptType>
             <timeout>600</timeout>
           </commandScript>
+          <customCommands>
+            <customCommand>
+              <name>Rebalance</name>
+              <background>true</background>
+              <commandScript>
+                <script>scripts/kafka.py</script>
+                <scriptType>PYTHON</scriptType>
+              </commandScript>
+            </customCommand>
+            <customCommand>
+              <name>Repartition</name>
+              <background>true</background>
+              <commandScript>
+                <script>scripts/kafka.py</script>
+                <scriptType>PYTHON</scriptType>
+              </commandScript>
+            </customCommand>
+          </customCommands>
         </component>
       </components>
 
