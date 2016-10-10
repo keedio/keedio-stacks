@@ -18,12 +18,12 @@ limitations under the License.
 """
 
 from resource_management import *
-from kafka_handler import kafka
+from nagios import nagios
 
-class KafkaServiceCheck(Script):
+class NagiosServiceCheck(Script):
 
   def service_check(self, env):
-    kafka(action='status')
+    nagios(action='status')
 
 if __name__ == "__main__":
-  KafkaServiceCheck().execute()
+  NagiosServiceCheck().execute()
