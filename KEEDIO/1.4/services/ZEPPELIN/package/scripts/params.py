@@ -48,6 +48,8 @@ if authentication == 'internal':
     if has_ipa:
        use_internal_freeipa = True  
        use_authentication = True  
+       use_active_directory = False 
+       use_external_ldap = False
     else: 
        Logger.Info('FreeIPA service not available, reverting authentication to  disabled') 
 
