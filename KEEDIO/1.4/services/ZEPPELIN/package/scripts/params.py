@@ -23,8 +23,47 @@ from resource_management import *
 # server configurations
 config = Script.get_config()
 cluster_name = config['clusterName']
-zeppelin_port = int(default('/configurations/zeppelin/zeppelin_port',8050))
-zeppelin_notebook_dir = str(default('/configurations/zeppelin/zeppelin_notebook_dir','notebook'))
+zeppelin_port = int(default('/configurations/main/zeppelin_port',8050))
+zeppelin_notebook_dir = str(default('/configurations/main/zeppelin_notebook_dir','notebook'))
+authentication = str(default('/configurations/main/authentication','internal'))
+ldap_server=str(default('/configurations/ldap/ldap_server','master.ambari.keedio.org'))
+ldap_basename=str(default('/configurations/ldap/basename','master.ambari.keedio.org'))
+ldap_userdntemplate=str(default('/configurations/ldap/userdntemplate','master.ambari.keedio.org'))
+ipa_server_host = config['clusterHostInfo']['ipa_server_hosts']
+print "Alessio"
+print ipa_server_host
+ipa_server=str(ipa_server_host[0])
+print ipa_server
+has_ipa = not len(ipa_server_host) == 0
+ipa_realm = str(config['configurations']['freeipa']['realm'])
+ipastring =ipa_realm.split('.')
+print ipastring
+ldapstring=''
+for string in ipastring:
+   ldapstring=ldapstring+"dc="+string+',' 
+#remove last ','
+ldapstring=ldapstring[:-1]
+
+if authentication == 'internal':
+    if has_ipa:
+       use_internal_freeipa = True  
+       use_authentication = True  
+    else: 
+       Logger.Info('FreeIPA service not available, reverting authentication to  disabled') 
+
+elif authentication == 'ldap':
+    use_internal_freeipa = False 
+    use_active_directory = False 
+    use_external_ldap = True
+    use_authentication = True  
+elif authentication == 'ad':
+    use_internal_freeipa = False 
+    use_active_directory = True 
+    use_external_ldap = False
+    use_authentication = True  
+else:
+    use_internal_freeipa = False 
+    use_authentication = False 
 
 hostname = config['hostname']
 

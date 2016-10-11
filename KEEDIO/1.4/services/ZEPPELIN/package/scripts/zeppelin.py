@@ -33,8 +33,20 @@ def zeppelin(action=None):
 
   if action == 'config' :
     import params
+    File('/etc/zeppelin/conf/keystore',
+      content=StaticFile('keystore.j2'),
+      owner='zeppelin',
+      group='root',
+      mode=0400
+    )
     File('/etc/zeppelin/conf/zeppelin-site.xml',
       content=Template('zeppelin-site.xml.j2'),
+      owner='zeppelin',
+      group='root',
+      mode=0550
+    )
+    File('/etc/zeppelin/conf/shiro.ini',
+      content=Template('shiro.ini.j2'),
       owner='zeppelin',
       group='root',
       mode=0550

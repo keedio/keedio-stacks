@@ -191,7 +191,7 @@
 
 <property>
   <name>zeppelin.ssl</name>
-  <value>false</value>
+  <value>true</value>
   <description>Should SSL be used by the servers?</description>
 </property>
 
@@ -203,7 +203,7 @@
 
 <property>
   <name>zeppelin.ssl.keystore.path</name>
-  <value>keystore</value>
+  <value>/etc/zeppelin/conf/keystore</value>
   <description>Path to keystore relative to Zeppelin configuration directory</description>
 </property>
 
@@ -215,7 +215,7 @@
 
 <property>
   <name>zeppelin.ssl.keystore.password</name>
-  <value>change me</value>
+  <value>Happy78</value>
   <description>Keystore password. Can be obfuscated by the Jetty Password tool</description>
 </property>
 
@@ -229,7 +229,7 @@
 
 <property>
   <name>zeppelin.ssl.truststore.path</name>
-  <value>truststore</value>
+  <value>/etc/zeppelin/conf/keystore</value>
   <description>Path to truststore relative to Zeppelin configuration directory. Defaults to the keystore path</description>
 </property>
 
@@ -255,7 +255,7 @@
 
 <property>
   <name>zeppelin.anonymous.allowed</name>
-  <value>true</value>
+  <value>false</value>
   <description>Anonymous user allowed by default</description>
 </property>
 

@@ -22,13 +22,18 @@
 
 <configuration>
   <property>
-    <name>zeppelin_port</name>
-    <value>8050</value>
-    <description>Port where zeppelin will listen</description>
+    <name>ldap-server</name>
+    <value>master.ambari.keedio.org</value>
+    <description>Ldap Server</description>
   </property>
   <property>
-    <name>zeppelin_notebook_dir</name>
-    <value>'notebook'</value>
-    <description>Porsistent storage for notebooks</description>
+    <name>Basename</name>
+    <value>dc=KEEDIO,dc=ORG</value>
+    <description>Realm basename</description>
+  </property>
+  <property>
+    <name>UserDnTemplate</name>
+    <value>uid={0},cn=users,cn=accounts,dc=KEEDIO,dc=ORG</value>
+    <description>UserDnTemplate parameter is only required when authenticating against an LDAP store that requires a full User DN</description>
   </property>
 </configuration>
