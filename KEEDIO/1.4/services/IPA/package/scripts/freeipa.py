@@ -160,9 +160,9 @@ def freeipaclient(action=None):
         if dns: 
            dns_cmd=["--enable-dns-updates"]
         else:
-           dns_cmd=[]
+           dns_cmd=[""]
 
-    	cmd=Popen(['/usr/sbin/ipa-client-install','-U','--server='+ipa_server_host,'--domain='+domain,'-p','admin','-w',ipa_password]+dns_cmd,stdout=PIPE,stderr=PIPE)
+    	cmd=Popen(['/usr/sbin/ipa-client-install','-U','--server='+ipa_server_host,'--domain='+domain,'-p','admin','-w',ipa_password,dns_cmd[0]],stdout=PIPE,stderr=PIPE)
     	out,err=cmd.communicate()
     	Logger.info("installing FreeIPA client")
     	Logger.info(out)
