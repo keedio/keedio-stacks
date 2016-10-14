@@ -26,4 +26,9 @@
     <value>3000</value>
     <description>Port where grafana will listen</description>
   </property>
+  <property>
+    <name>authentication</name>
+    <value>internal</value>
+    <description>Decide authentication method, internal: uses internal Free IPA (requires IPA service), manual: allows manual installation </description>
+  </property>
 </configuration>

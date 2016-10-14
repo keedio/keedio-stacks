@@ -210,8 +210,13 @@ check_for_updates = true
 
 #################################### Auth LDAP ##########################
 [auth.ldap]
+{% if use_authentication %}
+enabled = true
+config_file = /etc/grafana/conf/ldap.toml
+{% else %}
 ;enabled = false
 ;config_file = /etc/grafana/ldap.toml
+{% endif %}
 
 #################################### SMTP / Emailing ##########################
 [smtp]

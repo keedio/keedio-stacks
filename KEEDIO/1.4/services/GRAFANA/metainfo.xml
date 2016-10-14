@@ -29,7 +29,7 @@
           <name>GRAFANA</name>
           <displayName>Grafana</displayName>
           <category>MASTER</category>
-          <cardinality></cardinality>
+          <cardinality>1</cardinality>
           <commandScript>
             <script>scripts/grafana_handler.py</script>
             <scriptType>PYTHON</scriptType>

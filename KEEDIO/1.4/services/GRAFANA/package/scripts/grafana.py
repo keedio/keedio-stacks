@@ -39,3 +39,10 @@ def grafana(action=None):
       group='grafana',
       mode=0550
     )
+    if params.authentication != 'manual':
+       File('/etc/grafana/conf/ldap.toml',
+         content=Template('ldap.toml.j2'),
+         owner='grafana',
+         group='grafana',
+         mode=0550
+       )
