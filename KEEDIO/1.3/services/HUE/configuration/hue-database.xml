@@ -49,6 +49,7 @@
   <property>
     <name>db_password</name>
     <value>hue</value>
+    <property-type>PASSWORD</property-type>¬
     <description>Hue DB password</description>
   </property>
   <property>
