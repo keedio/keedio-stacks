@@ -47,6 +47,12 @@
             <package>
               <name>jmxtrans</name>
             </package>
+            <package>
+              <name>python-six</name>
+            </package>
+            <package>
+              <name>python-kazoo</name>
+            </package>
           </packages>
         </osSpecific>
       </osSpecifics>
