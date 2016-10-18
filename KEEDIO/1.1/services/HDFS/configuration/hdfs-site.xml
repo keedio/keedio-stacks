@@ -210,6 +210,12 @@
     <value>134217728</value>
     <description>The default block size for new files.</description>
   </property>
+ 
+ <property>
+    <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+    <value>false</value>
+    <description>Enable name resolution checks, disable on Azure</description>
+  </property>
 
   <property>
     <name>dfs.namenode.http-address</name>
