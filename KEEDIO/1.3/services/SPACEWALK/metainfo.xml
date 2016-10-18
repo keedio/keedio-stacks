@@ -29,7 +29,7 @@
           <name>SPACEWALK_CLIENT</name>
           <displayName>Spacewalk client</displayName>
           <category>CLIENT</category>
-          <cardinality>1+</cardinality>
+          <cardinality>ALL</cardinality>
           <commandScript>
             <script>scripts/spacewalk_handler.py</script>
             <scriptType>PYTHON</scriptType>
