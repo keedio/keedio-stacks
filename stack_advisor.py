@@ -19,7 +19,11 @@ limitations under the License.
 
 import time
 import socket
-
+import re
+def natural_sort(l): 
+    convert = lambda text: int(text) if text.isdigit() else text.lower() 
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
+    return sorted(l, key = alphanum_key)
 class StackAdvisor(object):
   """
   Abstract class implemented by all stack advisors. Stack advisors advise on stack specific questions. 
@@ -314,7 +318,9 @@ class DefaultStackAdvisor(StackAdvisor):
 
     stackName = services["Versions"]["stack_name"]
     stackVersion = services["Versions"]["stack_version"]
-    hostsList = [host["Hosts"]["host_name"] for host in hosts["items"]]
+    hostsLis = [host["Hosts"]["host_name"] for host in hosts["items"]]
+    hostsList = natural_sort(hostsLis)
+    print "ALESSIO2", hostsList
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
 
     layoutRecommendations = self.createComponentLayoutRecommendations(services, hosts)
@@ -340,7 +346,8 @@ class DefaultStackAdvisor(StackAdvisor):
     }
 
     hostsList = [host["Hosts"]["host_name"] for host in hosts["items"]]
-
+    hostsList=natural_sort(hostsList)
+    print "ALESSIO3", hostsList
     hostsComponentsMap = {}
     for hostName in hostsList:
       if hostName not in hostsComponentsMap:
@@ -355,21 +362,25 @@ class DefaultStackAdvisor(StackAdvisor):
         if self.isComponentHostsPopulated(component):
           hostsForComponent = component["StackServiceComponents"]["hostnames"]
         else:
-
+     
+          print "BBBBBB", component, len(hostsList), self.isMasterComponentWithMultipleInstances(component)  
           if len(hostsList) > 1 and self.isMasterComponentWithMultipleInstances(component):
+            print "AHIAAA", component  
             hostsCount = self.getMinComponentCount(component)
             if hostsCount > 1: # get first 'hostsCount' available hosts
               hostsForComponent = []
-              hostIndex = 0
+              hostIndex = self.getIndexForComponent(component, hostsList) 
               while hostsCount > len(hostsForComponent) and hostIndex < len(hostsList):
                 currentHost = hostsList[hostIndex]
                 if self.isHostSuitableForComponent(currentHost, component):
                   hostsForComponent.append(currentHost)
                 hostIndex += 1
             else:
-              hostsForComponent = [self.getHostForComponent(component, hostsList)]
+              hostsForComponent  = self.getHostForComponent(component, hostsList)
+              hostsForComponent = [hostsForComponent] 
           else:
-            hostsForComponent = [self.getHostForComponent(component, hostsList)]
+            hostsForComponent = self.getHostForComponent(component, hostsList)
+            hostsForComponent = [hostsForComponent] 
 
         #extend 'hostsComponentsMap' with 'hostsForComponent'
         for hostName in hostsForComponent:
@@ -453,6 +464,8 @@ class DefaultStackAdvisor(StackAdvisor):
     stackName = services["Versions"]["stack_name"]
     stackVersion = services["Versions"]["stack_version"]
     hostsList = [host["Hosts"]["host_name"] for host in hosts["items"]]
+    hostsList=natural_sort(hostsList)
+    print "ALESSIO1", hostsList
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
     components = [component["StackServiceComponents"]["component_name"]
                   for service in services["services"]
@@ -518,6 +531,7 @@ class DefaultStackAdvisor(StackAdvisor):
   def isMasterComponentWithMultipleInstances(self, component):
     componentName = self.getComponentName(component)
     masters = self.getMastersWithMultipleInstances()
+    print 'TTTTT', componentName, masters
     return componentName in masters
 
   def isComponentNotValuable(self, component):
@@ -538,6 +552,9 @@ class DefaultStackAdvisor(StackAdvisor):
 
     if len(hostsList) != 1:
       scheme = self.getComponentLayoutScheme(componentName)
+      print "ALESSIUUUU", scheme
+      print componentName, scheme
+      hostsList=natural_sort(hostsList)
       if scheme is not None:
         hostIndex = next((index for key, index in scheme.iteritems() if isinstance(key, ( int, long )) and len(hostsList) < key), scheme['else'])
       else:
@@ -546,6 +563,23 @@ class DefaultStackAdvisor(StackAdvisor):
         if self.isHostSuitableForComponent(host, component):
           return host
     return hostsList[0]
+
+  def getIndexForComponent(self, component, hostsList):
+    componentName = self.getComponentName(component)
+
+    if len(hostsList) != 1:
+      scheme = self.getComponentLayoutScheme(componentName)
+      print "ALESSIUUUU", scheme
+      print componentName, scheme
+      hostsList=natural_sort(hostsList)
+      if scheme is not None:
+        hostIndex = next((index for key, index in scheme.iteritems() if isinstance(key, ( int, long )) and len(hostsList) < key), scheme['else'])
+      else:
+        hostIndex = 0
+      for host in hostsList[hostIndex:]:
+        if self.isHostSuitableForComponent(host, component):
+          return hostIndex
+    return 0
 
   def getComponentLayoutScheme(self, componentName):
     """
