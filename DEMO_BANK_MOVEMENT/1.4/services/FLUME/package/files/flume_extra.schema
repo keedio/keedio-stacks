@@ -1,0 +1,1 @@
+{"title": "flume extra file","type": "object","properties": {"path": {"type": "string"},"owner": {"type": "string","default": "nobody"},"group":{"type": "string","default": "nobody"},"mode": {"type": "string","default": "0644"},"content": {"type": "string","default": ""}},"required": ["path"]}
