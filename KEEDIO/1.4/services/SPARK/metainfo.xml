@@ -29,7 +29,7 @@
           <name>SPARK</name>
           <displayName>SPARK</displayName>
           <category>CLIENT</category>
-          <cardinality>1</cardinality>
+          <cardinality>1+</cardinality>
           <dependencies>
             <dependency>
               <name>HDFS/HDFS_CLIENT</name>
