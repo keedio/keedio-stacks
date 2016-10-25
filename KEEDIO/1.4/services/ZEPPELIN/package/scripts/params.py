@@ -23,14 +23,16 @@ from resource_management import *
 # server configurations
 config = Script.get_config()
 cluster_name = config['clusterName']
-zeppelin_port = int(default('/configurations/main/zeppelin_port',8050))
+zeppelin_port = int(default('/configurations/main/zeppelin_port',8044))
 zeppelin_notebook_dir = str(default('/configurations/main/zeppelin_notebook_dir','notebook'))
 authentication = str(default('/configurations/main/authentication','internal'))
+
+livy_server=default("/clusterHostInfo/livy_server_host", ["localhost"])[0]
+livy_port=str(default('/configurations/livy/livy_port',8998))
 ldap_server=str(default('/configurations/ldap/ldap_server','master.ambari.keedio.org'))
 ldap_basename=str(default('/configurations/ldap/basename','master.ambari.keedio.org'))
 ldap_userdntemplate=str(default('/configurations/ldap/userdntemplate','master.ambari.keedio.org'))
 ipa_server_host = config['clusterHostInfo']['ipa_server_hosts']
-print "Alessio"
 print ipa_server_host
 ipa_server=str(ipa_server_host[0])
 print ipa_server

@@ -23,7 +23,7 @@
 <configuration>
   <property>
     <name>zeppelin_port</name>
-    <value>8050</value>
+    <value>8044</value>
     <description>Port where zeppelin will listen</description>
   </property>
   <property>
