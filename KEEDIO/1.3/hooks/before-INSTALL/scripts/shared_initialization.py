@@ -122,6 +122,7 @@ def install_spacewalk_client():
       Logger.info(err)
       repolist=out.split('\n')
       repolist=filter(None, repolist)
+         
       # repoenable and repodisable are define in params, so they can be used inside a template
       for repo in repolist:
           if keedio_stack_version in repo:
@@ -132,7 +133,7 @@ def install_spacewalk_client():
       Logger.info("Disabling the following channels because they are not compatible with the selected stack")
       Logger.info(repodisable)
       if len(repoenable) == 0:
-          raise Exception ("No Keedio repo is available for the installation")
+           Logger.info ("WARNING: No Keedio repo is available for the installation, probably IPA server is down")
       Logger.info("Keedio repos used for the installation")
       Logger.info(repoenable)   
       File('/etc/yum/pluginconf.d/rhnplugin.conf',
