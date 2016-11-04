@@ -40,7 +40,7 @@
   </property>
   <property>
     <name>flink_hdfs_home</name>
-    <value>/user/flink</value>
+    <value>/flink</value>
     <description>Home path in HDFS. It will contains directory libs with jars and directory eventLogs</description>
   </property>
 </configuration>

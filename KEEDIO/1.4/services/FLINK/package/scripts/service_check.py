@@ -30,6 +30,7 @@ class ServiceCheck(Script):
   def service_check(self, env):
     import params
     env.set_params(params)
+    execute_hdfs = partial(execute_sudo_krb,user=params.hdfs_user,principal=params.hdfs_principal_name,keytab=params.hdfs_user_keytab) 
     execute_flink = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
     Logger.info("Sourcing /etc/profile.d/hadoop-env.sh")
     cmd=Popen('/bin/grep export  /etc/profile.d/hadoop-env.sh ',stdout=PIPE,stderr=PIPE,shell=True)
@@ -45,6 +46,15 @@ class ServiceCheck(Script):
 
     Logger.info("The environment for Flink execution:")
     Logger.info(os.environ)
+    cmd_create_dir_hdfs=['hdfs','dfs','-mkdir','-p',params.flink_hdfs_home+'/savepoints']
+    cmd_chown_dir_hdfs=['hdfs','dfs','-chown','%s:',params.flink_user ,params.flink_hdfs_home]
+    cmd_chown_dir_hdfs2=['hdfs','dfs','-chown','%s:',params.flink_user ,params.flink_hdfs_home+'/savepoints']
+    cmd_chmod_dir_hdfs=['hdfs','dfs','-chmod','777',params.flink_hdfs_home+'/savepoints']
+    execute_hdfs(cmd_create_dir_hdfs)
+    execute_hdfs(cmd_chown_dir_hdfs)
+    execute_hdfs(cmd_chown_dir_hdfs2)
+    execute_hdfs(cmd_chmod_dir_hdfs)
+    
     check_flink = ['/usr/lib/flink/default/bin/flink','run','-m','yarn-cluster','-yn','2','-j','/usr/lib/flink/default/examples/batch/KMeans.jar']
     out,err,rc=execute_flink(check_flink)
     Logger.info("Check: Batch Kmeans")
