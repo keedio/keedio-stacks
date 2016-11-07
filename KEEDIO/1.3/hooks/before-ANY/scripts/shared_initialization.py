@@ -71,11 +71,16 @@ def setup_users():
     
   for user in params.user_list:
     Logger.info("User:"+user)
-    User(user,
-        gid = params.user_to_gid_dict[user],
-        groups = params.user_to_groups_dict[user],
-        ignore_failures = params.ignore_groupsusers_create       
-    )
+    #If the system is kerberized, and you try to add a node, it will try to create hdfs and ambari-qa users.This users are already available
+    # in the ipa directory, and the group association faisl, because the user is not present in /etc/password. Instead of stopping installation, here 
+    # we continue with an eror message. 
+    try:
+       User(user,
+          gid = params.user_to_gid_dict[user],
+          groups = params.user_to_groups_dict[user],
+          ignore_failures = params.ignore_groupsusers_create)
+    except:
+       Logger.error('Problem in User group association, if your system has security enabled this is normal:'+str(user))       
            
   set_uid(params.smoke_user, params.smoke_user_dirs)
 

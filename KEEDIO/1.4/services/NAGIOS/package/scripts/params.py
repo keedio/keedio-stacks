@@ -19,7 +19,7 @@ limitations under the License.
 
 from resource_management.libraries.functions.version import format_hdp_stack_version, compare_versions
 from resource_management import *
-import socket,multiprocessing
+import socket,multiprocessing,psutil
 
 #exclude_packages=[]
 config = Script.get_config()
@@ -28,6 +28,13 @@ if config.has_key('hostname'):
   hostname = str(config['hostname'])
 cluster_name=str(config['clusterName'])
 
+
+mountpoints=[]
+partitions = psutil.disk_partitions()
+for p in partitions: 
+   mountpoints.append(p.mountpoint)
+Logger.info("Alessio1") 
+Logger.info(mountpoints) 
 
 all_hosts =set(default("/clusterHostInfo/all_hosts",[]))
 zookeeper_server_hosts = set(default("/clusterHostInfo/zookeeper_hosts",[]))

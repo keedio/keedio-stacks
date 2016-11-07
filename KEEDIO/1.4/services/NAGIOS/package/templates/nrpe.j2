@@ -209,12 +209,14 @@ allowed_hosts={% for nagios_host in nagios_server_host %}{{ nagios_host }},{% en
 
 command[check_users]=/usr/lib64/nagios/plugins/check_users -w 5 -c 10
 command[check_load]=/usr/lib64/nagios/plugins/check_load -w {{ cpus * 3 }},{{ cpus * 2 }},{{ cpus }} -c {{ cpus * 5 }},{{ cpus * 4 }},{{ cpus * 3 }}
+{% if has_namenodes %}
 {% for path in data_path_nn %}
 command[check_disk_nn{{loop.index}}]=/usr/lib64/nagios/plugins/check_disk -w 20% -c 10% -p {{ path }}
 {% endfor %}
 {% for path in data_path_dn %}
 command[check_disk_dn{{loop.index}}]=/usr/lib64/nagios/plugins/check_disk -w 20% -c 10% -p {{ path }}
 {% endfor %}
+{% endif %}
 command[check_zombie_procs]=/usr/lib64/nagios/plugins/check_procs -w 5 -c 10 -s Z
 command[check_total_procs]=/usr/lib64/nagios/plugins/check_procs -w 150 -c 200 
 {% if has_namenodes %}
@@ -226,8 +228,10 @@ command[check_hdfs]=/usr/bin/sudo -u hdfs /usr/lib64/nagios/plugins/check_hadoop
 
 {% endif %}
 {% endif %}
+{% if has_namenodes %}
 {% if dfs_ha_enabled %}
 command[check_qjm]=/usr/lib64/nagios/plugins/check_hadoop_journalnode.py --qjm {{ journalnode_hosts_port }}
+{% endif %}
 {% endif %}
 {% if has_namenodes %}
 {% for nn in namenode_host %}
@@ -260,7 +264,7 @@ command[check_storm]=/usr/lib64/nagios/plugins/check_storm.py  --nimbus_serv {{ 
 command[check_kafka_topic_test]=/usr/lib64/nagios/plugins/check_kafka --hosts {{ zookeeper_connection_list }} --topic test
 {% endif %}
 {% if has_zookeeper %}
-command[check_zookeeper]=/usr/lib64/nagios/plugins/check_zookeeper.py --hosts {{ zookeeper_connection_list }} --version "3.4.6--1, built on 11/13/2015 10:21 GMT"
+command[check_zookeeper]=/usr/lib64/nagios/plugins/check_zookeeper.py --hosts {{ zookeeper_connection_list }} --version "3.4.8--1, built on 07/22/2016 09:44 GMT"
 {% endif %}
 {% if has_namenodes %}
 command[check_hdfs_znode]=/usr/lib64/nagios/plugins/check_zookeeper_znode.py --hosts {{ zookeeper_connection_list }} --test hdfs --hdfs_cluster_name {{ cluster_name }} {% if security_enabled %}-s -p "{{ hdfs_princ }}" -k "{{ hdfs_keytab }}"{% endif %}
@@ -293,3 +297,8 @@ command[check_ping_qjm{{ loop.index }}]=/usr/lib64/nagios/plugins/check_ping -H 
 {% endfor %}
 {% endif %}
 {% endif %}
+command[check_swap]=/usr/lib64/nagios/plugins/check_swap -w 20 -c 10
+{% for m in mountpoints %}
+command[check_{{ str(m) }}] =/usr/lib64/nagios/plugins/check_disk -w 20% -c 10% -p  {{ str(m) }}
+
+{% endfor %}

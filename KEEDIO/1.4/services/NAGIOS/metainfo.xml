@@ -83,6 +83,9 @@
             <package>
               <name>python-kazoo</name>
             </package>
+            <package>
+              <name>python-psutil</name>
+            </package>
           </packages>
         </osSpecific>
       </osSpecifics>

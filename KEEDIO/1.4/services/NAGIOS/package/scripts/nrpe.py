@@ -3,7 +3,6 @@ from subprocess import *
 
 def nrpe(action):
   import utils
-  # FIX: When status is checked params  shouldn't be called
   if action != 'config':
     executed = Popen(["service","nrpe",action],stdout=PIPE,stderr=PIPE)
     out,err = executed.communicate()
