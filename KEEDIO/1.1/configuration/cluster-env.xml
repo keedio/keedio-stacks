@@ -29,7 +29,7 @@
     <property>
         <name>kerberos_domain</name>
         <value>EXAMPLE.ES</value>
-        <description>Kerberos realm.</description>
+        <description>Kerberos realm. If IPA service is installed, us the same Realm.  </description>
     </property>
     <property>
         <name>ignore_groupsusers_create</name>

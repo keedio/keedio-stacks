@@ -23,8 +23,8 @@ from exclude_nagios import *
 
 class Nagios(Script):
   def install(self, env):
-    import params
     self.install_packages(env,exclude_packages)
+    import params
     env.set_params(params)
     self.configure(env)
 

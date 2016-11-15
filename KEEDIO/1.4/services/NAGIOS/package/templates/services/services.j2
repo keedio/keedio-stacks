@@ -97,6 +97,7 @@ define service{
         check_command                   check_nrpe!check_zookeeper
 }
 
+{% if has_namenodes %}
 {% if has_namenodes and dfs_ha_enabled %}
 define service{
         use                             generic-service
@@ -105,6 +106,7 @@ define service{
         servicegroups                   batch,hdfs
         check_command                   check_nrpe!check_hdfs_znode
 }
+{% endif %}
 {% endif %}
 
 {% if has_hbase %}
@@ -146,6 +148,22 @@ define service{
 	check_command			check_ping!100.0,20%!500.0,60%
 }
 
+define service{
+        use generic-service
+        hostgroup_name commons
+        service_description check ntp sync
+        check_command check_ntp_time!.5!1
+        servicegroups so_status
+}
+
+define service{
+        use generic-service
+        hostgroup_name commons
+        service_description swap status
+        check_command check_nrpe!check_swap
+        servicegroups so_status
+}
+
 {% if has_namenodes or has_datanodes %}
 define service{
 	use				generic-service
@@ -155,6 +173,7 @@ define service{
 	check_command			check_nrpe!check_ping_nn1
 }
 {% endif %}
+{% if has_namenodes or has_datanodes %}
 {% if  dfs_ha_enabled %}
 define service{
         use                             generic-service
@@ -196,6 +215,7 @@ define service{
         check_command                   check_nrpe!check_httpfs_tmp_nn2
         }
 {% endif %}
+{% endif %}
 define service{
         use                             generic-service
         hostgroup_name                  commons
@@ -235,3 +255,14 @@ define service{
 }
 {% endfor %}
 {% endif %}
+{% for m in mountpoints %}
+define service{
+        use                             generic-service
+        hostgroup_name                  commons
+        service_description             {{ str(m) }} disk usage
+        servicegroups                   so_status
+        check_command                   check_nrpe!check_{{ str(m)}}
+}
+
+
+{% endfor %}
