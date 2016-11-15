@@ -29,6 +29,7 @@
   <property>
     <name>activation_key</name>
     <value></value>
+    <property-type>PASSWORD</property-type>
     <description>This is the key to subscribe to the spacewalk server
     </description>
   </property>
