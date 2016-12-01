@@ -24,19 +24,21 @@ from resource_management import *
 config = Script.get_config()
 cluster_name = config['clusterName']
 grafana_port = int(default('/configurations/grafana/grafana_port',3000))
+es_port = int(default('/configurations/elasticsearch/es_port',9200))
 authentication = str(default('/configurations/grafana/authentication','internal'))
 es_master_hosts = [ str(elem) for elem in config['clusterHostInfo']['elasticsearch_hosts']]
 es_indexer_hosts = [ str(elem) for elem in default('/clusterHostInfo/elasticsearch_indexer_hosts',[]) ]
 #ldap_server=str(default('/configurations/ldap/ldap_server','master.ambari.keedio.org'))
 #ldap_basename=str(default('/configurations/ldap/basename','master.ambari.keedio.org'))
 #ldap_userdntemplate=str(default('/configurations/ldap/userdntemplate','master.ambari.keedio.org'))
-ipa_server_host = config['clusterHostInfo']['ipa_server_hosts']
-print "Alessio"
+ipa_server_host = default('/clusterHostInfo/ipa_server_hosts',[])
 print ipa_server_host
-ipa_server=str(ipa_server_host[0])
-print ipa_server
 has_ipa = not len(ipa_server_host) == 0
-ipa_realm = str(config['configurations']['freeipa']['realm'])
+ipa_server='localhost'
+if has_ipa:
+   ipa_server=str(ipa_server_host[0])
+   print ipa_server
+ipa_realm = str(default('/configurations/freeipa/realm','none'))
 ipastring =ipa_realm.split('.')
 print ipastring
 ldapstring=''
@@ -52,7 +54,11 @@ if authentication == 'internal':
        use_active_directory = False 
        use_external_ldap = False
     else: 
-       Logger.Info('FreeIPA service not available, reverting authentication to  disabled') 
+       print('FreeIPA service not available, reverting authentication to  disabled')
+       use_internal_freeipa = False
+       use_authentication = False
+       use_active_directory = False
+       use_external_ldap = False 
 elif authentication == 'manual':
     use_internal_freeipa = False  
     use_authentication = True  
