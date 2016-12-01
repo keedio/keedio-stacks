@@ -22,19 +22,35 @@
 
 <configuration>
   <property>
-    <name>nagios_web_login</name>
-    <value>nagiosadmin</value>
-    <description>Nagios admin</description>
+    <name>storm_user</name>
+    <value>storm</value>
+    <property-type>USER</property-type>
+    <description></description>
   </property>
   <property>
-    <name>nagios_web_password</name>
-    <value>nagiosadmin</value>
-    <property-type>PASSWORD</property-type>
-    <description>Nagios admin password</description>
+    <name>storm_log_dir</name>
+    <value>/var/log/storm</value>
+    <description></description>
   </property>
   <property>
-    <name>nagios_contact</name>
-    <value>acomisso@keedio.com</value>
-    <description>Contact email</description>
+    <name>storm_pid_dir</name>
+    <value>/var/run/storm</value>
+    <description></description>
+  </property>
+  
+  <!-- storm-env.sh -->
+  <property>
+    <name>content</name>
+    <description>This is the jinja template for storm-env.sh file</description>
+    <value>
+#!/bin/bash
+
+# Set Storm specific environment variables here.
+
+# The java implementation to use.
+export JAVA_HOME={{java64_home}}
+
+# export STORM_CONF_DIR=""
+    </value>
   </property>
 </configuration>

@@ -24,6 +24,7 @@
       <displayName>Keedio Examples</displayName>
       <comment>Keedio service configuration examples</comment>
       <version>1.0</version>
+      <deleted>true</deleted>
       <components>
         <component>
           <name>EXAMPLES</name>

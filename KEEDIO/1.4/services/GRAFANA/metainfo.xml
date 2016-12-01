@@ -23,7 +23,7 @@
       <name>GRAFANA</name>
       <displayName>Grafana</displayName>
       <comment>Grafana is an open source analytics and visualization platform.</comment>
-      <version>3.1.1</version>
+      <version>4.0.0</version>
       <components>
         <component>
           <name>GRAFANA</name>
