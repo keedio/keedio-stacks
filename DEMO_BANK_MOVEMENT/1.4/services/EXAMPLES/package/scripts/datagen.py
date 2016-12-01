@@ -24,7 +24,12 @@ from resource_management import *
 def datagen(action):
   if action == "config":
    import params
-    
+   File(format("/opt/keedio-examples/bankmovements-demo/datagenerator/run.sh"),
+       content=Template("run.sh.j2"),
+       owner='root',
+       group='root',
+       mode=0755
+       )    
 
   if action == "install":
     Logger.info("Installing Syslog datagenerator") 

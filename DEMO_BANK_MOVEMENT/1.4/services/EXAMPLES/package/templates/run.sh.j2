@@ -1,0 +1,2 @@
+#!/bin/bash
+exec java -Dcities.inputfile=./cities.ser  -Drate.limiter={{ datagen_rate_limit }} -Dactive.actor=sysloggerActor -Dsyslog.host=keedio9 -Dsyslog.port=5140 -Dsyslog.facility=USER -jar ./datagenerator-assembly-0.1.6-SNAPSHOT.jar

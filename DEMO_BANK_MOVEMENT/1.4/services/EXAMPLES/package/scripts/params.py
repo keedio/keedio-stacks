@@ -23,6 +23,7 @@ from resource_management import *
 
 config = Script.get_config()
 
+datagen_rate_limit = default('/configurations/examples/datagen_rate_limit',5)
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 kerberos_cache_file = default('/configurations/cluster-env/kerberos_cache_file','/tmp/ccache_keytab')
 kerberos_domain = config['configurations']['cluster-env']['kerberos_domain']

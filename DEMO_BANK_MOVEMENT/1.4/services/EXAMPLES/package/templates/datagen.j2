@@ -89,7 +89,7 @@ do_stop() {
                 if [ "$STATUS" == "$PID" ]
                 then
                                 echo "Killing Data generator...."
-                                KILL=$(kill -15 $PID)
+                                KILL=$(kill -9 $PID)
                                 rm $PIDFILE
                                 sleep 1
                                 echo -e "\tData generator (PID:$PID) killed"

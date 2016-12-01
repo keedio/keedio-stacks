@@ -26,4 +26,9 @@
     <value>/etc/keedio-examples/conf</value>
     <description>Path in local file system containing examples configurations</description>
   </property>
+ <property>
+    <name>datagen_rate_limit</name>
+    <value>5</value>
+    <description>Limits data generation rate</description>
+  </property>
 </configuration>
