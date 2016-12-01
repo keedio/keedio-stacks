@@ -51,6 +51,9 @@
               <name>flume-kafka-avro-sink</name>
             </package>
             <package>
+              <name>cacheable_interceptor</name>
+            </package>
+            <package>
               <name>flume-kafka-sink</name>
             </package>
             <package>
