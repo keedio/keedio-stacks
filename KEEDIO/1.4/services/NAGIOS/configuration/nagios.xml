@@ -27,6 +27,12 @@
     <description>Nagios admin</description>
   </property>
   <property>
+    <name>nagios_web_password</name>
+    <value>nagiosadmin</value>
+    <property-type>PASSWORD</property-type>
+    <description>Nagios admin password</description>
+  </property>
+  <property>
     <name>nagios_contact</name>
     <value>acomisso@keedio.com</value>
     <description>Contact email</description>

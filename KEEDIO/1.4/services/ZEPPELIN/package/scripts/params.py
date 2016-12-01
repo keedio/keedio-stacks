@@ -32,12 +32,14 @@ livy_port=str(default('/configurations/livy/livy_port',8998))
 ldap_server=str(default('/configurations/ldap/ldap_server','master.ambari.keedio.org'))
 ldap_basename=str(default('/configurations/ldap/basename','master.ambari.keedio.org'))
 ldap_userdntemplate=str(default('/configurations/ldap/userdntemplate','master.ambari.keedio.org'))
-ipa_server_host = config['clusterHostInfo']['ipa_server_hosts']
+ipa_server_host = default('/clusterHostInfo/ipa_server_hosts',[])
 print ipa_server_host
-ipa_server=str(ipa_server_host[0])
-print ipa_server
 has_ipa = not len(ipa_server_host) == 0
-ipa_realm = str(config['configurations']['freeipa']['realm'])
+ipa_server='none'
+if has_ipa:
+   ipa_server=str(ipa_server_host[0])
+   print ipa_server
+ipa_realm = str(default('/configurations/freeipa/realm','none'))
 ipastring =ipa_realm.split('.')
 print ipastring
 ldapstring=''
@@ -53,7 +55,11 @@ if authentication == 'internal':
        use_active_directory = False 
        use_external_ldap = False
     else: 
-       Logger.Info('FreeIPA service not available, reverting authentication to  disabled') 
+       print('FreeIPA service not available, reverting authentication to  disabled') 
+       use_internal_freeipa = False  
+       use_authentication = False
+       use_active_directory = False 
+       use_external_ldap = False
 
 elif authentication == 'ldap':
     use_internal_freeipa = False 
