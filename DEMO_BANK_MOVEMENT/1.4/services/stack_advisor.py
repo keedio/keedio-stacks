@@ -98,11 +98,11 @@ class DEMO_BANK_MOVEMENT14StackAdvisor(DefaultStackAdvisor):
         elif componentName=="COUCHBASE_DATA" or componentName=="COUCHBASE_INDEXER" or componentName=="COUCHBASE_QUERY":
           hostsForComponent = couchbaseHosts
         elif componentName=="DATANODE" or componentName=="NODEMANAGER":
-          hostsForComponent = ['keedio4','keedio5','keedio6']
+          hostsForComponent = ['keedio4.oiehshvz1pcudfonymnzx1ksib.fx.internal.cloudapp.net','keedio5.oiehshvz1pcudfonymnzx1ksib.fx.internal.cloudapp.net','keedio6.oiehshvz1pcudfonymnzx1ksib.fx.internal.cloudapp.net']
         elif componentName=="ELASTICSEARCH_INDEXER":
-          hostsForComponent = ['keedio7']
+          hostsForComponent = ['keedio7.oiehshvz1pcudfonymnzx1ksib.fx.internal.cloudapp.net']
         elif componentName=="FLUME_HANDLER":
-          hostsForComponent = ['keedio9','keedio10']
+          hostsForComponent = ['keedio9.oiehshvz1pcudfonymnzx1ksib.fx.internal.cloudapp.net','keedio10.oiehshvz1pcudfonymnzx1ksib.fx.internal.cloudapp.net']
         else:
           if len(freeHosts) == 0:
             hostsForComponent = hostsList[-1:]
@@ -459,6 +459,8 @@ class DEMO_BANK_MOVEMENT14StackAdvisor(DefaultStackAdvisor):
       'OOZIE_SERVER': {6: 1, 31: 8, "else": 3},
       'HIVE_SERVER': {6: 1, 31: 2, "else": 4},
       'HIVE_METASTORE': {6: 1, 31: 2, "else": 4},
+      'ZEPPELIN': {6: 1, 31: 1, "else": 1},
+      'LIVY': {6: 1, 31: 1, "else": 1},
       'WEBHCAT_SERVER': {6: 1, 31: 2, "else": 4}
       }
 

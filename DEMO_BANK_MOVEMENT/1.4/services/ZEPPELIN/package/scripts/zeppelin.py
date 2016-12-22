@@ -22,10 +22,10 @@ import os
 from resource_management import *
 from subprocess import *
 from utils import check_rc
-def livy(action=None):
+def zeppelin(action=None):
   
   if action == 'start' or action == 'stop' or action == 'status':
-    cmd=Popen(['service','livy',action],stdout=PIPE,stderr=PIPE)
+    cmd=Popen(['service','zeppelin',action],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     Logger.info('Zeppelin action: %s.\nSTDOUT=%s\nSTDERR=%s' % (action,out,err))
     if action == 'start' or action == 'status':
@@ -33,21 +33,21 @@ def livy(action=None):
 
   if action == 'config' :
     import params
-    File('/etc/livy/conf/spark-blacklist.conf',
-      content=Template('spark-blacklist.conf.j2'),
-      owner='livy',
-      group='livy',
+    File('/etc/zeppelin/conf/keystore',
+      content=StaticFile('keystore.j2'),
+      owner='zeppelin',
+      group='root',
+      mode=0400
+    )
+    File('/etc/zeppelin/conf/zeppelin-site.xml',
+      content=Template('zeppelin-site.xml.j2'),
+      owner='zeppelin',
+      group='root',
       mode=0550
     )
-    File('/etc/livy/conf/livy-env.sh',
-      content=Template('livy-env.sh.j2'),
-      owner='livy',
-      group='livy',
-      mode=0550
-    )
-    File('/etc/livy/conf/livy.conf',
-      content=Template('livy.conf.j2'),
-      owner='livy',
-      group='livy',
+    File('/etc/zeppelin/conf/shiro.ini',
+      content=Template('shiro.ini.j2'),
+      owner='zeppelin',
+      group='root',
       mode=0550
     )
