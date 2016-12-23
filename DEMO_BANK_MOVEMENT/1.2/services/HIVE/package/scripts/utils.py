@@ -17,9 +17,11 @@ limitations under the License.
 
 """
 import os
+
 from resource_management import *
 import re
 from subprocess import *
+
 
 def check_rc(rc,stdout=None,stderr=None):
   if rc == 2:
@@ -31,7 +33,6 @@ def check_rc(rc,stdout=None,stderr=None):
   if rc > 0:
     Logger.error("Code %d: Undefined error\n%s" % (rc,stderr))
     raise Fail(stderr)
-
 
 def execute_sudo_krb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,input=None):
   import params
@@ -54,9 +55,10 @@ def execute_sudo_krb(cmd,user=None,principal=None,keytab=None,keytab_cache=None,
     cmd = cmd_aux
   Logger.info("Executing %s" % str(cmd)) 
   executed=Popen(cmd,stdin=PIPE,stdout=PIPE,stderr=PIPE)
-#  out,err=executed.communicate(input=input)
-  out,err=executed.communicate()
+  out,err=executed.communicate(input=input)
   if secure and auth_token:
     auth_token.destroy()
 
   return out,err,executed.returncode
+    
+  

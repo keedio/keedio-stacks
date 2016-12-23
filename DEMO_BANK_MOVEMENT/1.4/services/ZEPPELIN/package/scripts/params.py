@@ -26,7 +26,13 @@ cluster_name = config['clusterName']
 zeppelin_port = int(default('/configurations/main/zeppelin_port',8044))
 zeppelin_notebook_dir = str(default('/configurations/main/zeppelin_notebook_dir','notebook'))
 authentication = str(default('/configurations/main/authentication','internal'))
+kerberos_domain = default('/configurations/cluster-env/kerberos_domain',None)
+kerberos_cache_file = default('/configurations/cluster-env/kerberos_cache_file','/tmp/ccache_keytab')
+security_enabled = config['configurations']['cluster-env']['security_enabled']
 
+hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
+hdfs_principal_name = default('/configurations/hadoop-env/hdfs_principal_name',None)
+hdfs_user_keytab = default('/configurations/hadoop-env/hdfs_user_keytab',None)
 livy_server=default("/clusterHostInfo/livy_server_host", ["localhost"])[0]
 livy_port=str(default('/configurations/livy/livy_port',8998))
 ldap_server=str(default('/configurations/ldap/ldap_server','master.ambari.keedio.org'))

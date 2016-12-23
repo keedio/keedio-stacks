@@ -15,7 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #}
-spark.master		yarn-cluster
+# Let zeppelin and spark-submit choose the deployment type
+#spark.master		yarn-cluster
 spark.yarn.jar 		hdfs://{{ spark_hdfs_home }}/lib/{{ spark_assembly }}
 spark.eventLog.enabled	true
 spark.eventLog.dir	hdfs://{{ spark_hdfs_home }}/eventLog

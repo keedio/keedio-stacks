@@ -51,3 +51,9 @@ def zeppelin(action=None):
       group='root',
       mode=0550
     )
+    File('/etc/zeppelin/conf/zeppelin-env.sh',
+      content=Template('zeppelin-env.sh.j2'),
+      owner='zeppelin',
+      group='root',
+      mode=0550
+    )

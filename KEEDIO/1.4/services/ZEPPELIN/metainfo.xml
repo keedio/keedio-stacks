@@ -77,6 +77,19 @@
           </packages>
         </osSpecific>
       </osSpecifics>
+
+      <requiredServices>
+        <service>LIVY</service>
+      </requiredServices>
+
+      <commandScript>
+        <script>scripts/service_check.py</script>
+        <scriptType>PYTHON</scriptType>
+        <timeout>300</timeout>
+      </commandScript>
     </service>
+    <configuration-dependencies>
+      <config-type>livy</config-type>
+    </configuration-dependencies>
   </services>
 </metainfo>
