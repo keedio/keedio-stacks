@@ -69,7 +69,7 @@ def install_repos():
                action = 'create',
                base_url = spacewalk_pub_url,
                repo_file_name = 'Spacewalk',
-               repo_template = 'spacewalk.j2',
+               repo_template = 'spacewalk7.j2',
                )
   elif has_external_spacewalk:
       Logger.info ('This machine is registered with a Red Hat satellite server, skipping repo creation') 

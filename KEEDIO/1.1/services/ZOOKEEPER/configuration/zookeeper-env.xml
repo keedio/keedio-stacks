@@ -50,7 +50,23 @@ export ZOO_LOG_DIR={{zk_log_dir}}
 export ZOOPIDFILE={{zk_pid_file}}
 export SERVER_JVMFLAGS={{zk_server_heapsize}}
 export JAVA=$JAVA_HOME/bin/java
-export CLASSPATH=$CLASSPATH:/usr/share/zookeeper/*
+export CLASSPATH=$CLASSPATH:/usr/lib/zookeeper/lib/*
+NAME=zookeeper
+ZOOCFGDIR=/etc/zookeeper/conf
+ZOOCFG="$ZOOCFGDIR/zoo.cfg"
+USER=zookeeper
+GROUP=zookeeper
+PIDDIR=/var/run
+PIDFILE=/var/run/zookeeper.pid
+SCRIPTNAME=/etc/init.d/$NAME
+ZOOMAIN="org.apache.zookeeper.server.quorum.QuorumPeerMain"
+ZOO_LOG4J_PROP="INFO,ROLLINGFILE"
+JMXLOCALONLY=false
+JAVA_OPTS="-Xmx1G -Xms1G"
+ZKREST_LOG=/var/log/zookeeper/zookeeper-rest.log
+ZKREST_HOME=/usr/lib/zookeeper-rest
+ZKREST_CONF=/etc/zookeeper/conf/rest
+ZKREST_MAIN=org.apache.zookeeper.server.jersey.RestMain
 
 {% if security_enabled %}
 export SERVER_JVMFLAGS="$SERVER_JVMFLAGS -Djava.security.auth.login.config={{zk_server_jaas_file}}"

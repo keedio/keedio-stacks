@@ -40,7 +40,7 @@
   </property>
   <property>
     <name>spacewalk_pub_url</name>
-    <value>http://repo.keedio.com/pub/spacewalk-client-el6</value>
+    <value>http://repo.keedio.com/pub/spacewalk-client-el7</value>
     <description>Spacewalk public repository url</description>
   </property>
   <property>
