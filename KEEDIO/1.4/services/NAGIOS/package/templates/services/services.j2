@@ -151,8 +151,8 @@ define service{
 define service{
         use generic-service
         hostgroup_name commons
-        service_description check ntp sync
-        check_command check_ntp_time!.5!1
+        service_description check chrony sync
+        check_command check_nrpe!check_chrony
         servicegroups so_status
 }
 

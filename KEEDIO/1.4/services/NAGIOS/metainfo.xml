@@ -22,7 +22,7 @@
       <name>NAGIOS</name>
       <displayName>Nagios</displayName>
       <comment>Nagios monitors hosts and services and yells if somethings breaks</comment>
-      <version>3.5.1</version>
+      <version>4.0.8</version>
       <components>
         <component>
           <name>Nagios_Server</name>

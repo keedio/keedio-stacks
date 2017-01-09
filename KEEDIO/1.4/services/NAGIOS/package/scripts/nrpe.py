@@ -24,4 +24,8 @@ def nrpe(action):
 
     File("/etc/sudoers.d/91-nrpe",
       content=StaticFile('91-nrpe'))
+
+    File("/usr/lib64/nagios/plugins/check_chrony.sh",
+      mode=0755,
+      content=StaticFile('check_chrony.sh'))
   

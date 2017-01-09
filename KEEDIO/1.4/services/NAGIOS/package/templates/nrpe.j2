@@ -209,6 +209,7 @@ allowed_hosts={% for nagios_host in nagios_server_host %}{{ nagios_host }},{% en
 
 command[check_users]=/usr/lib64/nagios/plugins/check_users -w 5 -c 10
 command[check_load]=/usr/lib64/nagios/plugins/check_load -w {{ cpus * 3 }},{{ cpus * 2 }},{{ cpus }} -c {{ cpus * 5 }},{{ cpus * 4 }},{{ cpus * 3 }}
+command[check_chrony]=/usr/lib64/nagios/plugins/check_chrony.sh 500 1000
 {% if has_namenodes %}
 {% for path in data_path_nn %}
 command[check_disk_nn{{loop.index}}]=/usr/lib64/nagios/plugins/check_disk -w 20% -c 10% -p {{ path }}
@@ -264,7 +265,7 @@ command[check_storm]=/usr/lib64/nagios/plugins/check_storm.py  --nimbus_serv {{ 
 command[check_kafka_topic_test]=/usr/lib64/nagios/plugins/check_kafka --hosts {{ zookeeper_connection_list }} --topic test
 {% endif %}
 {% if has_zookeeper %}
-command[check_zookeeper]=/usr/lib64/nagios/plugins/check_zookeeper.py --hosts {{ zookeeper_connection_list }} --version "3.4.8--1, built on 07/22/2016 09:44 GMT"
+command[check_zookeeper]=/usr/lib64/nagios/plugins/check_zookeeper.py --hosts {{ zookeeper_connection_list }} --version "3.4.8--1, built on 12/14/2016 16:52 GMT"
 {% endif %}
 {% if has_namenodes %}
 command[check_hdfs_znode]=/usr/lib64/nagios/plugins/check_zookeeper_znode.py --hosts {{ zookeeper_connection_list }} --test hdfs --hdfs_cluster_name {{ cluster_name }} {% if security_enabled %}-s -p "{{ hdfs_princ }}" -k "{{ hdfs_keytab }}"{% endif %}
