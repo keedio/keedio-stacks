@@ -28,7 +28,7 @@ class CassandraServiceCheck(Script):
     import params
     env.set_params(params)
     
-    status_cmd = ["source /etc/default/cassandra && /usr/lib/cassandra/bin/nodetool status -r"]
+    status_cmd = ["source /etc/default/cassandra && export CASSANDRA_CONF CASSANDRA_HOME CASSANDRA_INCLUDE && /usr/lib/cassandra/bin/nodetool status -r"]
     rc = 1
     for i in range(1,20):
       cmd = Popen(status_cmd,stdout=PIPE,stderr=PIPE,shell=True)
