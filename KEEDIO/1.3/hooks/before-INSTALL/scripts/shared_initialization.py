@@ -63,6 +63,10 @@ def setup_java():
     content=StaticFile("java.sh"),
     mode=0755
   )
+  File("/etc/profile.d/java-systemd.sh",
+    content=StaticFile("java-systemd.sh"),
+    mode=0755
+  )
 
 
 def install_packages():

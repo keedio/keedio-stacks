@@ -30,4 +30,8 @@ def gmetad(action=None):
     from functions import check_rc
     check_rc(rc,stdout=out,stderr=err)
   if action =="start" or action == "stop":
-    MonitorWebserver("restart")
+   # MonitorWebserver("restart") Not compatible with centos 7
+     cmd=Popen(['service','httpd',action],stdout=PIPE,stderr=PIPE)
+     out,err=cmd.communicate()
+     rc=cmd.returncode
+     Logger.info("Httpd service %s: %s" % (action, cmd.returncode == 0))

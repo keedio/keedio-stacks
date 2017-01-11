@@ -119,3 +119,7 @@ def setup_hadoop_env():
          owner=tc_owner,
          content=InlineTemplate(params.hadoop_env_sh_template)
     )
+    File(os.path.join(params.hadoop_conf_dir, 'hadoop-env-systemd.sh'),
+         owner=tc_owner,
+         content=StaticFile('hadoop-env-systemd.sh')
+    )
