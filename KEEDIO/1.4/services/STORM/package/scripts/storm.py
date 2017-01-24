@@ -21,7 +21,7 @@ limitations under the License.
 from resource_management import *
 from yaml_utils import escape_yaml_propetry
 import sys
-
+import time
 from ambari_agent.AgentException import AgentException
 from subprocess import *
 
@@ -69,6 +69,7 @@ def storm(service=None,action=None):
   if service is not None:
     if  service != "storm-drpc" and (action == "start" or action == "stop"):
       cmd=Popen(['monit',action,service,'-v'],stdout=PIPE,stderr=PIPE)
+      time.sleep(30)
     else:
       cmd=Popen(['service',service,action],stdout=PIPE,stderr=PIPE)
 
