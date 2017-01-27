@@ -1,0 +1,19 @@
+[main]
+enabled = 1
+gpgcheck = {{ gpgcheck }}
+
+timeout = {{ spacewalk_timeout }}
+
+# You can specify options per channel, e.g.:
+#
+#[rhel-i386-server-5]
+#enabled = 1
+#
+#[some-unsigned-custom-channel]
+#gpgcheck = 0
+
+{% for repo in repodisable %}
+[{{ repo }}]
+enabled = 0
+
+{% endfor %}
