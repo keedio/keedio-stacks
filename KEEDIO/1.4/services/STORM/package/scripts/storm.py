@@ -57,6 +57,10 @@ def storm(service=None,action=None):
       owner=params.storm_user,
       content=InlineTemplate(params.storm_env_sh_template)
     )
+    File(format("{conf_dir}/storm_env.ini"),
+      owner=params.storm_user,
+      content=StaticFile('storm_env.ini')
+    )
     File('/etc/monit.conf',content=StaticFile('monit.conf'))
     monit_status = Popen(["service","monit","status"])
     out,err=monit_status.communicate()
@@ -67,7 +71,7 @@ def storm(service=None,action=None):
       executed = Popen(["service","monit","start"])
 
   if service is not None:
-    if  service != "storm-drpc" and (action == "start" or action == "stop"):
+    if  service != "storm-drpc" and service != "storm-logviewer" and (action == "start" or action == "stop"):
       cmd=Popen(['monit',action,service,'-v'],stdout=PIPE,stderr=PIPE)
       time.sleep(30)
     else:

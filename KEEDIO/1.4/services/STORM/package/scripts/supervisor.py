@@ -20,7 +20,7 @@ limitations under the License.
 
 from resource_management import *
 from storm import storm
-
+import time
 
 class Supervisor(Script):
   def install(self, env):
@@ -32,7 +32,6 @@ class Supervisor(Script):
     import params
     env.set_params(params)
     File('/etc/monit.d/storm-supervisor',content=StaticFile('monit.d_storm-supervisor'))
-    File('/etc/monit.d/storm-logviewer',content=StaticFile('monit.d_storm-logviewer'))
     storm(action="config")
 
   def start(self, env):
@@ -41,6 +40,7 @@ class Supervisor(Script):
     self.configure(env)
 
     storm(service="storm-supervisor", action="start")
+    time.sleep(5)
     storm(service="storm-logviewer", action="start")
 
   def stop(self, env):
@@ -48,6 +48,7 @@ class Supervisor(Script):
     env.set_params(params)
 
     storm(service="storm-logviewer", action="stop")
+    time.sleep(5)
     storm(service="storm-supervisor", action="stop")
 
   def status(self, env):
