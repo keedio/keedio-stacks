@@ -120,7 +120,8 @@ hbase_tmp_dir = "/tmp/hbase-hbase"
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 
 #java params
-java_home = config['hostLevelParams']['java_home']
+#java_home = config['hostLevelParams']['java_home']
+java_home = "/usr/lib/jvm/jre"
 artifact_dir = format("{tmp_dir}/AMBARI-artifacts/")
 jdk_name = default("/hostLevelParams/jdk_name", None) # None when jdk is already installed by user
 jce_policy_zip = default("/hostLevelParams/jce_name", None) # None when jdk is already installed by user

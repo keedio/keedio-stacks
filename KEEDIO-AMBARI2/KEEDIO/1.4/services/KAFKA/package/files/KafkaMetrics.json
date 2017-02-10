@@ -1,0 +1,441 @@
+{
+"servers": [
+    {   
+        "port": "${jmxPort}",
+        "host": "${hostname}",
+        "queries": [             
+              {
+                    "outputWriters" : [ {
+        		             "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+        		             "settings" : {
+          			             "groupName" : "Kafka",
+          			             "port" : "${gmondPort}",
+          			             "host" : "${gmondServer}",
+          			             "typeNames" : [ "name" ]
+                     	   }
+      		          } ],
+      		          "obj": "kafka.server:type=BrokerTopicMetrics,name=*",
+      		          "attr": [
+      				                 "Count",
+      				                 "FifteenMinuteRate",
+      				                 "FiveMinuteRate",
+      				                 "OneMinuteRate",
+      				                 "MeanRate"
+      			        ],
+      		          "resultAlias": "BrokerTopicMetrics"
+    	        },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.server:type=ReplicaManager,name=*",
+                    "attr": [  
+                               "Value",
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "ReplicaManager"
+              },
+             
+             {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.server:type=ProducerRequestPurgatory,name=*",
+                    "attr": [
+                               "Value"
+                    ],
+                    "resultAlias": "ProducerRequestPurgatory"
+              }, 
+             {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.server:type=FetchRequestPurgatory,name=*",
+                    "attr": [
+                               "Value"
+                    ],
+                    "resultAlias": "FetchRequestPurgatory"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.server:type=FetcherLagMetrics,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "FetcherLagMetrics"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.server:type=ProducerRequestPurgatory,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "ProducerRequestPurgatory"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.server:type=FetchRequestPurgatory,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "FetchRequestPurgatory"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.server:type=KafkaRequestHandlerPool,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "KafkaRequestHandlerPool"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.server:type=ReplicaFetcherManager,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "ReplicaFetcherManager"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.network:type=RequestMetrics,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "RequestMetrics"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.network:type=SocketServer,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "SocketServer"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.controller:type=KafkaController,name=*",
+                    "attr": [ 
+                               "Value",
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "KafkaController"
+              },
+              {       
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.controller:type=ControllerStats,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "1MinuteRate",
+                               "MeanRate"
+                    ], 
+                    "resultAlias": "ControllerStats"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.consumer:type=ConsumerFetcherManager,name=*",
+                    "attr": [
+                               "Value",
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "ConsumerFetcherManager"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.log:type=LogFlushStats,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "LogFlushStats"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.log:type=Log,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "Log"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.producer:type=producer-metrics,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "producer-metrics"
+              },
+               
+              
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.producer:type=producer-node-metrics,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "producer-node-metrics"
+              },
+            {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.producer:type=ProducerRequestsMetrics,name=*",
+                    "attr": [
+                               "Count"
+                    ],
+                    "resultAlias": "ProducerRequestsMetrics"
+              },
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.producer:type=ProducerStats,name=*",
+                    "attr": [
+                               "Count"
+                    ],
+                    "resultAlias": "ProducerStats"
+              },
+             
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.producer:type=ProducerTopicMetrics,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "ProducerTopicMetrics"
+              },  
+              {
+                    "outputWriters" : [ {
+                         "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+                         "settings" : {
+                             "groupName" : "Kafka",
+                             "port" : "${gmondPort}",
+                             "host" : "${gmondServer}",
+                             "typeNames" : [ "name" ]
+                         }
+                    } ],
+                    "obj": "kafka.producer:type=producer-topic-metrics,name=*",
+                    "attr": [
+                               "Count",
+                               "FifteenMinuteRate",
+                               "FiveMinuteRate",
+                               "OneMinuteRate",
+                               "MeanRate"
+                    ],
+                    "resultAlias": "producer-topic-metrics"
+              } ],
+        "numQueryThreads": 2
+    }
+  ]
+} 

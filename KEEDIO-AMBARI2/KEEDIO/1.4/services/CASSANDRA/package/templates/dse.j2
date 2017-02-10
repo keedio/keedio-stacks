@@ -1,0 +1,5 @@
+kerberos_options:
+   keytab: {{ cassandra_keytab_file }}
+   service_principal: {{ cassandra_principal_name }}
+   http_principal: {{ cassandra_spnego_principal_name }}
+   qop: auth

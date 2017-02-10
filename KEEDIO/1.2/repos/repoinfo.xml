@@ -16,7 +16,7 @@
    limitations under the License.
 -->
 <reposinfo>
-  <os type="redhat6">
+  <os family="redhat6">
     <repo>
       <baseurl>http://repo.keedio.org/openbus/1.2/rpm</baseurl>
       <repoid>keedio-1.2</repoid>

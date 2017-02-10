@@ -66,11 +66,11 @@ def setup_java():
   #)
   #File(params.task_log4j_properties_location,
   File(params.java_profile_location,
-    content=StaticFile("java.sh"),
+    content=Template("java.sh.j2"),
     mode=0755
   )
   File("/etc/profile.d/java-systemd.sh",
-    content=StaticFile("java-systemd.sh"),
+    content=Template("java-systemd.sh.j2"),
     mode=0755
   )
 def install_packages():
