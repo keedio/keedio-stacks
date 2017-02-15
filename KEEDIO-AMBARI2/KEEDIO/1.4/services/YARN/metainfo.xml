@@ -155,6 +155,13 @@
         <config-type>yarn-log4j</config-type>
       </configuration-dependencies>
       <metricsFileName>YARN_metrics.json</metricsFileName>
+      <quickLinksConfigurations-dir>quicklinks-yarn</quickLinksConfigurations-dir>
+      <quickLinksConfigurations>
+        <quickLinksConfiguration>
+          <fileName>quicklinks.json</fileName>
+          <default>true</default>
+        </quickLinksConfiguration>
+      </quickLinksConfigurations>
     </service>
 
     <service>
