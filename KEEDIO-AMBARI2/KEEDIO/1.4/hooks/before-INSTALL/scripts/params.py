@@ -40,8 +40,8 @@ keedio_stack_version = str(config['hostLevelParams']['stack_version'])
 #users and groups
 hbase_user = config['configurations']['hbase-env']['hbase_user']
 smoke_user =  config['configurations']['cluster-env']['smokeuser']
-gmetad_user = config['configurations']['ganglia-env']["gmetad_user"]
-gmond_user = config['configurations']['ganglia-env']["gmond_user"]
+gmetad_user = config['configurations']['gangliaui-env']["gmetad_user"]
+gmond_user = config['configurations']['gangliaui-env']["gmond_user"]
 tez_user = config['configurations']['tez-env']["tez_user"]
 
 user_group = config['configurations']['cluster-env']['user_group']
@@ -68,7 +68,7 @@ hs_host = default("/clusterHostInfo/hs_host", [])
 jtnode_host = default("/clusterHostInfo/jtnode_host", [])
 namenode_host = default("/clusterHostInfo/namenode_host", [])
 zk_hosts = default("/clusterHostInfo/zookeeper_hosts", [])
-ganglia_server_hosts = default("/clusterHostInfo/ganglia_server_host", [])
+ganglia_server_hosts = default("/clusterHostInfo/gangliaui_server_hosts", [])
 storm_server_hosts = default("/clusterHostInfo/nimbus_hosts", [])
 falcon_host =  default('/clusterHostInfo/falcon_server_hosts', [])
 
@@ -123,7 +123,8 @@ security_enabled = config['configurations']['cluster-env']['security_enabled']
 #java_home = config['hostLevelParams']['java_home']
 java_home = "/usr/lib/jvm/jre"
 artifact_dir = format("{tmp_dir}/AMBARI-artifacts/")
-jdk_name = default("/hostLevelParams/jdk_name", None) # None when jdk is already installed by user
+#jdk_name = default("/hostLevelParams/jdk_name", None) # None when jdk is already installed by user
+jdk_name="java-1.7.0-openjdk.x86_64"
 jce_policy_zip = default("/hostLevelParams/jce_name", None) # None when jdk is already installed by user
 jce_location = config['hostLevelParams']['jdk_location']
 jdk_location = config['hostLevelParams']['jdk_location']

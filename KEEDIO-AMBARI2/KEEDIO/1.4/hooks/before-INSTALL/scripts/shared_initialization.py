@@ -40,8 +40,8 @@ def setup_java():
   java_dir = os.path.dirname(params.java_home)
   java_exec = format("{params.java_home}/bin/java")
 
-  if not params.jdk_name:
-    return
+  #if not params.jdk_name:
+  #  return
 
   #environment = {
   #  "no_proxy": format("{ambari_server_hostname}")
@@ -65,7 +65,7 @@ def setup_java():
   #        not_if = format("test -e {java_exec}")
   #)
   #File(params.task_log4j_properties_location,
-  File(params.java_profile_location,
+  File("/etc/profile.d/java.sh",
     content=Template("java.sh.j2"),
     mode=0755
   )

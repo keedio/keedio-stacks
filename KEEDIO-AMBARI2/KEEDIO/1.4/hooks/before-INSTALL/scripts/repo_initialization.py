@@ -90,7 +90,7 @@ def install_repos():
 
 
 
-  template = repo_rhel_suse if OSCheck.is_suse_family() or OSCheck.is_redhat_family() else repo_ubuntu
-  _alter_repo("create", repo_info, template)
-  if service_repo_info:
-    _alter_repo("create", service_repo_info, template)
+#  template = repo_rhel_suse if OSCheck.is_suse_family() or OSCheck.is_redhat_family() else repo_ubuntu
+#  _alter_repo("create", repo_info, template)
+#  if service_repo_info:
+#    _alter_repo("create", service_repo_info, template)
