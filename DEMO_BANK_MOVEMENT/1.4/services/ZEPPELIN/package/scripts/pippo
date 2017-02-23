@@ -1,2 +1,0 @@
-nagios_web_login');
-    var adminEmail = config.findProperty('name', 'nagios_contact')
