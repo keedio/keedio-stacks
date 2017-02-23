@@ -32,7 +32,7 @@ class ServiceCheck(Script):
          content=StaticFile("wordCount.jar")
     )
 
-    cmd = format("/usr/lib/storm/bin/storm jar /usr/lib/storm/examples/storm-starter/storm-starter-topologies-1.0.1.jar  org.apache.storm.starter.WordCountTopology  WordCount{unique} -c nimbus.host={nimbus_host}")
+    cmd = format("/usr/lib/storm/bin/storm jar /usr/lib/storm/examples/storm-starter/storm-starter-topologies-*.jar  org.apache.storm.starter.WordCountTopology  WordCount{unique} -c nimbus.host={nimbus_host}")
 
     Execute(cmd,
             logoutput=True
