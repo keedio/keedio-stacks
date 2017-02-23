@@ -59,4 +59,6 @@ def spark(service=None,action=None):
        owner=params.spark_user,
        group=params.spark_group
     )
+    cmd=Popen(['ln','-s','/etc/hive/conf/hive-site.xml','/etc/spark/conf/hive-site.xml'],stdout=PIPE,stderr=PIPE)
+    out,err=cmd.communicate()
 

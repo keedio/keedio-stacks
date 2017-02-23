@@ -45,3 +45,9 @@ def livy(action=None):
       group='livy',
       mode=0550
     )
+    File('/etc/livy/conf/livy.conf',
+      content=Template('livy.conf.j2'),
+      owner='livy',
+      group='livy',
+      mode=0550
+    )

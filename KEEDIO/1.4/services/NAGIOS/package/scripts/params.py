@@ -33,7 +33,6 @@ mountpoints=[]
 partitions = psutil.disk_partitions()
 for p in partitions: 
    mountpoints.append(p.mountpoint)
-Logger.info("Alessio1") 
 Logger.info(mountpoints) 
 
 all_hosts =set(default("/clusterHostInfo/all_hosts",[]))

@@ -18,27 +18,30 @@ limitations under the License.
 
 """
 
+import os
 from resource_management import *
-from resource_management.libraries.functions import get_unique_id_and_date
+from functools import partial
+from utils import *
 
 class ServiceCheck(Script):
+
+
   def service_check(self, env):
-    import params
+    import params,json, pprint, requests, textwrap, time 
     env.set_params(params)
+    
+    # Define partial aux functions
+    execute_hdfs = partial(execute_sudo_krb,user=params.hdfs_user,principal=params.hdfs_principal_name,keytab=params.hdfs_user_keytab)
+    #execute_zeppelin = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
 
-    unique = get_unique_id_and_date()
 
-    File("/tmp/wordCount.jar",
-         content=StaticFile("wordCount.jar")
-    )
+    # HDFS oozie user init
+    cmd_create_dir_hdfs=['hdfs','dfs','-mkdir','-p','/user/%s' % 'zeppelin']
+    cmd_chown_dir_hdfs=['hdfs','dfs','-chown','%s:' % 'zeppelin','/user/%s' % 'zeppelin']
+    execute_hdfs(cmd_create_dir_hdfs)
+    execute_hdfs(cmd_chown_dir_hdfs)
 
-    cmd = format("/usr/lib/storm/bin/storm jar /usr/lib/storm/examples/storm-starter/storm-starter-topologies-*.jar  org.apache.storm.starter.WordCountTopology  WordCount{unique} -c nimbus.host={nimbus_host}")
 
-    Execute(cmd,
-            logoutput=True
-    )
-
-    Execute(format("/usr/lib/storm/bin/storm kill WordCount{unique}"))
 
 if __name__ == "__main__":
   ServiceCheck().execute()
