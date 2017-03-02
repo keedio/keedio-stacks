@@ -28,12 +28,20 @@ class Supervisor(Script):
     self.install_packages(env)
     Package("storm-supervisor")
     Package("storm-logviewer")
+    Package("jmxtrans")
     self.configure(env)
 
   def configure(self, env):
     import params
     env.set_params(params)
     File('/etc/monit.d/storm-supervisor',content=StaticFile('monit.d_storm-supervisor'))
+    if params.has_ganglia_server:
+       File('/var/lib/jmxtrans/supervisor.json',
+          content=Template('supervisor.json.j2')
+       )
+       File('/var/lib/jmxtrans/supervisorjvm.json',
+          content=Template('supervisorjvm.json.j2')
+       )
     storm(action="config")
 
   def start(self, env):
@@ -44,11 +52,15 @@ class Supervisor(Script):
     storm(service="storm-supervisor", action="start")
     time.sleep(5)
     storm(service="storm-logviewer", action="start")
+    time.sleep(5)
+    storm(service="jmxtrans", action="start")
 
   def stop(self, env):
     import params
     env.set_params(params)
 
+    storm(service="jmxtrans", action="stop")
+    time.sleep(5)
     storm(service="storm-logviewer", action="stop")
     time.sleep(5)
     storm(service="storm-supervisor", action="stop")

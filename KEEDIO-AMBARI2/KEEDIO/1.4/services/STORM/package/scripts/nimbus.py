@@ -33,6 +33,13 @@ class Nimbus(Script):
     import params
     env.set_params(params)
     File('/etc/monit.d/storm-nimbus',content=StaticFile('monit.d_storm-nimbus'))
+    if params.has_ganglia_server:
+       File('/var/lib/jmxtrans/nimbus.json',
+          content=Template('nimbus.json.j2')
+       )
+       File('/var/lib/jmxtrans/nimbusjvm.json',
+          content=Template('nimbusjvm.json.j2')
+       )
     storm(action="config")
 
   def start(self, env):
@@ -41,12 +48,14 @@ class Nimbus(Script):
     self.configure(env)
 
     storm(service="storm-nimbus", action="start")
+    storm(service="jmxtrans", action="start")
 
   def stop(self, env):
     import params
     env.set_params(params)
 
     storm(service="storm-nimbus", action="stop")
+    storm(service="jmxtrans", action="stop")
 
   def status(self, env):
     import status_params

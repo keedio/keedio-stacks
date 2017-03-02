@@ -51,6 +51,10 @@ def storm(service=None,action=None):
        owner=params.storm_user,
        group=params.user_group
     )
+    #if params.has_ganglia_server:
+    #   File('/etc/jmxtrans/config/jmxtrans.config',
+    #      content=Template('jmxtrans.j2')
+    #   )
 
 
     File(format("{conf_dir}/storm-env.sh"),
@@ -71,7 +75,7 @@ def storm(service=None,action=None):
       executed = Popen(["service","monit","start"])
 
   if service is not None:
-    if  service != "storm-drpc" and service != "storm-logviewer" and (action == "start" or action == "stop"):
+    if  service != "storm-drpc" and service != "storm-logviewer" and service != "jmxtrans" and (action == "start" or action == "stop"):
       cmd=Popen(['monit',action,service,'-v'],stdout=PIPE,stderr=PIPE)
       time.sleep(30)
     else:

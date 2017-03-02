@@ -97,6 +97,9 @@
               <name>storm</name>
             </package>
             <package>
+              <name>jmxtrans</name>
+            </package>
+            <package>
               <name>storm-elasticsearch</name>
             </package>
             <package>

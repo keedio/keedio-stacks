@@ -47,6 +47,15 @@ zookeeper_hosts = config['clusterHostInfo']['zookeeper_hosts']
 drpc_hosts = default("/clusterHostInfo/drpc_server_hosts",[])
 has_drpc_hosts = drpc_hosts != []
 
+ganglia_server_hosts = default('/clusterHostInfo/gangliaui_server_hosts', [])
+has_ganglia_server = not len(ganglia_server_hosts) == 0
+if has_ganglia_server:
+  gmondServer = ganglia_server_hosts[0]
+  nimbusjmxPort = default("/configurations/storm-site/jmxPort","12345")
+  supervisorjmxPort = default("/configurations/storm-site/jmxPort","56431")
+  nimbusGmondPort = default("/configurations/storm-site/nimbus.ganglia.metrics.port", 8663)
+  supervisorGmondPort = default("/configurations/storm-site/supervisor.ganglia.metrics.port", 8664)
+
 exclude_packages=[]
 if not is_nimbus_server:
   exclude_packages += ['storm-nimbus']
