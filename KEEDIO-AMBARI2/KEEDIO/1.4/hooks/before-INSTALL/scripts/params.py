@@ -121,7 +121,7 @@ security_enabled = config['configurations']['cluster-env']['security_enabled']
 
 #java params
 #java_home = config['hostLevelParams']['java_home']
-java_home = "/usr/lib/jvm/jre"
+java_home = "/usr/lib/jvm/java"
 artifact_dir = format("{tmp_dir}/AMBARI-artifacts/")
 #jdk_name = default("/hostLevelParams/jdk_name", None) # None when jdk is already installed by user
 jdk_name="java-1.7.0-openjdk.x86_64"
