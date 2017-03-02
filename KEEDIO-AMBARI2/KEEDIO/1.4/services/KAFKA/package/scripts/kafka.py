@@ -55,16 +55,16 @@ class Kafka(Script):
     executed = Popen(["/usr/lib/kafka/bin/kafka-preferred-replica-election.sh","--zookeeper",params.zookeeper_server_hosts],stdout=PIPE,stderr=PIPE)
     out,err = executed.communicate()
     Logger.info("Kafka rebalancing:")
-    Logger.info(out)
-    Logger.info(err)
+    Logger.info(str(out))
+    Logger.info(str(err))
 
   def repartition(self, env):
     import params
     #executed = Popen(["/usr/lib/kafka/bin/kafka-preferred-replica-election.sh","--zookeeper",params.zookeeper_server_hosts],stdout=PIPE,stderr=PIPE)
     #out,err = executed.communicate()
     Logger.info("Kafka rebalancing: Not yet implemented")
-    #Logger.info(out)
-    #Logger.info(err)
+    #Logger.info(str(out))
+    #Logger.info(str(err))
 
 if __name__ == "__main__":
   Kafka().execute()

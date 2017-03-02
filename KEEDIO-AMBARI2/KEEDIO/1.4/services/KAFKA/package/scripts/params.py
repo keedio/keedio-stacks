@@ -29,7 +29,7 @@ zookeeper_server_hosts = str(default("/configurations/kafka-server-properties/zo
 kafka_broker_hosts = default("/clusterHostInfo/kafka_broker_hosts",[])
 log_dirs = default("/configurations/kafka-server-properties/log.dirs","")
 
-ganglia_server_hosts = default('/clusterHostInfo/ganglia_server_host', [])
+ganglia_server_hosts = default('/clusterHostInfo/gangliaui_server_hosts', [])
 kafka_conf = default("/configurations/kafka-server-properties",[])
 
 has_ganglia_server = not len(ganglia_server_hosts) == 0

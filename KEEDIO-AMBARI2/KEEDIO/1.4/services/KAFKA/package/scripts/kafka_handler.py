@@ -22,27 +22,28 @@ def kafka(action):
         content=kafka_server_properties,
         owner='kafka',
         group='kafka')
-      if params.has_ganglia_server:
-        File('/etc/jmxtrans/config/jmxtrans.config',
-          content=Template('jmxtrans.j2')
-        )
-        File('/etc/jmxtrans/config/KafkaMetrics.json',
-          content=StaticFile('KafkaMetrics.json')
+      #if params.has_ganglia_server:
+      #  File('/etc/jmxtrans/config/jmxtrans.config',
+      #    content=Template('jmxtrans.j2')
+      #  )
+#        File('/etc/jmxtrans/config/KafkaMetrics.json',
+      File('/var/lib/jmxtrans/KafkaMetrics.json',
+          content=Template('KafkaMetrics.json.j2')
         )
     elif action == 'start' or action == 'stop':
       executed = Popen(["service","kafka",action],stdout=PIPE,stderr=PIPE)
       out,err = executed.communicate()
       Logger.info("Kafka service:")
       Logger.info(action) 
-      Logger.info(out)
-      Logger.info(err)
+      Logger.info(str(out))
+      Logger.info(str(err))
       if params.has_ganglia_server:
         executed2=Popen(["service","jmxtrans",action])
         out,err = executed2.communicate()
         Logger.info("JMXtrans service")
         Logger.info(action)
-        Logger.info(out)
-        Logger.info(err)
+        Logger.info(str(out))
+        Logger.info(str(err))
   elif action == "status":
     executed = Popen(["service","kafka",action],stdout=PIPE,stderr=PIPE)
     out,err = executed.communicate()

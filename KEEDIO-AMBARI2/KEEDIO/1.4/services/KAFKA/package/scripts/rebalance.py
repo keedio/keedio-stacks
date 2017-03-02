@@ -29,8 +29,8 @@ class Rebalance(Script):
       out,err = executed.communicate()
       Logger.info("Kafka rebalancing:")
       Logger.info(action)
-      Logger.info(out)
-      Logger.info(err)
+      Logger.info(str(out))
+      Logger.info(str(err))
   
     
 
