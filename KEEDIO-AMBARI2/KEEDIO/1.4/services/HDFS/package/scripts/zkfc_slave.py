@@ -29,7 +29,6 @@ class ZkfcSlave(Script):
     self.install_packages(env)
     Package("hadoop-hdfs-zkfc")
     Package("jsvcdaemon")
-    Package("monit")
     env.set_params(params)
     zkfc(action="configure")
 
