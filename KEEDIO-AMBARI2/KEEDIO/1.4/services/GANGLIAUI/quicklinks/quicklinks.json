@@ -1,0 +1,28 @@
+{
+   "name": "default",
+   "description": "default quick links configuration",
+   "configuration": {
+     "protocol":
+     {
+       "type":"HTTP_ONLY"
+     },
+ 
+     "links": [
+       {
+         "name": "gangliaui",
+         "label": "Ganglia",
+         "requires_user_name": "false",
+         "url":"%@://%@:%@/ganglia",
+         "port":{
+          "http_property": "gangliaui_server_port",
+          "http_default_port": "80",
+          "https_property": "gangliaui_server_port",
+          "https_default_port": "80",
+          "regex": "^(\\d+)$",
+          "site": "gangliaui-env"
+         }
+       }
+     ]
+   }
+ } 
+
