@@ -75,7 +75,7 @@ targets = default('/commandParams/flume_handler', None)
 flume_command_targets = [] if targets is None else targets.split(',')
 
 
-ganglia_server_hosts = default('/clusterHostInfo/ganglia_server_host', [])
+ganglia_server_hosts = default('/clusterHostInfo/gangliaui_server_hosts', [])
 has_ganglia_server = not len(ganglia_server_hosts) == 0
 if has_ganglia_server:
   ganglia_server_host = ganglia_server_hosts[0]
