@@ -8,7 +8,7 @@
       "checks":[
         {
           "property":"protocol",
-          "desired":"http,
+          "desired":"http",
           "site":"grafana.xml"
         }
       ]
