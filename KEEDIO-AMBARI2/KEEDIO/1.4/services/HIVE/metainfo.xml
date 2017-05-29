@@ -142,6 +142,13 @@
         <service>YARN</service>
       </requiredServices>
 
+      <themes>
+        <theme>
+          <fileName>theme.json</fileName>
+          <default>true</default>
+        </theme>
+      </themes>
+
       <configuration-dependencies>
         <config-type>hive-site</config-type>
         <config-type>yarn-site</config-type>

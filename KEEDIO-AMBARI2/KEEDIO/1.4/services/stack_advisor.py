@@ -199,6 +199,7 @@ class KEEDIO14StackAdvisor(DefaultStackAdvisor):
   def recommendHiveConfigurations(self, configurations, clusterData, services, hosts):
     hiveSiteProperties = getSiteProperties(services['configurations'], 'hive-site')
     hiveEnvProperties = getSiteProperties(services['configurations'], 'hive-env')
+    clusterEnvProperties = getSiteProperties(services['configurations'], 'spacewalk')
     containerSize = clusterData['mapMemory'] if clusterData['mapMemory'] > 2048 else int(clusterData['reduceMemory'])
     containerSize = min(clusterData['containers'] * clusterData['ramPerContainer'], containerSize)
     container_size_bytes = int(containerSize)*1024*1024
@@ -220,12 +221,14 @@ class KEEDIO14StackAdvisor(DefaultStackAdvisor):
       protocol = self.getProtocol(hiveEnvProperties['hive_database'])
       oldSchemaName = getOldValue(self, services, "hive-site", "ambari.hive.db.schema.name")
       oldDBType = getOldValue(self, services, "hive-env", "hive_database")
+      database_host = clusterEnvProperties['database_host']
       # under these if constructions we are checking if hive server hostname available,
       # if it's default db connection url with "localhost" or if schema name was changed or if db type was changed (only for db type change from default mysql to existing mysql)
       # or if protocol according to current db type differs with protocol in db connection url(other db types changes)
       if hiveServerHost is not None:
         if (hiveDBConnectionURL and "//localhost" in hiveDBConnectionURL) or oldSchemaName or oldDBType or (protocol and hiveDBConnectionURL and not hiveDBConnectionURL.startswith(protocol)):
-          dbConnection = self.getDBConnectionString(hiveEnvProperties['hive_database']).format(hiveServerHost['Hosts']['host_name'], hiveSiteProperties['ambari.hive.db.schema.name'])
+#          dbConnection = self.getDBConnectionString(hiveEnvProperties['hive_database']).format(hiveServerHost['Hosts']['host_name'], hiveSiteProperties['ambari.hive.db.schema.name'])
+          dbConnection = self.getDBConnectionString(hiveEnvProperties['hive_database']).format(database_host, hiveSiteProperties['ambari.hive.db.schema.name'])
           putHiveProperty('javax.jdo.option.ConnectionURL', dbConnection)
 
     servicesList = self.get_services_list(services)
