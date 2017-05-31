@@ -1693,7 +1693,7 @@ class KEEDIO14StackAdvisor(DefaultStackAdvisor):
   def getNotPreferableOnServerComponents(self):
     return ['GANGLIA_SERVER', 'METRICS_COLLECTOR']
 
-  def getCardinalitiesDict(self):
+  def getCardinalitiesDict(self,hosts):
     return {
       'ZOOKEEPER_SERVER': {"min": 3},
       'HBASE_MASTER': {"min": 1},
