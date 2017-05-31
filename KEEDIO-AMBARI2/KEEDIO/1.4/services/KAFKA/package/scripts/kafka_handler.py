@@ -27,9 +27,10 @@ def kafka(action):
       #    content=Template('jmxtrans.j2')
       #  )
 #        File('/etc/jmxtrans/config/KafkaMetrics.json',
-      File('/var/lib/jmxtrans/KafkaMetrics.json',
-          content=Template('KafkaMetrics.json.j2')
-        )
+      if params.has_ganglia_server:
+          File('/var/lib/jmxtrans/KafkaMetrics.json',
+               content=Template('KafkaMetrics.json.j2')
+              )
     elif action == 'start' or action == 'stop':
       executed = Popen(["service","kafka",action],stdout=PIPE,stderr=PIPE)
       out,err = executed.communicate()
