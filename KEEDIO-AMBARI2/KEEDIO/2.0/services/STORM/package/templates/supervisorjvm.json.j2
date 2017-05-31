@@ -1,0 +1,33 @@
+{
+  "servers" : [ {
+    "port" : "{{ supervisorjmxPort }}",
+    "host" : "{{ hostname }}",
+    "alias" : "Supervisor JVM",
+    "queries" : [ {
+      "outputWriters" : [ {
+        "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+        "settings" : {
+          "groupName" : "supervisor.jvmheapmemory",
+          "port" : "{{ supervisorGmondPort }}",
+          "host" : "{{ gmondServer }}"
+        }
+      } ],
+      "obj" : "java.lang:type=Memory",
+      "resultAlias": "supervisor.jvmheapmemory",
+      "attr" : [ "HeapMemoryUsage", "NonHeapMemoryUsage" ]
+    }, {
+      "outputWriters" : [ {
+        "@class" : "com.googlecode.jmxtrans.model.output.GangliaWriter",
+        "settings" : {
+          "groupName" : "jvmcmsoldgen",
+          "port" : "{{ supervisorGmondPort }}",
+          "host" : "{{ gmondServer }}"
+        }
+      } ],
+      "obj" : "java.lang:name=CMS Old Gen,type=MemoryPool",
+      "resultAlias": "jvmcmsoldgen",
+      "attr" : [ "Usage" ]
+    } ],
+    "numQueryThreads" : 2
+  } ]
+}

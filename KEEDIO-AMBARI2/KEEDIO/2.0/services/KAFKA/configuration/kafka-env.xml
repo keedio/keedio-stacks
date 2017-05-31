@@ -1,0 +1,30 @@
+<configuration>
+  <property>
+    <name>jmxPort</name>
+    <value>9999</value>
+  </property>
+
+  <property>
+    <name>kafka_user</name>
+    <value>kafka</value>
+    <property-type>USER</property-type>
+  </property>
+
+  <property>
+    <name>kafka_log_dir</name>
+    <value>/var/log/kafka</value>
+    <description></description>
+  </property>
+  <property>
+    <name>kafka_pid_dir</name>
+    <value>/var/run/kafka</value>
+    <description></description>
+  </property>
+
+  <property>
+    <name>znode_path</name>
+    <value>/ambari/kafka</value>
+  </property>
+
+</configuration>
+

@@ -1,0 +1,28 @@
+{
+   "name": "default",
+   "description": "default quick links configuration",
+   "configuration": {
+     "protocol":
+     {
+       "type":"HTTP_ONLY"
+     },
+ 
+     "links": [
+       {
+         "name": "nagios",
+         "label": "Nagios",
+         "requires_user_name": "false",
+         "url":"%@://%@:%@/nagios",
+         "port":{
+          "http_property": "nagios_server_port",
+          "http_default_port": "80",
+          "https_property": "nagios_server_port",
+          "https_default_port": "80",
+          "regex": "^(\\d+)$",
+          "site": "nagios-env"
+         }
+       }
+     ]
+   }
+ } 
+

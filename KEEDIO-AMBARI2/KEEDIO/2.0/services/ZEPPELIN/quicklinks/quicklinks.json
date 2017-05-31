@@ -1,0 +1,35 @@
+{
+  "name": "default",
+  "description": "default quick links configuration",
+  "configuration": {
+    "protocol":
+    {
+      "type":"https",
+      "checks":[
+        {
+          "property":"zeppelin.ssl",
+          "desired":"true",
+          "site":"main-zeppelin"
+        }
+      ]
+    },
+
+    "links": [
+      {
+        "name": "zeppelin_ui",
+        "label": "Zeppelin UI",
+        "requires_user_name": "false",
+        "component_name": "ZEPPELIN",
+        "url":"%@://%@:%@/",
+        "port":{
+          "http_property": "zeppelin.server.port",
+          "http_default_port": "8044",
+          "https_property": "zeppelin.server.port",
+          "https_default_port": "8044",
+          "regex": "^(\\d+)$",
+          "site": "main"
+        }
+      }
+    ]
+  }
+}
