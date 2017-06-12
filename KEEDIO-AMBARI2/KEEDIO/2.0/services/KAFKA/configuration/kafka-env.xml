@@ -1,7 +1,7 @@
 <configuration>
   <property>
     <name>jmxPort</name>
-    <value>9999</value>
+    <value>19999</value>
   </property>
 
   <property>
