@@ -35,10 +35,10 @@ kafka_conf = default("/configurations/kafka-server-properties",[])
 has_ganglia_server = not len(ganglia_server_hosts) == 0
 if has_ganglia_server:
   gmondServer = ganglia_server_hosts[0]
-  jmxPort = default("/configurations/kafka-env/jmxPort","9999")
+  jmxPort = default("/configurations/kafka-env/jmxPort","19999")
   gmondPort = default("/configurations/kafka-broker/kafka.ganglia.metrics.port", 8671)
 else:
-  jmxPort = "9999"
+  jmxPort = "19999"
 
 #else:
 #  exclude_packages.append('jmxtrans')
