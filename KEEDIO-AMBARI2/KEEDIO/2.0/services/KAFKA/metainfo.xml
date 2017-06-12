@@ -22,7 +22,7 @@
       <name>KAFKA</name>
       <displayName>Kafka</displayName>
       <comment>A distributed service for collecting large amounts of streaming data</comment>
-      <version>0.8.2.1</version>
+      <version>0.10.2.1</version>
       <components>
         <component>
           <name>KAFKA_BROKER</name>
