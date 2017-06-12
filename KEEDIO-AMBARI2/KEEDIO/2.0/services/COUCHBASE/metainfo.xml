@@ -23,7 +23,7 @@
       <name>COUCHBASE</name>
       <displayName>Couchbase</displayName>
       <comment>Couchbase  is an open-source, distributed (shared-nothing architecture) multi-model NoSQL document-oriented database software package that is optimized for interactive applications.</comment>
-      <version>4.5.1</version>
+      <version>4.6.2</version>
       <components>
         <component>
           <name>COUCHBASE_CLUSTERCREATOR</name>
@@ -102,6 +102,13 @@
           </packages>
         </osSpecific>
       </osSpecifics>
+
+      <quickLinksConfigurations>
+        <quickLinksConfiguration>
+          <fileName>quicklinks.json</fileName>
+          <default>true</default>
+        </quickLinksConfiguration>
+      </quickLinksConfigurations>
 
 
     </service>
