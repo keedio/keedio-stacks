@@ -1,0 +1,45 @@
+{
+  "name": "default",
+  "description": "default quick links configuration",
+  "configuration": {
+    "protocol":
+    {
+      "type":"HTTP_ONLY",
+      "checks":[
+        {
+          "property":"protocol",
+          "desired":"http",
+          "site":"couchbase.xml"
+        }
+      ]
+    },
+    "links": [
+      {
+        "name": "couchbase",
+        "label": "Couchbase node",
+        "requires_user_name": "false",
+        "component_name": "COUCHBASE_CLUSTERCREATOR",
+        "url":"%@://%@:%@",
+        "port":{
+          "http_property": "port",
+          "http_default_port": "8091",
+          "regex": "^(\\d+)$",
+          "site": "couchbase.xml"
+        }
+      },
+      {
+        "name": "couchbase",
+        "label": "Couchbase node",
+        "requires_user_name": "false",
+        "component_name": "COUCHBASE_SERVER",
+        "url":"%@://%@:%@",
+        "port":{
+          "http_property": "port",
+          "http_default_port": "8091",
+          "regex": "^(\\d+)$",
+          "site": "couchbase.xml"
+        }
+      }
+    ]
+  }
+}
