@@ -80,22 +80,201 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
     }
     return driverDict.get(databaseType.upper())
   def __init__(self):
-    super(KEEDIO14StackAdvisor, self).__init__()
+    super(KEEDIO20StackAdvisor, self).__init__()
     Logger.initialize_logger()
+
+  def getHostsForSlaveComponent(self, services, hosts, component, hostsList, freeHosts, couchbaseHosts):
+    if component["StackServiceComponents"]["cardinality"] == "ALL":
+      return hostsList
+
+    if self.isComponentHostsPopulated(component):
+      return component["StackServiceComponents"]["hostnames"]
+
+    hostsForComponent = []
+    componentName = component["StackServiceComponents"]["component_name"]
+
+    if componentName=="COUCHBASE_DATA" or componentName=="COUCHBASE_INDEXER" or componentName=="COUCHBASE_QUERY":
+          return couchbaseHosts
+
+    if self.isSlaveComponent(component):
+      cardinality = str(component["StackServiceComponents"]["cardinality"])
+      hostsMin, hostsMax = self.parseCardinality(cardinality, len(hostsList))
+      hostsMin, hostsMax = (0 if hostsMin is None else hostsMin, len(hostsList) if hostsMax is None else hostsMax)
+      if self.isComponentUsingCardinalityForLayout(componentName) and cardinality:
+        if hostsMin > len(hostsForComponent):
+          hostsForComponent.extend(freeHosts[0:hostsMin-len(hostsForComponent)])
+
+      else:
+        hostsForComponent.extend(freeHosts)
+        if not hostsForComponent:  # hostsForComponent is empty
+          hostsForComponent = hostsList[-1:]
+      hostsForComponent = list(set(hostsForComponent))  # removing duplicates
+      if len(hostsForComponent) < hostsMin:
+        hostsForComponent = list(set(hostsList))[0:hostsMin]
+      elif len(hostsForComponent) > hostsMax:
+        hostsForComponent = list(set(hostsList))[0:hostsMax]
+    elif self.isClientComponent(component):
+      hostsForComponent = freeHosts[0:1]
+      if not hostsForComponent:  # hostsForComponent is empty
+        hostsForComponent = hostsList[-1:]
+
+    return hostsForComponent
+  def createComponentLayoutRecommendations(self, services, hosts):
+    self.services = services
+
+    recommendations = {
+      "blueprint": {
+        "host_groups": [ ]
+      },
+      "blueprint_cluster_binding": {
+        "host_groups": [ ]
+      }
+    }
+
+    hostsList = self.getActiveHosts([host["Hosts"] for host in hosts["items"]])
+
+    # for fast lookup
+    hostsSet = set(hostsList)
+
+    hostsComponentsMap = {}
+    for hostName in hostsList:
+      if hostName not in hostsComponentsMap:
+        hostsComponentsMap[hostName] = []
+    couchbaseHosts=[]
+    #extend 'hostsComponentsMap' with MASTER components
+    for service in services["services"]:
+      masterComponents = [component for component in service["components"] if self.isMasterComponent(component)]
+      serviceName = service["StackServices"]["service_name"]
+      serviceAdvisor = self.getServiceAdvisor(serviceName)
+      for component in masterComponents:
+        componentName = component["StackServiceComponents"]["component_name"]
+        advisor = serviceAdvisor if serviceAdvisor is not None else self
+        hostsForComponent = advisor.getHostsForMasterComponent(services, hosts, component, hostsList)
+
+        if componentName=="COUCHBASE_SERVER" or componentName=="COUCHBASE_CLUSTERCREATOR":
+           print hostsForComponent 
+           print "ALESSIO "
+           couchbaseHosts=couchbaseHosts+hostsForComponent
+        #extend 'hostsComponentsMap' with 'hostsForComponent'
+        for hostName in hostsForComponent:
+          if hostName in hostsSet:
+            hostsComponentsMap[hostName].append( { "name":componentName } )
+
+    #extend 'hostsComponentsMap' with Slave and Client Components
+    componentsListList = [service["components"] for service in services["services"]]
+    componentsList = [item for sublist in componentsListList for item in sublist]
+    usedHostsListList = [component["StackServiceComponents"]["hostnames"] for component in componentsList if not self.isComponentNotValuable(component)]
+    utilizedHosts = [item for sublist in usedHostsListList for item in sublist]
+    freeHosts = [hostName for hostName in hostsList if hostName not in utilizedHosts]
+
+    for service in services["services"]:
+      slaveClientComponents = [component for component in service["components"]
+                               if self.isSlaveComponent(component) or self.isClientComponent(component)]
+      serviceName = service["StackServices"]["service_name"]
+      serviceAdvisor = self.getServiceAdvisor(serviceName)
+      for component in slaveClientComponents:
+        componentName = component["StackServiceComponents"]["component_name"]
+        advisor = serviceAdvisor if serviceAdvisor is not None else self
+        hostsForComponent = advisor.getHostsForSlaveComponent(services, hosts, component, hostsList, freeHosts, couchbaseHosts)
+
+        #extend 'hostsComponentsMap' with 'hostsForComponent'
+        for hostName in hostsForComponent:
+          if hostName not in hostsComponentsMap and hostName in hostsSet:
+            hostsComponentsMap[hostName] = []
+          if hostName in hostsSet:
+            hostsComponentsMap[hostName].append( { "name": componentName } )
+
+    #colocate custom services
+    for service in services["services"]:
+      serviceName = service["StackServices"]["service_name"]
+      serviceAdvisor = self.getServiceAdvisor(serviceName)
+      if serviceAdvisor is not None:
+        serviceComponents = [component for component in service["components"]]
+        serviceAdvisor.colocateService(hostsComponentsMap, serviceComponents)
+
+    #prepare 'host-group's from 'hostsComponentsMap'
+    host_groups = recommendations["blueprint"]["host_groups"]
+    bindings = recommendations["blueprint_cluster_binding"]["host_groups"]
+    index = 0
+    for key in hostsComponentsMap.keys():
+      index += 1
+      host_group_name = "host-group-{0}".format(index)
+      host_groups.append( { "name": host_group_name, "components": hostsComponentsMap[key] } )
+      bindings.append( { "name": host_group_name, "hosts": [{ "fqdn": key }] } )
+
+    return recommendations
 
   def getComponentLayoutValidations(self, services, hosts):
     """Returns array of Validation objects about issues with hostnames components assigned to"""
-    items = super(KEEDIO14StackAdvisor, self).getComponentLayoutValidations(services, hosts)
+    items = super(KEEDIO20StackAdvisor, self).getComponentLayoutValidations(services, hosts)
 
     # Validating NAMENODE and SECONDARY_NAMENODE are on different hosts if possible
     # Use a set for fast lookup
-    hostsSet =  set(super(KEEDIO14StackAdvisor, self).getActiveHosts([host["Hosts"] for host in hosts["items"]]))  #[host["Hosts"]["host_name"] for host in hosts["items"]]
+    hostsSet =  set(super(KEEDIO20StackAdvisor, self).getActiveHosts([host["Hosts"] for host in hosts["items"]]))  #[host["Hosts"]["host_name"] for host in hosts["items"]]
     hostsCount = len(hostsSet)
 
     componentsListList = [service["components"] for service in services["services"]]
     componentsList = [item for sublist in componentsListList for item in sublist]
     nameNodeHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "NAMENODE"]
     secondaryNameNodeHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "SECONDARY_NAMENODE"]
+    if hostsCount > 1 and len(nameNodeHosts) > 0 and len(secondaryNameNodeHosts) > 0:
+      nameNodeHosts = nameNodeHosts[0]
+      secondaryNameNodeHosts = secondaryNameNodeHosts[0]
+      commonHosts = list(set(nameNodeHosts).intersection(secondaryNameNodeHosts))
+      for host in commonHosts:
+        items.append( { "type": 'host-component', "level": 'WARN', "message": 'NameNode and Secondary NameNode should not be hosted on same machine', "component-name": 'NAMENODE', "host": str(host) } )
+        items.append( { "type": 'host-component', "level": 'WARN', "message": 'NameNode and Secondary NameNode should not be hosted on same machine', "component-name": 'SECONDARY_NAMENODE', "host": str(host) } )
+    # GRAFANA and AMS METRICS should stay on different hosts
+    grafanaNodeHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "GRAFANA"]
+    amsgrafanaNameNodeHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "METRICS_GRAFANA"]
+    #Validate only  if both services exists
+    if hostsCount > 1 and len(grafanaNodeHosts) > 0 and len(amsgrafanaNameNodeHosts) > 0:
+        grafanaNodeHost = grafanaNodeHosts[0]
+        amsgrafanaNameNodeHost =  amsgrafanaNameNodeHosts[0]
+        commonHosts = list(set(grafanaNodeHost).intersection(amsgrafanaNameNodeHost))
+        for host in commonHosts:
+            items.append( { "type": 'host-component', "level": 'ERROR', "message": 'NameNode and Secondary NameNode should not be hosted on same machine', "component-name": 'GRAFANA', "host": str(host) } )
+            items.append( { "type": 'host-component', "level": 'ERROR', "message": 'NameNode and Secondary NameNode should not be hosted on same machine', "component-name": 'METRICS_GRAFANA', "host": str(host) } )
+
+    # Validation COUCHBASE_CLUSTERSTARTER and COUCHBASE_SERVER are on different hosts if possible
+    cbClustercreatorHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "COUCHBASE_CLUSTERCREATOR"]
+    cbServerHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "COUCHBASE_SERVER"]
+    cbDataHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "COUCHBASE_DATA"]
+    cbIndexerHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "COUCHBASE_INDEXER"]
+    cbQueryHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "COUCHBASE_QUERY"]
+    if hostsCount > 1 and len(cbClustercreatorHosts) > 0 and len(cbServerHosts) > 0:
+      cbClustercreatorHosts = cbClustercreatorHosts[0]
+      cbServerHosts = cbServerHosts[0]
+      cbDataHosts = cbDataHosts[0]
+      cbIndexerHosts = cbIndexerHosts[0]
+      cbQueryHosts = cbQueryHosts[0]
+      commonHosts = list(set(cbClustercreatorHosts).intersection(cbServerHosts))
+      for host in commonHosts:
+        items.append( { "type": 'host-component', "level": 'ERROR', "message": 'Couchbase Cluster starter and Couchbase server must not be hosted on same machine', "component-name": 'COUCHBASE_CLUSTERSTARTER', "host": str(host) } )
+        items.append( { "type": 'host-component', "level": 'ERROR', "message": 'Couchbase Cluster starter and Couchbase server must not be hosted on same machine', "component-name": 'COUCHBASE_SERVER', "host": str(host) } )
+      for host in cbDataHosts: 
+         if host not in cbServerHosts and host not in cbClustercreatorHosts:
+            items.append( { "type": 'host-component', "level": 'ERROR', "message": 'Couchbase Data node must be hosted on the same machine of a Couchbase server', "component-name": 'COUCHBASE_DATA', "host": str(host) } )
+      for host in cbClustercreatorHosts: 
+         if host not in cbDataHosts:
+            items.append( { "type": 'host-component', "level": 'ERROR', "message": 'Couchbase Cluster Creator must have the data role assigned', "component-name": 'COUCHBASE_DATA', "host": str(host) } )
+      for host in cbServerHosts: 
+         if host not in cbDataHosts and host not in cbIndexerHosts and host not in cbQueryHosts:
+            items.append( { "type": 'host-component', "level": 'ERROR', "message": 'Couchbase server must have at least one role assigned', "component-name": 'COUCHBASE_SERVER', "host": str(host) } )
+      for host in cbIndexerHosts: 
+         if host not in cbServerHosts and host not in cbClustercreatorHosts:
+            items.append( { "type": 'host-component', "level": 'ERROR', "message": 'Couchbase Indexer node must be hosted on the same machine of a Couchbase server', "component-name": 'COUCHBASE_INDEXER', "host": str(host) } )
+      for host in cbQueryHosts: 
+         if host not in cbServerHosts and host not in cbClustercreatorHosts:
+            items.append( { "type": 'host-component', "level": 'ERROR', "message": 'Couchbase Query node must be hosted on the same machine of a Couchbase server', "component-name": 'COUCHBASE_QUERY', "host": str(host) } )
+
+      ClientHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "SPACEWALK_CLIENT"]
+      ClientHosts = ClientHosts[0]
+      print "KEEDIOOOO", hostsSet, ClientHosts
+      for host in hostsSet: 
+         if host not in ClientHosts:
+            items.append( { "type": 'host-component', "level": 'ERROR', "message": 'Client component must be hosted on all the hosts', "component-name": 'SPACEWALK_CLIENT', "host": str(host) } )
+            continue
 
     # Validating cardinality
     for component in componentsList:
@@ -134,8 +313,8 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
     usedHostsList = [item for sublist in usedHostsListList for item in sublist]
     nonUsedHostsList = [item for item in hostsSet if item not in usedHostsList]
     for host in nonUsedHostsList:
-      items.append( { "type": 'host-component', "level": 'ERROR', "message": 'Host is not used', "host": str(host) } )
-
+      items.append( { "type": 'host-component', "level": 'ERROR', "message": 'Host is not used', "host": str(host) } ) 
+    print "ALESSIO",items
     return items
 
   def getServiceConfigurationRecommenderDict(self):
