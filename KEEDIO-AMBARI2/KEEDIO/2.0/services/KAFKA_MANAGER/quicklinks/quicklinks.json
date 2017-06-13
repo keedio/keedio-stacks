@@ -12,7 +12,7 @@
         "name": "kafka_manager_ui",
         "label": "Kafka Manager UI",
         "requires_user_name": "false",
-        "component_name": "KAFKA_MANAGER_UI_SERVER",
+        "component_name": "KAFKA_MANAGER",
         "url":"%@://%@:%@/",
         "port":{
           "http_property": "ui.port",
