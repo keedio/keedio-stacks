@@ -27,13 +27,13 @@ class KafkaManager(Script):
         # import params
         self.install_packages(env)
         # env.set_params(params)
-        # self.configure(env)
+        self.configure(env)
 
     def start(self, env):
         import params
         env.set_params(params)
 
-        #self.configure(env)
+        self.configure(env)
         kafka_manager(action='start')
 
     def stop(self, env):
@@ -41,6 +41,12 @@ class KafkaManager(Script):
         env.set_params(params)
 
         kafka_manager(action='stop')
+
+    def configure(self, env):
+        import params
+        env.set_params(params)
+
+        kafka_manager(action='config')
 
     def status(self, env):
         kafka_manager(action='status')
