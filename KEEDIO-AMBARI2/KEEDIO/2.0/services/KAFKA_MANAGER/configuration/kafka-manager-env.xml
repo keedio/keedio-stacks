@@ -1,0 +1,25 @@
+<configuration>
+  <property>
+    <name>kafka_manager_user</name>
+    <value>kafka</value>
+    <property-type>USER</property-type>
+  </property>
+
+  <property>
+    <name>kafka_manager_log_dir</name>
+    <value>/var/log/kafka-manager</value>
+    <description></description>
+  </property>
+  <property>
+    <name>kafka_manager_pid_dir</name>
+    <value>/var/run/kafka-manager</value>
+    <description></description>
+  </property>
+
+  <property>
+    <name>znode_path</name>
+    <value>/ambari/kafka-manager</value>
+  </property>
+
+</configuration>
+

@@ -1,0 +1,28 @@
+{
+  "name": "default",
+  "description": "default quick links configuration",
+  "configuration": {
+    "protocol":
+    {
+      "type":"HTTP_ONLY"
+    },
+
+    "links": [
+      {
+        "name": "kafka_manager_ui",
+        "label": "Kafka Manager UI",
+        "requires_user_name": "false",
+        "component_name": "KAFKA_MANAGER_UI_SERVER",
+        "url":"%@://%@:%@/",
+        "port":{
+          "http_property": "ui.port",
+          "http_default_port": "9000",
+          "https_property": "ui.port",
+          "https_default_port": "9000",
+          "regex": "^(\\d+)$",
+          "site": "kafka-manager-site"
+        }
+      }
+    ]
+  }
+}
