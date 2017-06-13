@@ -45,7 +45,7 @@ class ServiceCheck(Script):
 
     Logger.info("The environment for spark execution:")
     Logger.info(str(os.environ))
-    check_spark = [str(params.spark_local_home)+"/bin/spark-submit","--class","org.apache.spark.examples.SparkPi",str(params.spark_local_home)+"/lib/"+str(params.spark_examples_jar),"10"]
+    check_spark = [str(params.spark_local_home)+"/bin/spark-submit","--class","org.apache.spark.examples.SparkPi",str(params.spark_local_home)+"/examples/jars/"+str(params.spark_examples_jar),"10"]
     out,err,rc=execute_spark(check_spark)
     check_rc(rc,stdout=out,stderr=err)
 
