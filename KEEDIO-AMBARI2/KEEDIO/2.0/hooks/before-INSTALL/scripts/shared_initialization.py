@@ -60,6 +60,7 @@ def setup_java():
   #  install_cmd = format("mkdir -p {java_dir} ; cd {java_dir} ; tar -xf {jdk_curl_target} > /dev/null 2>&1")
   
   Package([params.jdk_name])
+  Package("java-1.8.0-openjdk-devel")
   #Execute(install_cmd,
   #        path = ["/bin","/usr/bin/"],
   #        not_if = format("test -e {java_exec}")
@@ -71,6 +72,14 @@ def setup_java():
   )
   File("/etc/profile.d/java-systemd.sh",
     content=Template("java-systemd.sh.j2"),
+    mode=0755
+  )
+  File("/etc/profile.d/java8.sh",
+    content=Template("java8.sh.j2"),
+    mode=0755
+  )
+  File("/etc/profile.d/java8-systemd.sh",
+    content=Template("java8-systemd.sh.j2"),
     mode=0755
   )
 def install_packages():
