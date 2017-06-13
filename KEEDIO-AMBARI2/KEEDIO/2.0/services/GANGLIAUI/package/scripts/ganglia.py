@@ -49,7 +49,8 @@ def generate_daemon(ganglia_service,
     File("/etc/systemd/system/gmond." + name +'.service',
       content=InlineTemplate(template),
       mode=0755 )
-    functions.turn_off_autostart("gmond."+name)
+#    Not sure why the services were disabled
+#    functions.turn_off_autostart("gmond."+name)
     if name == "ElasticSearch":
       File("/etc/ganglia/conf.d/elasticsearch.pyconf",
         content=Template("elasticsearch.pyconf.j2"),
