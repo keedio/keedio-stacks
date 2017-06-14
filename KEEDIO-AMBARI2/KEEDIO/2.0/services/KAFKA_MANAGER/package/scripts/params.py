@@ -27,6 +27,7 @@ import kazoo
 config = Script.get_config()
 zookeeper_server_hosts = str(default("/configurations/kafka-manager-properties/zookeeper.connect", None))
 kafka_manager_hosts = default("/clusterHostInfo/kafka_manager_hosts", [])
+kafka_manager_port = str(default("/configurations/kafka-manager-properties/port", 9000))
 log_dirs = default("/configurations/kafka-manager-properties/log.dirs", "")
 
 kafka_manager_conf = default("/configurations/kafka-manager-properties", [])
@@ -36,6 +37,10 @@ kafka_manager_conf = default("/configurations/kafka-manager-properties", [])
 hostname = None
 if config.has_key('hostname'):
     hostname = str(config['hostname'])
+
+clustername = None
+if config.has_key('clusterName'):
+    clustername = config['clusterName']
 
 znode_kafka_path = str(default("/configurations/kafka-manager-env/znode_path", "/ambari/kafka-manager"))
 kafka_manager_id = None

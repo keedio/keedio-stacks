@@ -6,7 +6,6 @@ def kafka_manager(action):
     import utils
     # FIX: When status is checked params  shouldn't be called
     if action != 'status':
-        import params
         if action == 'config':
             File('/etc/kafka-manager/conf/application.conf',
                  content=Template('application.conf.j2'))

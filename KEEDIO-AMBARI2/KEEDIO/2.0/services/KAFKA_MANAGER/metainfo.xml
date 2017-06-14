@@ -48,6 +48,9 @@
             <package>
               <name>python-kazoo</name>
             </package>
+            <package>
+              <name>python-requests</name>
+            </package>
           </packages>
         </osSpecific>
       </osSpecifics>
@@ -59,6 +62,7 @@
 
       <requiredServices>
         <service>ZOOKEEPER</service>
+        <service>KAFKA</service>
       </requiredServices>
 
       <quickLinksConfigurations>

@@ -17,13 +17,35 @@ limitations under the License.
 
 """
 
+import requests
+import json
 from resource_management import *
 from kafka_manager_handler import kafka_manager
 
 
 class KafkaManagerServiceCheck(Script):
     def service_check(self, env):
+        import params
+        env.set_params(params)
         kafka_manager(action='status')
+
+        # TODO: Include a conditional flag to try to create the cluster or not
+
+        # Get Kafka Manager host
+        Logger.info("Kafka Manager service: " + ','.join(params.kafka_manager_hosts))
+        kafka_manager_host = params.kafka_manager_hosts[0]
+
+        # Get Kafka version
+        kafka_version = '0.10.1.0' # TODO: Remove hardcoded var
+
+        # Create Kafka Manager cluster
+        url = "http://" + kafka_manager_host + ":" + str(params.kafka_manager_port) + "/clusters"
+        payload = {'name': params.clustername, 'zkHosts': params.zookeeper_server_hosts, 'kafkaVersion': kafka_version}
+        Logger.info("URL: " + url)
+        Logger.info("Data: " + json.dumps(payload))
+        response = requests.post(url, data=payload)
+        if not response.status_code == 200:
+            Logger.logger.warn("Couldn't auto-create cluster in Kafka Manager: CODE " + response.status_code)
 
 
 if __name__ == "__main__":
