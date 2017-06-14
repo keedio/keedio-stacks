@@ -30,9 +30,10 @@ timezone = default('/configurations/hue-env/timezone','Europe/Madrid')
 
 webserver_group = "apache"
 
-ganglia_server_host = set(default("/clusterHostInfo/ganglia_server_host", []))
-Ganglia_server_host = str(default("/clusterHostInfo/ganglia_server_host", ["none"])[0])
+ganglia_server_host = set(default("/clusterHostInfo/gangliaui_server_hosts", []))
+Ganglia_server_host = str(default("/clusterHostInfo/gangliaui_server_hosts", ["none"])[0])
 
+has_ganglia = not len(ganglia_server_host) == 0
 hostname = config["hostname"]
 namenode_host = set(default("/clusterHostInfo/namenode_host", []))
 namenode_list=list(namenode_host)
