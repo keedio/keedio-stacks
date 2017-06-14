@@ -30,8 +30,8 @@ class KafkaManager(Script):
         self.configure(env)
 
     def start(self, env):
-        #import params
-        #env.set_params(params)
+        import params
+        env.set_params(params)
 
         self.configure(env)
         kafka_manager(action='start')
