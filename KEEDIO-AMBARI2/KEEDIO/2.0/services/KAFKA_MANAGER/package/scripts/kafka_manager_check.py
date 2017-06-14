@@ -33,7 +33,7 @@ class KafkaManagerServiceCheck(Script):
 
         # Get Kafka Manager host
         kafka_manager_hosts = default("/clusterHostInfo/kafka_manager_host", [])
-        Logger.info("Kafka Manager service: " + kafka_manager_hosts)
+        Logger.info("Kafka Manager service: " + ','.join(kafka_manager_hosts))
         kafka_manager_host = kafka_manager_hosts[0]
 
         # Get Kafka version
