@@ -38,6 +38,10 @@ hostname = None
 if config.has_key('hostname'):
     hostname = str(config['hostname'])
 
+clustername = None
+if config.has_key('clusterName'):
+    clustername = config['clusterName']
+
 znode_kafka_path = str(default("/configurations/kafka-manager-env/znode_path", "/ambari/kafka-manager"))
 kafka_manager_id = None
 

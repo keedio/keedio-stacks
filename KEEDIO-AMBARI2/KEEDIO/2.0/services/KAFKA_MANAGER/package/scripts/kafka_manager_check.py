@@ -40,13 +40,12 @@ class KafkaManagerServiceCheck(Script):
 
         # Create Kafka Manager cluster
         url = "http://" + kafka_manager_host + ":" + str(params.kafka_manager_port) + "/clusters"
-        payload = {'name': params.hostname, 'zkHosts': params.zookeeper_server_hosts, 'kafkaVersion': kafka_version}
+        payload = {'name': params.clustername, 'zkHosts': params.zookeeper_server_hosts, 'kafkaVersion': kafka_version}
         Logger.info("URL: " + url)
-        data = urllib.urlencode(payload)
-        Logger.info("Data: " + data)
-        response = requests.post(url, data=data)
-        if not response.ok:
-            Logger.logger.warn("Couldn't auto-create cluster in Kafka Manager: " + response.text)
+        Logger.info("Data: " + payload)
+        response = requests.post(url, data=payload)
+        if not response.status_code == 200:
+            Logger.logger.warn("Couldn't auto-create cluster in Kafka Manager: CODE " + response.status_code)
 
 
 if __name__ == "__main__":
