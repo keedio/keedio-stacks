@@ -60,7 +60,7 @@ class HiveServerHandler(Script):
         Logger.info(str(out))
         Logger.info(str(err))
         Logger.info('Using MySQL, importing schema')
-        cmd=Popen(['mysql','-h',params.jdbc_host,'-b',params.jdbc_db,'-u',params.jdbc_username,'--password='+params.jdbc_password,'-e','source /usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-0.14.0.mysql.sql;'],stdout=PIPE,stderr=PIPE)
+        cmd=Popen(['mysql','-h',params.jdbc_host,'-b',params.jdbc_db,'-u',params.jdbc_username,'--password='+params.jdbc_password,'-e','source /usr/lib/hive/scripts/metastore/upgrade/mysql/hive-schema-1.2.0.mysql.sql;'],stdout=PIPE,stderr=PIPE)
         out,err=cmd.communicate()
         Logger.info(str(out))
         Logger.info(str(err))
