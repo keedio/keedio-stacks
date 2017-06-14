@@ -18,7 +18,7 @@ limitations under the License.
 """
 
 import requests
-import urllib
+import json
 from resource_management import *
 from kafka_manager_handler import kafka_manager
 
@@ -42,7 +42,7 @@ class KafkaManagerServiceCheck(Script):
         url = "http://" + kafka_manager_host + ":" + str(params.kafka_manager_port) + "/clusters"
         payload = {'name': params.clustername, 'zkHosts': params.zookeeper_server_hosts, 'kafkaVersion': kafka_version}
         Logger.info("URL: " + url)
-        Logger.info("Data: " + payload)
+        Logger.info("Data: " + json.dumps(payload))
         response = requests.post(url, data=payload)
         if not response.status_code == 200:
             Logger.logger.warn("Couldn't auto-create cluster in Kafka Manager: CODE " + response.status_code)

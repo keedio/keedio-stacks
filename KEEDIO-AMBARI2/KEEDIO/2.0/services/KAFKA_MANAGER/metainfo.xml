@@ -62,6 +62,7 @@
 
       <requiredServices>
         <service>ZOOKEEPER</service>
+        <service>KAFKA</service>
       </requiredServices>
 
       <quickLinksConfigurations>
