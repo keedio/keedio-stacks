@@ -32,9 +32,8 @@ class KafkaManagerServiceCheck(Script):
         # TODO: Include a conditional flag to try to create the cluster or not
 
         # Get Kafka Manager host
-        kafka_manager_hosts = default("/clusterHostInfo/kafka_manager_host", [])
-        Logger.info("Kafka Manager service: " + ','.join(kafka_manager_hosts))
-        kafka_manager_host = kafka_manager_hosts[0]
+        Logger.info("Kafka Manager service: " + ','.join(params.kafka_manager_hosts))
+        kafka_manager_host = params.kafka_manager_hosts[0]
 
         # Get Kafka version
         kafka_version = '0.10.1.0' # TODO: Remove hardcoded var
@@ -42,9 +41,12 @@ class KafkaManagerServiceCheck(Script):
         # Create Kafka Manager cluster
         url = "http://" + kafka_manager_host + ":" + str(params.kafka_manager_port) + "/clusters"
         payload = {'name': params.hostname, 'zkHosts': params.zookeeper_server_hosts, 'kafkaVersion': kafka_version}
-        response = requests.post(url, data=urllib.urlencode(payload))
+        Logger.info("URL: " + url)
+        data = urllib.urlencode(payload)
+        Logger.info("Data: " + data)
+        response = requests.post(url, data=data)
         if not response.ok:
-            Logger.warn("Couldn't auto-create cluster in Kafka Manager")
+            Logger.logger.warn("Couldn't auto-create cluster in Kafka Manager: " + response.text)
 
 
 if __name__ == "__main__":
