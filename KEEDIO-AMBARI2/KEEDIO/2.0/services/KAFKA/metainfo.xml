@@ -71,6 +71,9 @@
             <package>
               <name>python-six</name>
             </package>
+            <package>
+              <name>python-kafka</name>
+            </package>
           </packages>
         </osSpecific>
       </osSpecifics>

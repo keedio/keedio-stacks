@@ -19,11 +19,16 @@ limitations under the License.
 
 from resource_management import *
 from kafka_handler import kafka
+from kafka import KafkaConsumer
 
 class KafkaServiceCheck(Script):
 
   def service_check(self, env):
     kafka(action='status')
+    consumer = KafkaConsumer()
+    topics = consumer.topics()  #
+    Logger.info("Kafka topics: " + ', '.join(topics))
+
 
 if __name__ == "__main__":
   KafkaServiceCheck().execute()
