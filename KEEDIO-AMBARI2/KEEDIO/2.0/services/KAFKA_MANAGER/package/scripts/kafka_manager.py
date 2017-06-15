@@ -27,7 +27,7 @@ class KafkaManager(Script):
         # import params
         self.install_packages(env)
         # env.set_params(params)
-        self.configure(env)
+        #self.configure(env)
 
     def start(self, env):
         import params
