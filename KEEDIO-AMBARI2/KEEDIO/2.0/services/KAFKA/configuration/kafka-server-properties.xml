@@ -29,7 +29,7 @@
 
   <property>
     <name>num.network.threads</name>
-    <value>2</value>
+    <value>3</value>
     <description>Number of threads handling network requests</description>
   </property>
 
@@ -64,9 +64,33 @@
   </property>
 
   <property>
+    <name>auto.create.topics.enable</name>
+    <value>true</value>
+    <description>Enable auto creation of topic on the server</description>
+  </property>
+
+  <property>
+    <name>delete.topic.enable</name>
+    <value>false</value>
+    <description>Enables delete topic. Delete topic through the admin tool will have no effect if this config is turned off</description>
+  </property>
+
+  <property>
+    <name>auto.leader.rebalance.enable</name>
+    <value>true</value>
+    <description>Enables auto leader balancing. A background thread checks and triggers leader balance if required at regular intervals</description>
+  </property>
+
+  <property>
     <name>num.partitions</name>
     <value>2</value>
     <description>The default number of log partitions per topic. More partitions allow greater parallelism for consumtion, but this will also result in more files across brokers</description>
+  </property>
+
+  <property>
+    <name>default.replication.factor</name>
+    <value>1</value>
+    <description>The default replication factors for automatically created topics</description>
   </property>
 
   <property>
@@ -85,6 +109,12 @@
     <name>log.retention.hours</name>
     <value>168</value>
     <description>The minimum age of a log file to be elegible for deletion</description>
+  </property>
+
+  <property>
+    <name>log.cleaner.delete.retention.ms</name>
+    <value>86400000</value>
+    <description>How long are delete records retained?</description>
   </property>
 
   <property>
