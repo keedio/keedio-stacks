@@ -16,7 +16,15 @@ def kafka(action):
         else:
           value=str(params.kafka_conf[param])+"\n"
         kafka_server_properties+=param+"="+value
-        File('/etc/default/kafka-systemd.sh',
+      for param in params.kafka_topic_conf.keys():
+        value=params.kafka_topic_conf[param]
+        if type(value)==bool:
+          value=str(params.kafka_topic_conf[param]).lower()+"\n"
+        else:
+          value=str(params.kafka_topic_conf[param])+"\n"
+        kafka_server_properties+=param+"="+value
+
+      File('/etc/default/kafka-systemd.sh',
           content=StaticFile('kafka-systemd.profiles.d'))
       File('/etc/kafka/conf/server.properties',
         content=kafka_server_properties,
