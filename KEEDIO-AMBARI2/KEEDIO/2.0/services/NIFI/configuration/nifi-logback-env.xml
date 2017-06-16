@@ -13,7 +13,7 @@
     &lt;/contextListener&gt;
     
     &lt;appender name="APP_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender"&gt;
-        &lt;file&gt;{{nifi_node_log_dir}}/nifi-app.log&lt;/file&gt;
+        &lt;file&gt;{{nifi_log_dir}}/nifi-app.log&lt;/file&gt;
         &lt;rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"&gt;
             &lt;!--
               For daily rollover, use 'app_%d.log'.
@@ -21,7 +21,7 @@
               To GZIP rolled files, replace '.log' with '.log.gz'.
               To ZIP rolled files, replace '.log' with '.log.zip'.
             --&gt;
-            &lt;fileNamePattern&gt;{{nifi_node_log_dir}}/nifi-app_%d{yyyy-MM-dd_HH}.%i.log&lt;/fileNamePattern&gt;
+            &lt;fileNamePattern&gt;{{nifi_log_dir}}/nifi-app__%d.%i.log&lt;/fileNamePattern&gt;
             &lt;timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"&gt;
                 &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;
             &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;
@@ -35,7 +35,7 @@
     &lt;/appender&gt;
     
     &lt;appender name="USER_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender"&gt;
-        &lt;file&gt;{{nifi_node_log_dir}}/nifi-user.log&lt;/file&gt;
+        &lt;file&gt;{{nifi_log_dir}}/nifi-user.log&lt;/file&gt;
         &lt;rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"&gt;
             &lt;!--
               For daily rollover, use 'user_%d.log'.
@@ -43,7 +43,7 @@
               To GZIP rolled files, replace '.log' with '.log.gz'.
               To ZIP rolled files, replace '.log' with '.log.zip'.
             --&gt;
-            &lt;fileNamePattern&gt;{{nifi_node_log_dir}}/nifi-user_%d.log&lt;/fileNamePattern&gt;
+            &lt;fileNamePattern&gt;{{nifi_log_dir}}/nifi-user_%d.log&lt;/fileNamePattern&gt;
             &lt;!-- keep 30 log files worth of history --&gt;
             &lt;maxHistory&gt;30&lt;/maxHistory&gt;
         &lt;/rollingPolicy&gt;
@@ -53,7 +53,7 @@
     &lt;/appender&gt;
 
     &lt;appender name="BOOTSTRAP_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender"&gt;
-        &lt;file&gt;{{nifi_node_log_dir}}/nifi-bootstrap.log&lt;/file&gt;
+        &lt;file&gt;{{nifi_log_dir}}/nifi-bootstrap.log&lt;/file&gt;
         &lt;rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"&gt;
             &lt;!--
               For daily rollover, use 'user_%d.log'.
@@ -61,7 +61,7 @@
               To GZIP rolled files, replace '.log' with '.log.gz'.
               To ZIP rolled files, replace '.log' with '.log.zip'.
             --&gt;
-            &lt;fileNamePattern&gt;{{nifi_node_log_dir}}/nifi-bootstrap_%d.log&lt;/fileNamePattern&gt;
+            &lt;fileNamePattern&gt;{{nifi_log_dir}}/nifi-bootstrap_%d.log&lt;/fileNamePattern&gt;
             &lt;!-- keep 5 log files worth of history --&gt;
             &lt;maxHistory&gt;5&lt;/maxHistory&gt;
         &lt;/rollingPolicy&gt;
@@ -89,6 +89,16 @@
 
     &lt;!-- Logger for managing logging statements for jetty --&gt;
     &lt;logger name="org.eclipse.jetty" level="INFO"/&gt;
+
+    &lt;logger name="org.apache.zookeeper.ClientCnxn" level="ERROR" /&gt;
+    &lt;logger name="org.apache.zookeeper.server.NIOServerCnxn" level="ERROR" /&gt;
+    &lt;logger name="org.apache.zookeeper.server.NIOServerCnxnFactory" level="ERROR" /&gt;
+    &lt;logger name="org.apache.zookeeper.server.quorum" level="ERROR" /&gt;
+    &lt;logger name="org.apache.zookeeper.ZooKeeper" level="ERROR" /&gt;
+    &lt;logger name="org.apache.zookeeper.server.PrepRequestProcessor" level="ERROR" /&gt;
+
+    &lt;logger name="org.apache.curator.framework.recipes.leader.LeaderSelector" level="OFF" /&gt;
+    &lt;logger name="org.apache.curator.ConnectionState" level="OFF" /&gt;
 
     &lt;!-- Suppress non-error messages due to excessive logging by class or library --&gt;
     &lt;logger name="com.sun.jersey.spi.container.servlet.WebComponent" level="ERROR"/&gt;

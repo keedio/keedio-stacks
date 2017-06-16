@@ -7,25 +7,13 @@
 
   <property>
     <name>nifi.install_dir</name>
-    <value>/opt</value>
-    <description>Local dir where to install Nifi master. NiFi folder will be created as a subdir of this dir e.g. /opt/HDF-x.x.x.x</description>
-  </property> 
-
-  <property>
-    <name>nifi.master.port</name>
-    <value>9090</value>
-    <description>Port NiFi cluster manager runs on</description>
-  </property>
-
-  <property>
-    <name>nifi.master.protocol.port</name>
-    <value>9088</value>
-    <description>Port NiFi cluster manager protocol runs on</description>
+    <value>/var/lib</value>
+    <description>Local dir where to install Nifi. NiFi folder will be created as a subdir of this dir e.g. /opt/nifi/nifi-x.x.x</description>
   </property>
   
   <property>
     <name>nifi.node.port</name>
-    <value>7080</value>
+    <value>9090</value>
     <description>Port NiFi node runs on</description>
   </property>
 
@@ -59,7 +47,19 @@
     <value>1 mins</value>
     <description>Frequency with which Nifi metrics will be reported to Ambari Metrics. Only used during initial install of service. Post-install this can be reconfigured from Nifi UI under Controller Settings</description>
   </property>
-  
+
+
+  <property>
+    <name>zookeeper.connect</name>
+    <value>localhost:2181/nifi</value>
+    <description>Zookeeper connection string</description>
+  </property>
+
+  <property>
+    <name>zookeeper.connection.timeout.ms</name>
+    <value>1000000</value>
+    <description>Timeout in ms for connection to zookeeper</description>
+  </property>
   
   
   

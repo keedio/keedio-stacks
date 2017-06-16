@@ -6,28 +6,16 @@
             <name>NIFI</name>
             <displayName>NiFi</displayName>
             <comment>Apache NiFi is an easy to use, powerful, and reliable system to process and distribute data.</comment>
-            <version>1.2.0.0</version>
+            <version>1.3.0</version>
             <components>
-                <component>
-                  <name>NIFI_MASTER</name>
-                  <displayName>NiFi Cluster Manager</displayName>
-                  <category>MASTER</category>
-                  <cardinality>1</cardinality>
-                  <timelineAppid>NIFI</timelineAppid>
-                  <commandScript>
-                    <script>scripts/nifi_master.py</script>
-                    <scriptType>PYTHON</scriptType>
-                    <timeout>10000</timeout>
-                  </commandScript>
-                </component>
                 <component>
                   <name>NIFI_NODE</name>
                   <displayName>NiFi node</displayName>
                   <category>MASTER</category>
-                  <cardinality>0+</cardinality>
-                  <timelineAppid>NIFI_NODE</timelineAppid>
+                  <cardinality>1+</cardinality>
+                  <timelineAppid>NIFI</timelineAppid>
                   <commandScript>
-                    <script>scripts/nifi_node.py</script>
+                    <script>scripts/nifi.py</script>
                     <scriptType>PYTHON</scriptType>
                     <timeout>10000</timeout>
                   </commandScript>
@@ -35,14 +23,21 @@
                                 
             </components>
             <osSpecifics>
-              <osSpecific>
-                <osFamily>redhat6</osFamily>
-                <packages>
-                   <!-- <package><name>git</name></package> -->
-                </packages>
-              </osSpecific>
-              
-            </osSpecifics>
+        <osSpecific>
+          <osFamily>any</osFamily>
+          <packages></packages>
+        </osSpecific>
+      </osSpecifics>
+
+      <requiredServices>
+        <service>ZOOKEEPER</service>
+      </requiredServices>
+      <commandScript>
+        <script>scripts/nifi_check.py</script>
+        <scriptType>PYTHON</scriptType>
+        <timeout>300</timeout>
+      </commandScript>
+
       	    <configuration-dependencies>
         	    <config-type>nifi-ambari-config</config-type>      	   
                 <config-type>nifi-flow</config-type> 

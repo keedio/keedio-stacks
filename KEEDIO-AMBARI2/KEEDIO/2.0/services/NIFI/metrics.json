@@ -1,5 +1,5 @@
 {
-  "NIFI_MASTER": {
+  "NIFI_NODE": {
     "Component": [{
         "type": "ganglia",
         "metrics": {

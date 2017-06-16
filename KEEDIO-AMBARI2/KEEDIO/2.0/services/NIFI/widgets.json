@@ -15,7 +15,7 @@
               "name": "FlowFilesReceivedLast5Minutes",
               "metric_path": "metrics/nifi/FlowFilesReceivedLast5Minutes",
               "service_name": "NIFI",
-              "component_name": "NIFI_MASTER"
+              "component_name": "NIFI_NODE"
             }
           ],
           "values": [
@@ -39,7 +39,7 @@
               "name": "BytesReceivedLast5Minutes",
               "metric_path": "metrics/nifi/BytesReceivedLast5Minutes",
               "service_name": "NIFI",
-              "component_name": "NIFI_MASTER"
+              "component_name": "NIFI_NODE"
             }
           ],
           "values": [
@@ -63,7 +63,7 @@
               "name": "FlowFilesSentLast5Minutes",
               "metric_path": "metrics/nifi/FlowFilesSentLast5Minutes",
               "service_name": "NIFI",
-              "component_name": "NIFI_MASTER"
+              "component_name": "NIFI_NODE"
             }
           ],
           "values": [
@@ -87,7 +87,7 @@
               "name": "BytesSentLast5Minutes",
               "metric_path": "metrics/nifi/BytesSentLast5Minutes",
               "service_name": "NIFI",
-              "component_name": "NIFI_MASTER"
+              "component_name": "NIFI_NODE"
             }
           ],
           "values": [
@@ -111,7 +111,7 @@
               "name": "FlowFilesQueued",
               "metric_path": "metrics/nifi/FlowFilesQueued",
               "service_name": "NIFI",
-              "component_name": "NIFI_MASTER"
+              "component_name": "NIFI_NODE"
             }
           ],
           "values": [
@@ -135,7 +135,7 @@
               "name": "BytesQueued",
               "metric_path": "metrics/nifi/BytesQueued",
               "service_name": "NIFI",
-              "component_name": "NIFI_MASTER"
+              "component_name": "NIFI_NODE"
             }
           ],
           "values": [
@@ -159,7 +159,7 @@
               "name": "BytesReadLast5Minutes",
               "metric_path": "metrics/nifi/BytesReadLast5Minutes",
               "service_name": "NIFI",
-              "component_name": "NIFI_MASTER"
+              "component_name": "NIFI_NODE"
             }
           ],
           "values": [
@@ -183,7 +183,7 @@
               "name": "BytesWrittenLast5Minutes",
               "metric_path": "metrics/nifi/BytesWrittenLast5Minutes",
               "service_name": "NIFI",
-              "component_name": "NIFI_MASTER"
+              "component_name": "NIFI_NODE"
             }
           ],
           "values": [
@@ -207,7 +207,7 @@
               "name": "ActiveThreads",
               "metric_path": "metrics/nifi/ActiveThreads",
               "service_name": "NIFI",
-              "component_name": "NIFI_MASTER"
+              "component_name": "NIFI_NODE"
             }
           ],
           "values": [
@@ -231,7 +231,7 @@
               "name": "TotalTaskDurationSeconds",
               "metric_path": "metrics/nifi/TotalTaskDurationSeconds",
               "service_name": "NIFI",
-              "component_name": "NIFI_MASTER"
+              "component_name": "NIFI_NODE"
             }
           ],
           "values": [
@@ -255,7 +255,7 @@
                  "name": "jvm.heap_used",
                  "metric_path": "metrics/jvm/heap_used",
                  "service_name": "NIFI",
-                 "component_name": "NIFI_MASTER"
+                 "component_name": "NIFI_NODE"
                }
              ],
              "values": [
@@ -279,7 +279,7 @@
                  "name": "jvm.heap_usage",
                  "metric_path": "metrics/jvm/heap_usage",
                  "service_name": "NIFI",
-                 "component_name": "NIFI_MASTER"
+                 "component_name": "NIFI_NODE"
                }
              ],
              "values": [
@@ -303,7 +303,7 @@
                   "name": "jvm.file_descriptor_usage",
                   "metric_path": "metrics/jvm/file_descriptor_usage",
                   "service_name": "NIFI",
-                  "component_name": "NIFI_MASTER"
+                  "component_name": "NIFI_NODE"
                 }
               ],
               "values": [
@@ -327,7 +327,7 @@
                     "name": "jvm.thread_count",
                     "metric_path": "metrics/jvm/thread_count",
                     "service_name": "NIFI",
-                    "component_name": "NIFI_MASTER"
+                    "component_name": "NIFI_NODE"
                   }
                 ],
                 "values": [
@@ -349,7 +349,7 @@
                     "name": "jvm.daemon_thread_count",
                     "metric_path": "metrics/jvm/daemon_thread_count",
                     "service_name": "NIFI",
-                    "component_name": "NIFI_MASTER"
+                    "component_name": "NIFI_NODE"
                   }
                 ],
                 "values": [
@@ -371,7 +371,7 @@
                      "name": "jvm.thread_states.runnable",
                      "metric_path": "metrics/jvm/thread_states/runnable",
                      "service_name": "NIFI",
-                     "component_name": "NIFI_MASTER"
+                     "component_name": "NIFI_NODE"
                    }
                  ],
                  "values": [
@@ -395,7 +395,7 @@
                      "name": "jvm.thread_states.blocked",
                      "metric_path": "metrics/jvm/thread_states/blocked",
                      "service_name": "NIFI",
-                     "component_name": "NIFI_MASTER"
+                     "component_name": "NIFI_NODE"
                    }
                  ],
                  "values": [
@@ -419,7 +419,7 @@
                      "name": "jvm.thread_states.timed_waiting",
                      "metric_path": "metrics/jvm/thread_states/timed_waiting",
                      "service_name": "NIFI",
-                     "component_name": "NIFI_MASTER"
+                     "component_name": "NIFI_NODE"
                    }
                  ],
                  "values": [
@@ -443,7 +443,7 @@
                      "name": "jvm.thread_states.terminated",
                      "metric_path": "metrics/jvm/thread_states/terminated",
                      "service_name": "NIFI",
-                     "component_name": "NIFI_MASTER"
+                     "component_name": "NIFI_NODE"
                    }
                  ],
                  "values": [

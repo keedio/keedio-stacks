@@ -4,15 +4,9 @@
 <configuration>
 
   <property>
-    <name>nifi_master_log_dir</name>
-    <value>/var/log/nifi_master</value>    
-    <description>NiFi Master Log dir</description>
-  </property> 
-  
-  <property>
-    <name>nifi_node_log_dir</name>
-    <value>/var/log/nifi_node</value>    
-    <description>NiFi Node Log dir</description>
+    <name>nifi_log_dir</name>
+    <value>/var/log/nifi</value>
+    <description>NiFi Log dir</description>
   </property> 
   
  <property>
@@ -78,16 +72,22 @@ java.arg.6=-Djava.protocol.handler.pkgs=sun.net.www.protocol
 
 # The G1GC is still considered experimental but has proven to be very advantageous in providing great
 # performance without significant "stop-the-world" delays.
-#java.arg.13=-XX:+UseG1GC
+java.arg.13=-XX:+UseG1GC
 
 #Set headless mode by default
 java.arg.14=-Djava.awt.headless=true
 
-#Ambari Metrics Collector URL - passed in to flow.xml for AmbariReportingTask
-java.arg.15=-Dambari.metrics.collector.url=http://{{metrics_collector_host}}:{{metrics_collector_port}}/ws/v1/timeline/metrics
+#Jaas file
+java.arg.15=-Djava.security.auth.login.config=/opt/nifi1/configuration_resources/jaas/kafka_client_jass.conf
 
-#Application ID - used in flow.xml - passed into flow.xml for AmbariReportingTask 
-java.arg.16=-Dambari.application.id=nifi
+# DEBUG
+#java.arg.16=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=4044
+
+#Ambari Metrics Collector URL - passed in to flow.xml for AmbariReportingTask
+java.arg.17=-Dambari.metrics.collector.url=http://{{metrics_collector_host}}:{{metrics_collector_port}}/ws/v1/timeline/metrics
+
+#Application ID - used in flow.xml - passed into flow.xml for AmbariReportingTask
+java.arg.18=-Dambari.application.id=nifi
 
 
 ###
