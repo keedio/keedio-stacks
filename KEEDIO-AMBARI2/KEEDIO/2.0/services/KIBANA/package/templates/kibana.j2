@@ -5,7 +5,7 @@ port: {{ kibana_port }}
 host: "0.0.0.0"
 
 # The Elasticsearch instance to use for all your queries.
-elasticsearch_url: "http://localhost:{{ es_port }}"
+elasticsearch_url: "http://{{ hostname }}:{{ es_port }}"
 
 # preserve_elasticsearch_host true will send the hostname specified in `elasticsearch`. If you set it to false,
 # then the host you use to connect to *this* Kibana instance will be sent.
@@ -50,7 +50,7 @@ shard_timeout: 0
 
 # Set to false to have a complete disregard for the validity of the SSL
 # certificate.
-verify_ssl: true
+verificationMode: full
 
 # SSL for outgoing requests from the Kibana Server (PEM formatted)
 # ssl_key_file: /path/to/your/server.key

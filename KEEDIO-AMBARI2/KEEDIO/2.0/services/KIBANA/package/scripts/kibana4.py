@@ -25,7 +25,7 @@ from utils import check_rc
 def kibana(action=None):
   
   if action == 'start' or action == 'stop' or action == 'status':
-    cmd=Popen(['service','kibana4',action],stdout=PIPE,stderr=PIPE)
+    cmd=Popen(['service','kibana',action],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     Logger.info('Kibana4 action: %s.\nSTDOUT=%s\nSTDERR=%s' % (action,out,err))
     if action == 'start' or action == 'status':
@@ -38,7 +38,7 @@ def kibana(action=None):
       group='kibana',
       mode=0550
     )
-    File('/usr/lib/kibana4/config/kibana.yml',
+    File('/usr/lib/kibana/config/kibana.yml',
       content=Template('kibana.j2'),
       owner='kibana',
       group='kibana'

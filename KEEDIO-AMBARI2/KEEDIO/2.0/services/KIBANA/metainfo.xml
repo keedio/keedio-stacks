@@ -23,7 +23,7 @@
       <name>KIBANA</name>
       <displayName>Kibana</displayName>
       <comment>Kibana is an open source analytics and visualization platform designed to work with Elasticsearch.</comment>
-      <version>4.1.11</version>
+      <version>5.4.1</version>
       <components>
         <component>
           <name>KIBANA</name>
@@ -46,7 +46,7 @@
               <name>elasticsearch</name>
             </package>
             <package>
-              <name>kibana4</name>
+              <name>kibana</name>
             </package>
           </packages>
         </osSpecific>

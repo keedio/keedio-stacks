@@ -23,7 +23,7 @@
       <name>ELASTICSEARCH</name>
       <displayName>ElasticSearch</displayName>
       <comment>A distributed, highly available, RESTful search engine</comment>
-      <version>1.7.6</version>
+      <version>5.4.1</version>
       <components>
 
         <component>

@@ -45,8 +45,14 @@ def elasticsearch(action=None):
     )
 
 
-    File('/etc/elasticsearch/elasticsearch.yml',
-      content=Template('elasticsearch.j2'),
+    File('/etc/elasticsearch/conf/elasticsearch.yml',
+      content=Template('elasticsearch.yml.j2'),
+      owner="elasticsearch",
+      group="elasticsearch",
+      mode=0644)
+ 
+    File('/etc/elasticsearch/conf/jvm.options',
+      content=Template('jvm.options.j2'),
       owner="elasticsearch",
       group="elasticsearch",
       mode=0644)
