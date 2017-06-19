@@ -9,7 +9,7 @@
       ],
       "components": [
         {
-          "name": "NIFI_MASTER"
+          "name": "NIFI_NODE"
         }
       ]
     }
