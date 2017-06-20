@@ -59,6 +59,7 @@ def setup_java():
   #elif params.jdk_name.endswith(".gz"):
   #  install_cmd = format("mkdir -p {java_dir} ; cd {java_dir} ; tar -xf {jdk_curl_target} > /dev/null 2>&1")
   
+  Package("python-pip")
   Package([params.jdk_name])
   Package("java-1.8.0-openjdk-devel")
   #Execute(install_cmd,
