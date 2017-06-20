@@ -4,7 +4,7 @@
   "configuration": {
     "protocol":
     {
-      "type":"http",
+      "type":"HTTP_ONLY",
       "checks":[
         {
           "property":"protocol",
