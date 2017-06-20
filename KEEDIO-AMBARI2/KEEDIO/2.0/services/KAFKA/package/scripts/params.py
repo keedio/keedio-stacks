@@ -25,12 +25,12 @@ import kazoo
 
 #exclude_packages=[]
 config = Script.get_config()
-zookeeper_server_hosts = str(default("/configurations/kafka-server-properties/zookeeper.connect",None))
+zookeeper_server_hosts = str(default("/configurations/kafka-broker/zookeeper.connect",None))
 kafka_broker_hosts = default("/clusterHostInfo/kafka_broker_hosts",[])
-log_dirs = default("/configurations/kafka-server-properties/log.dirs","")
+log_dirs = default("/configurations/kafka-broker/log.dirs","")
 
 ganglia_server_hosts = default('/clusterHostInfo/gangliaui_server_hosts', [])
-kafka_conf = default("/configurations/kafka-server-properties",[])
+kafka_conf = default("/configurations/kafka-broker",[])
 kafka_topic_conf = default("/configurations/kafka-topic-properties",[])
 
 has_ganglia_server = not len(ganglia_server_hosts) == 0
@@ -49,7 +49,7 @@ if config.has_key('hostname'):
 
 znode_kafka_path=str(default("/configurations/kafka-env/znode_path","/ambari/kafka"))
 kafka_id=None
-
+Logger.info("PROVAAA"+zookeeper_server_hosts)
 zk = KazooClient(hosts=zookeeper_server_hosts)
 zk.start()
 
@@ -63,4 +63,5 @@ else:
   zk.create(znode_kafka_path+'/brokers/'+hostname,value=str(kafka_id),makepath=True)
 lock.release()
 zk.stop()
+
 

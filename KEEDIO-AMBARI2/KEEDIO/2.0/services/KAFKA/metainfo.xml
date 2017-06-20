@@ -82,7 +82,7 @@
       </commandScript>
 
       <configuration-dependencies>
-        <config-type>kafka-server-properties</config-type>
+        <config-type>kafka-broker</config-type>
         <config-type>kafka-topic-properties</config-type>
       </configuration-dependencies>
       <restartRequiredAfterChange>true</restartRequiredAfterChange>
