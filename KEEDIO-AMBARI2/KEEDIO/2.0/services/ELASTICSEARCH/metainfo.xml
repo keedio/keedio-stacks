@@ -49,6 +49,17 @@
             <timeout>600</timeout>
           </commandScript>
         </component>
+        <component>
+          <name>CEREBRO</name>
+          <displayName>Cerebro</displayName>
+          <category>MASTER</category>
+          <cardinality>1</cardinality>
+          <commandScript>
+            <script>scripts/cerebro_handler.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+        </component>
       </components>
 
       <configFile>
@@ -78,6 +89,12 @@
         <scriptType>PYTHON</scriptType>
         <timeout>600</timeout>
       </commandScript>
+      <quickLinksConfigurations>
+        <quickLinksConfiguration>
+          <fileName>quicklinks.json</fileName>
+          <default>true</default>
+        </quickLinksConfiguration>
+      </quickLinksConfigurations>
       
     </service>
 

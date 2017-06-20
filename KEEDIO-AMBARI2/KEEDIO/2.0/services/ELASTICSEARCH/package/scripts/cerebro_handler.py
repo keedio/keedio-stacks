@@ -18,32 +18,34 @@ limitations under the License.
 
 """
 
-import requests
-
-try:
-    import simplejson as json
-    assert json
-except ImportError:
-    import json
-
+import sys
 from resource_management import *
 
-class ServiceCheck(Script):
-  def service_check(self, env):
-    import params
-    for host in params.es_master_hosts:
-      url = "http://" + host + ":" + str(params.es_port) + "/_cluster/health"
-      response = requests.get(url)
-      if response.ok:
-        break
-    response.raise_for_status()
-    parsed = json.loads(response.content)
-    if str(parsed['status']) == 'red':
-      raise Fail(response.content)
-    if str(parsed['status']) == 'yellow':
-      Logger.warning(response.content)
-    if str(parsed['status']) == 'green':
-      Logger.info(response.content)
+from cerebro import cerebro
 
+         
+class CerebroHandler(Script):
+  def install(self, env):
+    import params
+    self.install_packages(env)
+    cerebro(action='install')
+    
+  def configure(self, env):
+    import params
+    env.set_params(params)
+    cerebro(action='config')
+    
+  def start(self, env):
+    import params
+    env.set_params(params)
+    self.configure(env)
+    cerebro(action='start')
+    
+  def stop(self, env):
+    cerebro(action='stop')
+
+  def status(self, env):
+    cerebro(action='status')
+     
 if __name__ == "__main__":
-  ServiceCheck().execute()
+  CerebroHandler().execute()

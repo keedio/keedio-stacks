@@ -17,33 +17,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 """
-
-import requests
-
-try:
-    import simplejson as json
-    assert json
-except ImportError:
-    import json
+import os
 
 from resource_management import *
+from subprocess import *
+from utils import check_rc
+def cerebro(action=None):
+  
+  if action == 'start' or action == 'stop' or action == 'status':
+    cmd=Popen(['service','cerebro',action],stdout=PIPE,stderr=PIPE)
+    out,err=cmd.communicate()
+    Logger.info('Cerebro action: %s.\nSTDOUT=%s\nSTDERR=%s' % (action,out,err))
+    if action == 'start' or action == 'status':
+      check_rc(cmd.returncode,stdout=out,stderr=err)
 
-class ServiceCheck(Script):
-  def service_check(self, env):
+  if action == 'config' :
     import params
-    for host in params.es_master_hosts:
-      url = "http://" + host + ":" + str(params.es_port) + "/_cluster/health"
-      response = requests.get(url)
-      if response.ok:
-        break
-    response.raise_for_status()
-    parsed = json.loads(response.content)
-    if str(parsed['status']) == 'red':
-      raise Fail(response.content)
-    if str(parsed['status']) == 'yellow':
-      Logger.warning(response.content)
-    if str(parsed['status']) == 'green':
-      Logger.info(response.content)
+    File('/etc/cerebro/conf/application.conf',
+      content=Template('cerebro.application.conf'),
+      owner="cerebro",
+      group="cerebro",
+      mode=0644)
 
-if __name__ == "__main__":
-  ServiceCheck().execute()
+
+  if action == 'install' :
+     Package('cerebro')
