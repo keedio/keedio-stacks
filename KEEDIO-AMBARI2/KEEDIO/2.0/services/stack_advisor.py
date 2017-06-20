@@ -235,6 +235,16 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
         for host in commonHosts:
             items.append( { "type": 'host-component', "level": 'ERROR', "message": 'NameNode and Secondary NameNode should not be hosted on same machine', "component-name": 'GRAFANA', "host": str(host) } )
             items.append( { "type": 'host-component', "level": 'ERROR', "message": 'NameNode and Secondary NameNode should not be hosted on same machine', "component-name": 'METRICS_GRAFANA', "host": str(host) } )
+ # STORM Nimbus and DRPC should stay on different hosts
+    nimbusNodeHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "NIMBUS"]
+    drpcNodeHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "DRPC_SERVER"]
+    if hostsCount > 1 and len(nimbusNodeHosts) > 0 and len(drpcNodeHosts) > 0:
+        nimbusNodeHost = nimbusNodeHosts[0]
+        drpcNodeHost =  drpcNodeHosts[0]
+        commonHosts = list(set(nimbusNodeHost).intersection(drpcNodeHost))
+        for host in commonHosts:
+            items.append( { "type": 'host-component', "level": 'WARN', "message": 'Nimbus and DRPC server should not be hosted on same machine', "component-name": 'NIMBUS', "host": str(host) } )
+            items.append( { "type": 'host-component', "level": 'WARN', "message": 'Nimbus and DRPC server should not be hosted on same machine', "component-name": 'DRPC_SERVER', "host": str(host) } )
 
     # Validation COUCHBASE_CLUSTERSTARTER and COUCHBASE_SERVER are on different hosts if possible
     cbClustercreatorHosts = [component["StackServiceComponents"]["hostnames"] for component in componentsList if component["StackServiceComponents"]["component_name"] == "COUCHBASE_CLUSTERCREATOR"]
@@ -318,6 +328,7 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
     return items
 
   def getServiceConfigurationRecommenderDict(self):
+    print "JJJJJJJJJJJJJJJJJJJJ"
     return {
       "YARN": self.recommendYARNConfigurations,
       "HDFS": self.recommendHDFSConfigurations,
@@ -325,9 +336,17 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
       "STORM": self.recommendStormConfigurations,
       "OOZIE": self.recommendOozieConfigurations,
       "HIVE": self.recommendHiveConfigurations,
-      "AMBARI_METRICS": self.recommendAmsConfigurations,
-      "RANGER": self.recommendRangerConfigurations
+      "RANGER": self.recommendRangerConfigurations,
+      "KAFKA": self.recommendKafkaConfigurations,
     }
+
+  def recommendKafkaConfigurations(self, configurations, clusterData, services, hosts):
+    print "KKKKKKKKKKKKKKK"
+    kafka_mounts = [
+      ("log.dirs", "KAFKA_BROKER", "/kafka-logs", "multi")
+    ]
+
+    self.updateMountProperties("kafka-broker", kafka_mounts, configurations, services, hosts)
 
   def recommendOozieConfigurations(self, configurations, clusterData, services, hosts):
     oozieSiteProperties = getSiteProperties(services['configurations'], 'oozie-site')
@@ -400,7 +419,7 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
       protocol = self.getProtocol(hiveEnvProperties['hive_database'])
       oldSchemaName = getOldValue(self, services, "hive-site", "ambari.hive.db.schema.name")
       oldDBType = getOldValue(self, services, "hive-env", "hive_database")
-      database_host = clusterEnvProperties['database_host']
+      database_host = 'master7'
       # under these if constructions we are checking if hive server hostname available,
       # if it's default db connection url with "localhost" or if schema name was changed or if db type was changed (only for db type change from default mysql to existing mysql)
       # or if protocol according to current db type differs with protocol in db connection url(other db types changes)
@@ -1880,20 +1899,33 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
 
   def getComponentLayoutSchemes(self):
     return {
-      'NAMENODE': {"else": 0},
-      'SECONDARY_NAMENODE': {"else": 1},
+      'NAMENODE': {14: 0,"else": 0},
+      'SECONDARY_NAMENODE': {14: 1,"else": 1},
+      'DATANODE': {14: 4,"else": 1},
+      'COUCHBASE_CLUSTERCREATOR': {3: 0, 6: 1,"else": 0},
+      'COUCHBASE_SERVER': {3: 1, 6: 2,"else": 2},
       'HBASE_MASTER': {6: 0, 31: 2, "else": 3},
-
-      'HISTORYSERVER': {31: 1, "else": 2},
-      'RESOURCEMANAGER': {31: 1, "else": 2},
-
-      'OOZIE_SERVER': {6: 1, 31: 2, "else": 3},
-
-      'HIVE_SERVER': {6: 1, 31: 2, "else": 4},
-      'HIVE_METASTORE': {6: 1, 31: 2, "else": 4},
-      'WEBHCAT_SERVER': {6: 1, 31: 2, "else": 4},
+      'HISTORYSERVER': {14: 2, 31: 2, "else": 2},
+      'RESOURCEMANAGER': {14: 2, 31: 2, "else": 2},
+      'FLUME_SERVER': {14: 9, 31: 9, "else": 2},
+      'ZOOKEEPER_SERVER': {14: 10, 31: 10, "else": 2},
+      'KAFKA_BROKER': {14: 10, 31: 10, "else": 2},
+      'ELASTICSEARCH': {14: 6, 31: 6, "else": 2},
+      'KIBANA': {14: 7, 31: 7, "else": 2},
+      'GANGLIA_SERVER': {14: 7, 31: 7, "else": 2},
+      'SPARK_HISTORY_SERVER': {14: 7, 31: 7, "else": 2},
+      'KAFKA_MANAGER': {14: 7, 31: 7, "else": 2},
+      'HUE': {14: 7, 31: 7, "else": 2},
+      'DATA_GENERATOR': {14: 7, 31: 7, "else": 2},
+      'ES_DUMPER': {14: 9, 31: 9, "else": 2},
+      'OOZIE_SERVER': {6: 1, 31: 8, "else": 3},
       'METRICS_COLLECTOR': {3: 2, 6: 2, 31: 3, "else": 5},
-    }
+      'HIVE_SERVER': {6: 1, 31: 2, "else": 4},
+      'NIMBUS': {6: 3, 14: 5, 31: 5, "else": 2},
+      'DRPC_SERVER': {6: 2, 14: 6, 31: 6, "else": 3},
+      'HIVE_METASTORE': {6: 1, 31: 2, "else": 4},
+      'WEBHCAT_SERVER': {6: 1, 31: 2, "else": 4}
+      }
 
   def get_system_min_uid(self):
     login_defs = '/etc/login.defs'
