@@ -32,7 +32,7 @@ def elasticsearch(action=None):
       check_rc(cmd.returncode,stdout=out,stderr=err)
 
   if action == 'config' :
-    File('/etc/elasticsearch/elasticsearch.yml',
+    File('/etc/elasticsearch/conf/elasticsearch.yml',
       content=Template('elasticsearch.j2'),
       owner="elasticsearch",
       group="elasticsearch",
