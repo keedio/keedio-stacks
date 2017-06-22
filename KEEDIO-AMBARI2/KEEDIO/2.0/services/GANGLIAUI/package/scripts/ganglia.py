@@ -56,7 +56,7 @@ def generate_daemon(ganglia_service,
         content=Template("elasticsearch.pyconf.j2"),
         mode=0644)
       File("/usr/lib64/ganglia/python_modules/elasticsearch.py",
-        content=StaticFile("elasticsearch.py"),
+        content=Template("elasticsearch.py.j2"),
           mode=0644)
       File("/etc/ganglia/gmond.ElasticSearch.conf",
         content=Template("gmond.ElasticSearch.j2",

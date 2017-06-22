@@ -49,5 +49,8 @@ def gmond(action=None):
   Logger.info("Ganglia %s service %s: %s" % (service,action, cmd.returncode == 0))
    
   if action == "status" :
+      cmd=Popen(['systemctl',action,'gmond.Slaves.service'],stdout=PIPE,stderr=PIPE)
+      rc=cmd.returncode
       from functions import check_rc
       check_rc(rc,stdout=out,stderr=err)
+
