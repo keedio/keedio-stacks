@@ -30,7 +30,7 @@
           <category>MASTER</category>
           <cardinality>1+</cardinality>
           <commandScript>
-            <script>scripts/kafka.py</script>
+            <script>scripts/kafka_base.py</script>
             <scriptType>PYTHON</scriptType>
             <timeout>600</timeout>
           </commandScript>
@@ -39,7 +39,7 @@
               <name>Rebalance</name>
               <background>true</background>
               <commandScript>
-                <script>scripts/kafka.py</script>
+                <script>scripts/kafka_base.py</script>
                 <scriptType>PYTHON</scriptType>
               </commandScript>
             </customCommand>
@@ -47,7 +47,7 @@
               <name>Repartition</name>
               <background>true</background>
               <commandScript>
-                <script>scripts/kafka.py</script>
+                <script>scripts/kafka_base.py</script>
                 <scriptType>PYTHON</scriptType>
               </commandScript>
             </customCommand>
@@ -70,9 +70,6 @@
             </package>
             <package>
               <name>python-six</name>
-            </package>
-            <package>
-              <name>python-kafka</name>
             </package>
           </packages>
         </osSpecific>

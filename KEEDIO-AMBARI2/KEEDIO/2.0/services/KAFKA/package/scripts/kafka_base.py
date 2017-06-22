@@ -20,10 +20,12 @@ limitations under the License.
 from resource_management import *
 from kafka_handler import kafka
 from subprocess import *
+import pip
 
 class Kafka(Script):
   def install(self, env):
     #import params
+    pip.main(['install', 'kafka-python'])
     self.install_packages(env)
     #env.set_params(params)
     #self.configure(env)

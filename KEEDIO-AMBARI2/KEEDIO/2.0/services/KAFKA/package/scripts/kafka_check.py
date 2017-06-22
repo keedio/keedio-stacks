@@ -24,7 +24,8 @@ from kafka import KafkaConsumer
 class KafkaServiceCheck(Script):
 
   def service_check(self, env):
-    kafka(action='status')
+    #kafka(action='status')
+    help('modules')
     consumer = KafkaConsumer()
     topics = consumer.topics()  #
     Logger.info("Kafka topics: " + ', '.join(topics))
