@@ -424,23 +424,33 @@ class KEEDIO14StackAdvisor(DefaultStackAdvisor):
       'ZOOKEEPER_SERVER': {"min": 3},
       'HBASE_MASTER': {"min": 1},
       }
-
-  def getComponentLayoutSchemes(self):
+def getComponentLayoutSchemes(self):
     return {
-     'NAMENODE': {"else": 0},
-      'SECONDARY_NAMENODE': {"else": 1},
+      'NAMENODE': {14: 0,"else": 0},
+      'SECONDARY_NAMENODE': {14: 1,"else": 1},
+      'DATANODE': {14: 4,"else": 1},
       'COUCHBASE_CLUSTERCREATOR': {3: 0, 6: 1,"else": 0},
       'COUCHBASE_SERVER': {3: 1, 6: 2,"else": 2},
       'HBASE_MASTER': {6: 0, 31: 2, "else": 3},
-
-      'HISTORYSERVER': {31: 3, "else": 2},
-      'RESOURCEMANAGER': {31: 3, "else": 2},
-
+      'HISTORYSERVER': {14: 2, 31: 2, "else": 2},
+      'RESOURCEMANAGER': {14: 2, 31: 2, "else": 2},
+      'FLUME_SERVER': {14: 9, 31: 9, "else": 2},
+      'ZOOKEEPER_SERVER': {14: 10, 31: 10, "else": 2},
+      'KAFKA_BROKER': {14: 10, 31: 10, "else": 2},
+      'ELASTICSEARCH': {14: 6, 31: 6, "else": 2},
+      'KIBANA': {14: 7, 31: 7, "else": 2},
+      'GANGLIA_SERVER': {14: 7, 31: 7, "else": 2},
+      'SPARK_HISTORY_SERVER': {14: 7, 31: 7, "else": 2},
+      'KAFKA_MANAGER': {14: 7, 31: 7, "else": 2},
+      'HUE': {14: 7, 31: 7, "else": 2},
+      'DATA_GENERATOR': {14: 7, 31: 7, "else": 2},
+      'ES_DUMPER': {14: 9, 31: 9, "else": 2},
       'OOZIE_SERVER': {6: 1, 31: 8, "else": 3},
-
       'HIVE_SERVER': {6: 1, 31: 2, "else": 4},
       'HIVE_METASTORE': {6: 1, 31: 2, "else": 4},
       'WEBHCAT_SERVER': {6: 1, 31: 2, "else": 4},
+      'NIMBUS': {6: 3, 14: 6, 31: 6, "else": 4},
+      'DRPC_SERVER': {6: 3, 14: 6, 31: 6, "else": 4}
       }
 
 # Validation helper methods
