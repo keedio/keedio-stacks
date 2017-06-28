@@ -51,107 +51,82 @@
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsMessagesInPerSec/1MinuteRate": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsMessagesInPerSec.1MinuteRate",
+              "metric": "kafka.server.BrokerTopicMetrics.MessagesInPerSec.1MinuteRate",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsMessagesInPerSec/5MinuteRate": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsMessagesInPerSec.5MinuteRate",
+              "metric": "kafka.server.BrokerTopicMetrics.MessagesInPerSec.5MinuteRate",
               "pointInTime": false,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsMessagesInPerSec/15MinuteRate": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsMessagesInPerSec.15MinuteRate",
+              "metric": "kafka.server.BrokerTopicMetrics.MessagesInPerSec.15MinuteRate",
               "pointInTime": false,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsMessagesInPerSec/meanRate": {
-              "metric": "kafka.server.BrokerTopicMetrics/AllTopicsMessagesInPerSec/meanRate",
+              "metric": "kafka.server.BrokerTopicMetrics.MessagesInPerSec.meanRate",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsMessagesInPerSec/count": {
-              "metric": "kafka.server.BrokerTopicMetrics/AllTopicsMessagesInPerSec.counte",
+              "metric": "kafka.server.BrokerTopicMetrics.MessagesInPerSec.count",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsBytesInPerSec/1MinuteRate": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsBytesInPerSec.1MinuteRate",
+              "metric": "kafka.server.BrokerTopicMetrics.BytesInPerSec.1MinuteRate",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsBytesInPerSec/5MinuteRate": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsBytesInPerSec.5MinuteRate",
+              "metric": "kafka.server.BrokerTopicMetrics.BytesInPerSec.5MinuteRate",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsBytesInPerSec/15MinuteRate": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsBytesInPerSec.15MinuteRate",
+              "metric": "kafka.server.BrokerTopicMetrics.BytesInPerSec.15MinuteRate",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsBytesInPerSec/meanRate": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsBytesInPerSec.meanRate",
+              "metric": "kafka.server.BrokerTopicMetrics.BytesInPerSec.meanRate",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsBytesInPerSec/count": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsBytesInPerSec.count",
+              "metric": "kafka.server.BrokerTopicMetrics.BytesInPerSec.count",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsBytesOutPerSec/1MinuteRate": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsBytesOutPerSec.1MinuteRate",
+              "metric": "kafka.server.BrokerTopicMetrics.BytesOutPerSec.1MinuteRate",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsBytesOutPerSec/5MinuteRate": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsBytesOutPerSec.5MinuteRate",
+              "metric": "kafka.server.BrokerTopicMetrics.BytesOutPerSec.5MinuteRate",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsBytesOutPerSec/15MinuteRate": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsBytesOutPerSec.15MinuteRate",
+              "metric": "kafka.server.BrokerTopicMetrics.BytesOutPerSec.15MinuteRate",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsBytesOutPerSec/meanRate": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsBytesOutPerSec.meanRate",
+              "metric": "kafka.server.BrokerTopicMetrics.BytesOutPerSec.meanRate",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/server/BrokerTopicMetrics/AllTopicsBytesOutPerSec/count": {
-              "metric": "kafka.server.BrokerTopicMetrics.AllTopicsBytesOutPerSec.count",
+              "metric": "kafka.server.BrokerTopicMetrics.BytesOutPerSec.count",
               "pointInTime": true,
               "temporal": true
             },
             "metrics/kafka/controller/KafkaController/ActiveControllerCount": {
               "metric": "kafka.controller.KafkaController.ActiveControllerCount",
-              "pointInTime": true,
-              "temporal": true
-            },
-            "metrics/kafka/log/LogFlushStats/LogFlushRateAndTimeMs/meanRate": {
-              "metric": "kafka.log.LogFlushStats.LogFlushRateAndTimeMs.meanRate",
-              "pointInTime": true,
-              "temporal": true
-            },
-            "metrics/kafka/log/LogFlushStats/LogFlushRateAndTimeMs/1MinuteRate": {
-              "metric": "kafka.log.LogFlushStats.LogFlushRateAndTimeMs.1MinuteRate",
-              "pointInTime": true,
-              "temporal": true
-            },
-            "metrics/kafka/log/LogFlushStats/LogFlushRateAndTimeMs/5MinuteRate": {
-              "metric": "kafka.log.LogFlushStats.LogFlushRateAndTimeMs.1MinuteRate",
-              "pointInTime": true,
-              "temporal": true
-            },
-            "metrics/kafka/log/LogFlushStats/LogFlushRateAndTimeMs/15MinuteRate": {
-              "metric": "kafka.log.LogFlushStats.LogFlushRateAndTimeMs.15MinuteRate",
-              "pointInTime": true,
-              "temporal": true
-            },
-            "metrics/kafka/log/LogFlushStats/LogFlushRateAndTimeMs/count": {
-              "metric": "kafka.log.LogFlushStats.LogFlushRateAndTimeMs.count",
               "pointInTime": true,
               "temporal": true
             },
@@ -227,7 +202,7 @@
             },
 
             "metrics/kafka/server/ReplicaFetcherManager/Replica-MaxLag": {
-              "metric": "kafka.server.ReplicaFetcherManager.Replica-MaxLag",
+              "metric": "kafka.server.ReplicaFetcherManager.MaxLag.clientId.Replica",
               "pointInTime": true,
               "temporal": true
             },
