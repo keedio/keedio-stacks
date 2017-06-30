@@ -43,40 +43,83 @@ def database(action=None):
     Logger.info("Starting MariaDB")
     Logger.info(out)
     Logger.info(err)
-    
+    #Access denied for user 
     Logger.info("Starting mysql secure installation")
     child = pexpect.spawn ('/bin/mysql_secure_installation')
     child.logfile = open("/tmp/mylog", "w")
+    
     Logger.info("Enter current password for root (enter for none):")
     child.expect('.*current.*')
     Logger.info("except: sending current password")
     child.send('\r')
-    child.expect('.*Set root password?.*')
-    child.send('y\r')
-    Logger.info("except: setting new password")
-    child.expect('.*New password:.*')
-    child.send(params.password+'\r')
-    child.expect('.*Re-enter new password:.*')
-    child.send(params.password+'\r')
-    Logger.info("except: removing security risks")
-    child.expect('.*Remove anonymous users?.*')
-    child.send('y\r')
-    child.expect('.*Disallow root login remotely?.*')
-    child.send('y\r')
-    child.expect('.*Remove test database and access to it?.*')
-    child.send('y\r')
-    child.expect('.*Reload privilege tables now?.*')
-    child.send('y\r')
-    db = MySQLdb.connect("localhost",params.username,params.password)
-    cursor = db.cursor()
+    try:
+	    i=child.expect('.*Set root password?.*')
+	    Logger.info("ALee:"+i)
+	    if i==1:
+		    child.send('y\r')
+		    Logger.info("except: setting new password")
+		    child.expect('.*New password:.*')
+		    child.send(params.password+'\r')
+		    child.expect('.*Re-enter new password:.*')
+		    child.send(params.password+'\r')
+		    Logger.info("except: removing security risks")
+		    child.expect('.*Remove anonymous users?.*')
+		    child.send('y\r')
+		    child.expect('.*Disallow root login remotely?.*')
+		    child.send('y\r')
+		    child.expect('.*Remove test database and access to it?.*')
+		    child.send('y\r')
+		    child.expect('.*Reload privilege tables now?.*')
+		    child.send('y\r')
+	    if i==0:
+		    Logger.warning("Cannot set mysql security: wrong password")
+    except: 
+	    Logger.warning("Cannot set mysql security: wrong password")
+    try:
+	    db = MySQLdb.connect("localhost",params.username,params.password)
+	    cursor = db.cursor()
+    except:
+           raise Fail("Cannot connect to Maria DB")
+
+
+    # Hue DB configuration
     Logger.info("CREATE DATABASE "+params.hue_db_name+";")
-    cursor.execute("CREATE DATABASE "+params.hue_db_name+";")
-#    Logger.info("CREATE USER"+params.hue_db_username+" IDENTIFIED BY '"+params.hue_db_password+"';") 
-#    cursor.execute("CREATE USER"+params.hue_db_username+" IDENTIFIED BY '"+params.hue_db_password+"';")
+    try: 
+   	 cursor.execute("CREATE DATABASE "+params.hue_db_name+";")
+    except:
+         Logger.warning("Cannot create Hue Database, probably already created")
+
     Logger.info("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'localhost' IDENTIFIED BY '"+params.hue_db_password+"';")
-    cursor.execute("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'localhost' IDENTIFIED BY '"+params.hue_db_password+"';")
+    try:
+  	  cursor.execute("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'localhost' IDENTIFIED BY '"+params.hue_db_password+"';")
+    except:
+         Logger.warning("Cannot create Hue localhost db user")
+
     Logger.info("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'"+str(params.hue_server_host[0])+"' IDENTIFIED BY '"+params.hue_db_password+"';")
-    cursor.execute("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'"+str(params.hue_server_host[0])+"' IDENTIFIED BY '"+params.hue_db_password+"';")
+    try:
+	    cursor.execute("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'"+str(params.hue_server_host[0])+"' IDENTIFIED BY '"+params.hue_db_password+"';")
+    except:
+         Logger.warning("Cannot create Hue specific host db user")
+  
     cursor.execute("FLUSH PRIVILEGES;")
     
+    # Oozie DB configuration
+    if params.has_oozie: 
+	    Logger.info("CREATE DATABASE "+params.oozie_database+";")
+            try:
+	    	cursor.execute("CREATE DATABASE "+params.oozie_database+";")
+            except: 
+                Logger.warning("Cannot create Oozie db, probably already created")
+	    Logger.info("GRANT ALL ON "+params.oozie_database+".* to '"+params.oozie_db_user+"'@'localhost' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+            try:
+	    	cursor.execute("GRANT ALL ON "+params.oozie_database+".* to '"+params.oozie_db_user+"'@'localhost' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+            except: 
+                Logger.warning("Oozie db localhost permission cannot be set")
+	    Logger.info("GRANT ALL ON "+params.oozie_database+".* to '"+params.oozie_db_user+"'@'"+str(params.oozie_server_host[0])+"' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+            try:
+	    	cursor.execute("GRANT ALL ON "+params.oozie_database+".* to '"+params.oozie_db_user+"'@'"+str(params.oozie_server_host[0])+"' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+            except: 
+                Logger.warning("Oozie db host permission cannot be set")
+             
+	    cursor.execute("FLUSH PRIVILEGES;")
    

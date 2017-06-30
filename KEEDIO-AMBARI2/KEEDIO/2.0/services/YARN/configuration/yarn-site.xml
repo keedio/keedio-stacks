@@ -51,6 +51,14 @@
   </property>
 
   <property>
+    <name>yarn.admin.acl</name>
+    <value>yarn</value>
+    <description>
+      Administration of Acl
+    </description>
+  </property>
+  
+  <property>
     <name>yarn.resourcemanager.admin.address</name>
     <value>localhost:8141</value>
     <description>The address of the RM admin interface.</description>

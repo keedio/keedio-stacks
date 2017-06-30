@@ -22,23 +22,29 @@
 
 <configuration>
   <property>
-    <name>username</name>
-    <value>root</value>
-    <description>Mysql Administrator </description>
+    <name>oozie_user</name>
+    <value>oozie</value>
+    <!--property-type>USER</property-type-->
+    <description>Oozie User.</description>
   </property>
   <property>
-    <name>password</name>
-    <value>root</value>
-    <description>Mysql Admin password, minimum 6 characters </description>
+    <name>oozie_group</name>
+    <value>oozie</value>
+    <description>Oozie group</description>
   </property>
   <property>
-    <name>use_external_db</name>
-    <value>false</value>
-    <description>JDBC Driver for internal DB</description>
+    <name>oozie_port</name>
+    <value>11000</value>
+    <description>Port to bind oozie server</description>
   </property>
   <property>
-    <name>external_db_driver</name>
-    <value>none</value>
-    <description>JDBC Driver for external DB</description>
+    <name>oozie_https_port</name>
+    <value>11443</value>
+    <description>Secure port to bind oozie server</description>
   </property>
+  <property>
+    <name>oozie_admin_port</name>
+    <value>11001</value>
+  </property>
+
 </configuration>

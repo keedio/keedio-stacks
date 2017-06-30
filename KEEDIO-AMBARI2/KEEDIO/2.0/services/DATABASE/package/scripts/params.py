@@ -39,7 +39,15 @@ hue_db_name=str(default('/configurations/hue-database/db_name','hue'))
 hue_db_username=str(default('/configurations/hue-database/db_user','hue'))
 hue_db_password=str(default('/configurations/hue-database/db_password','hue'))
 
-#is_cb_creator = hostname in cb_clustercreator_host
-#is_cb_datanode = hostname in cb_data_hosts
-#is_cb_indexnode = hostname in cb_index_hosts
-#is_cb_querynode = hostname in cb_query_hosts
+
+oozie_server_host = default('/clusterHostInfo/oozie_server',[])
+has_oozie = not len(oozie_server_host) == 0
+if has_oozie:
+	oozie_database = default('/configurations/oozie-site/oozie_database',None)
+	oozie_db_schema_name = config['configurations']['oozie-site']['oozie.db.schema.name']
+	oozie_db_server = oozie_server_host
+	oozie_jdbc_url = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.url']
+	oozie_jdbc_driver = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.driver']
+	oozie_db_user = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.username']
+	oozie_db_pass = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.password']
+
