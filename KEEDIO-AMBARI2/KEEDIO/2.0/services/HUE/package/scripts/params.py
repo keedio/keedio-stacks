@@ -79,8 +79,10 @@ if has_hive:
 
 
 
+database_server_host = str(default("/clusterHostInfo/mysql_hosts", ["none"])[0])
 db_type=config['configurations']['hue-database']['db_type']
 db_host=config['configurations']['hue-database']['db_host']
+db_host=database_server_host
 db_port_config=config['configurations']['hue-database']['db_port']
 db_port='3306'
 db_name=config['configurations']['hue-database']['db_name']

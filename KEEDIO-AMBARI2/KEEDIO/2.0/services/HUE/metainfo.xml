@@ -79,6 +79,9 @@
           </packages>
         </osSpecific>
       </osSpecifics>
+      <requiredServices>
+        <service>DATABASE</service>
+      </requiredServices>
       <quickLinksConfigurations>
         <quickLinksConfiguration>
           <fileName>quicklinks.json</fileName>
