@@ -69,6 +69,8 @@ export JAVA_HOME={{java_home}}
 # export JAVA_OPTS="-Xms100m -Xmx2000m -Dcom.sun.management.jmxremote"
 {% if has_ganglia_server %}
 export JAVA_OPTS="-Dflume.monitoring.type=ganglia -Dflume.monitoring.hosts={{ganglia_server_host}}:8655" 
+{% elif has_metric_collector %}
+export JAVA_OPTS="-Dflume.monitoring.type=org.apache.hadoop.metrics2.sink.flume.FlumeTimelineMetricsSink -Dflume.monitoring.node={{metric_collector_host}}:{{metric_collector_port}}"
 {% endif %}
 # Note that the Flume conf directory is always included in the classpath.
 #FLUME_CLASSPATH=""
