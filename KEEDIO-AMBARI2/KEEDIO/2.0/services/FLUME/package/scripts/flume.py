@@ -61,6 +61,11 @@ def flume(action = None):
       PropertiesFile(flume_agent_conf_file,
         properties=flume_agents[agent],
         mode = 0644)
+    if params.has_metric_collector:
+      File(os.path.join(params.flume_conf_dir, "flume-metrics2.properties"),
+             owner=params.flume_user,
+             content=Template("flume-metrics2.properties.j2")
+        )
 
     if params.flume_extra is not None:
       #import jsonschema

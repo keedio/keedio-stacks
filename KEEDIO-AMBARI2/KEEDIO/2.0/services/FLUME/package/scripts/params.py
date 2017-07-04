@@ -19,6 +19,7 @@ limitations under the License.
 
 #from resource_management.libraries.functions.version import format_hdp_stack_version, compare_versions
 from resource_management import *
+from ambari_commons.ambari_metrics_helper import select_metric_collector_hosts_from_hostnames
 
 config = Script.get_config()
 
@@ -111,3 +112,21 @@ if has_metric_collector:
     metric_collector_protocol = 'https'
   else:
     metric_collector_protocol = 'http'
+  metric_truststore_path= default("/configurations/ams-ssl-client/ssl.client.truststore.location", "")
+  metric_truststore_type= default("/configurations/ams-ssl-client/ssl.client.truststore.type", "")
+  metric_truststore_password= default("/configurations/ams-ssl-client/ssl.client.truststore.password", "")
+  pass
+metrics_report_interval = default("/configurations/ams-site/timeline.metrics.sink.report.interval", 60)
+metrics_collection_period = default("/configurations/ams-site/timeline.metrics.sink.collection.period", 10)
+
+# Cluster Zookeeper quorum
+zookeeper_quorum = None
+if not len(default("/clusterHostInfo/zookeeper_hosts", [])) == 0:
+  if 'zoo.cfg' in config['configurations'] and 'clientPort' in config['configurations']['zoo.cfg']:
+    zookeeper_clientPort = config['configurations']['zoo.cfg']['clientPort']
+  else:
+    zookeeper_clientPort = '2181'
+  zookeeper_quorum = (':' + zookeeper_clientPort + ',').join(config['clusterHostInfo']['zookeeper_hosts'])
+  # last port config
+  zookeeper_quorum += ':' + zookeeper_clientPort
+
