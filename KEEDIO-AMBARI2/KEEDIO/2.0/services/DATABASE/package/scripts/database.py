@@ -52,7 +52,7 @@ def database(action=None):
     child.expect('.*current.*')
     Logger.info("except: sending current password")
     child.send('\r')
-    i=child.expect('.*Set root password?.*')
+    i=child.expect(['.*Set root password?.*',pexpect.TIMEOUT],timeout=2)
     Logger.info("ALee:"+str(i))
     if i==0:
 	    child.send('y\r')
@@ -102,19 +102,19 @@ def database(action=None):
     
     # Oozie DB configuration
     if params.has_oozie: 
-	    Logger.info("CREATE DATABASE "+params.oozie_database+";")
+	    Logger.info("CREATE DATABASE "+params.oozie_db_schema_name+";")
             try:
-	    	cursor.execute("CREATE DATABASE "+params.oozie_database+";")
+	    	cursor.execute("CREATE DATABASE "+params.oozie_db_schema_name+";")
             except: 
                 Logger.warning("Cannot create Oozie db, probably already created")
-	    Logger.info("GRANT ALL ON "+params.oozie_database+".* to '"+params.oozie_db_user+"'@'localhost' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+	    Logger.info("GRANT ALL ON "+params.oozie_db_schema_name+".* to '"+params.oozie_db_user+"'@'localhost' IDENTIFIED BY '"+params.oozie_db_pass+"';")
             try:
-	    	cursor.execute("GRANT ALL ON "+params.oozie_database+".* to '"+params.oozie_db_user+"'@'localhost' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+	    	cursor.execute("GRANT ALL ON "+params.oozie_db_schema_name+".* to '"+params.oozie_db_user+"'@'localhost' IDENTIFIED BY '"+params.oozie_db_pass+"';")
             except: 
                 Logger.warning("Oozie db localhost permission cannot be set")
-	    Logger.info("GRANT ALL ON "+params.oozie_database+".* to '"+params.oozie_db_user+"'@'"+str(params.oozie_server_host[0])+"' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+	    Logger.info("GRANT ALL ON "+params.oozie_db_schema_name+".* to '"+params.oozie_db_user+"'@'"+str(params.oozie_server_host[0])+"' IDENTIFIED BY '"+params.oozie_db_pass+"';")
             try:
-	    	cursor.execute("GRANT ALL ON "+params.oozie_database+".* to '"+params.oozie_db_user+"'@'"+str(params.oozie_server_host[0])+"' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+	    	cursor.execute("GRANT ALL ON "+params.oozie_db_schema_name+".* to '"+params.oozie_db_user+"'@'"+str(params.oozie_server_host[0])+"' IDENTIFIED BY '"+params.oozie_db_pass+"';")
             except: 
                 Logger.warning("Oozie db host permission cannot be set")
              

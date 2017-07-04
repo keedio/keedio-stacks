@@ -22,16 +22,6 @@
 
 <configuration>
   <property>
-    <name>db_type</name>
-    <value></value>
-    <description>Hue DB  type, allowed values are mysql, postgresql_psycopg2, oracle</description>
-  </property>
-  <property>
-    <name>db_host</name>
-    <value></value>
-    <description>Hue DB  server</description>
-  </property>
-  <property>
     <name>db_port</name>
     <value>default</value>
     <description>Hue DB port, default specifies the default port for the different database type.</description>

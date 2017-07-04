@@ -46,10 +46,7 @@ class OozieHandler(Script):
     oozie(action='stop')
 
   def status(self, env):
-    import params
-    raise ClientComponentHasNoStatus()
-#    env.set_params(params)
-#    oozie(action='status')
+    oozie(action='status')
      
 if __name__ == "__main__":
   OozieHandler().execute()

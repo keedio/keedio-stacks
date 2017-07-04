@@ -80,31 +80,46 @@ if has_hive:
 
 
 database_server_host = str(default("/clusterHostInfo/mysql_hosts", ["none"])[0])
-db_type=config['configurations']['hue-database']['db_type']
-db_host=config['configurations']['hue-database']['db_host']
-db_host=database_server_host
-db_port_config=config['configurations']['hue-database']['db_port']
+use_external_db = default('/configurations/database/use_external_db',False)
+db_host = default('/configurations/database/external_db_host',None)
+external_db_type = default('/configurations/database/external_db_type','mysql')
+if use_external_db:
+   hue_db_server = db_host
+   if external_db_type=='mysql':
+      db_type = "com.mysql.jdbc.Driver"
+      db_port='3306'
+   elif external_db_type=='postgres':
+      db_type = "com.postgresql.jdbc.driver"
+      db_port='5432'
+   elif external_db_type=='oracle':
+      db_port='1521'
+      db_type = "oracle.jdbc.driver.OracleDriver"
+
+else:
+    db_type='mysql'
+    db_host=database_server_host
+#db_port_config=config['configurations']['hue-database']['db_port']
 db_port='3306'
 db_name=config['configurations']['hue-database']['db_name']
 db_user=config['configurations']['hue-database']['db_user']
 db_password=config['configurations']['hue-database']['db_password']
 oracle_home=config['configurations']['hue-database']['oracle_home']
 
-if db_port_config == 'default':
+#if db_port_config == 'default':
 #setting default port value
-     if db_type == 'mysql':
-        db_port='3306'
-     if db_type == 'postgresql_psycopg2':
-        db_port='5432'
-     if db_type == 'oracle':
-        db_port='1521'
-else:
-     try:
-           int(db_port_config)
-     except:
-           Logger.info('db_port must be either a number or default')
-           raise Fail(stderr)
-     db_port=db_port_config  
+#     if db_type == 'mysql':
+#        db_port='3306'
+#     if db_type == 'postgresql':
+#        db_port='5432'
+#     if db_type == 'oracle':
+#        db_port='1521'
+#else:
+#     try:
+#           int(db_port_config)
+#     except:
+#           Logger.info('db_port must be either a number or default')
+#           raise Fail(stderr)
+#     db_port=db_port_config  
 
 kafka_broker_hosts = default("/clusterHostInfo/kafka_broker_hosts",[])
 has_kafka = not len(kafka_broker_hosts) == 0

@@ -27,19 +27,23 @@ def oozie(action=None,is_server=False):
   import params
   
   if action == 'install':
+    import params
     cmd=Popen(['/usr/sbin/usermod','-a','-G','hadoop','oozie'],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     Logger.info('Oozie action: %s.\nSTDOUT=%s\nSTDERR=%s' % (action,out,err))
 
 
   if action == 'start' or action == 'stop' or action == 'status':
+    import params
     cmd=Popen(['service','oozie',action],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     Logger.info('Oozie action: %s.\nSTDOUT=%s\nSTDERR=%s' % (action,out,err))
-    #if action == 'start' or action == 'status':
-    #  check_rc(cmd.returncode,stdout=out,stderr=err)
+
+  if action == 'status':
+      check_rc(cmd.returncode,stdout=out,stderr=err)
 
   if action == 'config' :
+    import params
 
     File(params.oozie_config_dir + '/oozie-site.xml',
       content=Template('oozie-site.j2'),
@@ -71,13 +75,19 @@ def oozie(action=None,is_server=False):
       #Popen(extract_cmd)
 
       #extract_cmd=[ 'ln', '-s','/usr/share/java/postgresql-jdbc.jar','/usr/lib/oozie/libext/postgresql-jdbc.jar' ]
-      extract_cmd=[ 'ln', '-s','/usr/share/java/mysql-connector-java.jar','/usr/lib/oozie/libext/mysql-jdbc-driver.jar' ] 
+      #extract_cmd=[ 'ln', '-s','/usr/share/java/mysql-connector-java.jar','/usr/lib/oozie/libext/mysql-jdbc-driver.jar' ] 
       Logger.info(params.oozie_jdbc_driver)
       if params.oozie_jdbc_driver == "com.mysql.jdbc.Driver":
          Logger.info('Oozie DB: MySQL')
          Package("mysql-connector-java")
-         #extract_cmd=[ 'ln', '-s','/usr/share/java/mysql-connector-java.jar','/usr/lib/oozie/libext/mysql-connector-java.jar' ] 
-         extract_cmd=[ 'ln', '-s','/usr/lib/ambari-agent/mysql-jdbc-driver.jar','/usr/lib/oozie/libext/mysql-jdbc-driver.jar' ] 
+         if os.path.exists('/usr/lib/oozie/libext/mysql-connector-java.jar'):
+            rm_cmd=[ 'rm', '-f','/usr/lib/oozie/libext/mysql-connector-java.jar' ] 
+            cmd=Popen(extract_cmd)
+            out,err=cmd.communicate() 
+            Logger.info("Removing existing jdbc symbolic link in /usr/lib/oozie/libext/")
+            Logger.info(str(out))
+            Logger.info(str(err))
+         extract_cmd=[ 'ln', '-s','/usr/share/java/mysql-connector-java.jar','/usr/lib/oozie/libext/mysql-connector-java.jar' ] 
       if params.oozie_jdbc_driver == "org.postgresql.Driver":
          Logger.info('Oozie DB: PostgreSQL')
          #extract_cmd=[ 'ln', '-s','/usr/share/java/postgresql-jdbc.jar','/usr/lib/oozie/libext/postgresql-jdbc.jar' ] 

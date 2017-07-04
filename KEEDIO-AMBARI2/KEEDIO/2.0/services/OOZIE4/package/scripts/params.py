@@ -44,11 +44,27 @@ hdfs_principal_name = default('/configurations/hadoop-env/hdfs_principal_name',N
 hdfs_user_keytab = default('/configurations/hadoop-env/hdfs_user_keytab',None)
 
 database_server_host = str(default("/clusterHostInfo/mysql_hosts", ["none"])[0])
-oozie_database = default('/configurations/oozie-site/oozie_database',None)
+use_external_db = default('/configurations/database/use_external_db',False)
+external_db_host = default('/configurations/database/external_db_host',None)
+external_db_type = default('/configurations/database/external_db_type','mysql')
 oozie_db_schema_name = config['configurations']['oozie-site']['oozie.db.schema.name']
-oozie_db_server = database_server_host
-oozie_jdbc_url = "jdbc:mysql://"+database_server_host+":3306/"+oozie_database
-oozie_jdbc_driver = "com.mysql.jdbc.Driver"
+if use_external_db:
+   oozie_db_server = external_db_host
+   if external_db_type=='mysql':
+      oozie_jdbc_driver = "com.mysql.jdbc.Driver"
+      oozie_jdbc_url = "jdbc:mysql://"+oozie_db_server+":3306/"+oozie_db_schema_name
+   elif external_db_type=='postgres':
+      oozie_jdbc_driver = "com.postgresql.jdbc.driver"
+      oozie_jdbc_url = "jdbc:postgresql://"+oozie_db_server+":5432/"+oozie_db_schema_name
+   elif external_db_type=='oracle':
+      oozie_jdbc_driver = "oracle.jdbc.driver.OracleDriver"
+      oozie_jdbc_url = "jdbc:oracle:thin:@//"+oozie_db_server+":1521/"+oozie_db_schema_name
+
+else:
+#USE internal database 
+   oozie_db_server = database_server_host
+   oozie_jdbc_url = "jdbc:mysql://"+database_server_host+":3306/"+oozie_db_schema_name
+   oozie_jdbc_driver = "com.mysql.jdbc.Driver"
 oozie_db_user = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.username']
 oozie_db_pass = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.password']
 

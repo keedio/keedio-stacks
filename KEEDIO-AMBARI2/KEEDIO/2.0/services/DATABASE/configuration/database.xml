@@ -37,8 +37,13 @@
     <description>JDBC Driver for internal DB</description>
   </property>
   <property>
-    <name>external_db_driver</name>
+    <name>external_db_host</name>
     <value>none</value>
-    <description>JDBC Driver for external DB</description>
+    <description>Host for external DB DB</description>
+  </property>
+  <property>
+    <name>external_db_type</name>
+    <value>none</value>
+    <description>External DB type, possibilities are mysql, postgres, oracle</description>
   </property>
 </configuration>
