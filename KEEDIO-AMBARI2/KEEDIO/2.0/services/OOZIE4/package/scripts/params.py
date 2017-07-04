@@ -48,7 +48,7 @@ oozie_database = default('/configurations/oozie-site/oozie_database',None)
 oozie_db_schema_name = config['configurations']['oozie-site']['oozie.db.schema.name']
 oozie_db_server = database_server_host
 oozie_jdbc_url = "jdbc:mysql://"+database_server_host+":3306/"+oozie_database
-oozie_jdbc_driver = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.driver']
+oozie_jdbc_driver = "com.mysql.jdbc.Driver"
 oozie_db_user = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.username']
 oozie_db_pass = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.password']
 
@@ -58,14 +58,14 @@ oozie_config_dir = '/etc/oozie/conf'
 oozie_log_dir = '/var/log/oozie'
 
 oozie_server = default('/clusterHostInfo/oozie_server',[[]])[0]
-oozie_port = config['configurations']['oozie-env']['oozie_port']
+oozie_port = int(config['configurations']['oozie-env']['oozie_port'])
 oozie_https_port = config['configurations']['oozie-env']['oozie_https_port']
 oozie_user = config['configurations']['oozie-env']['oozie_user']
 oozie_group = config['configurations']['oozie-env']['oozie_group']
-oozie_principal = default('/configurations/oozie-site/oozie.service.HadoopAccessorService.kerberos.principal',None)
-oozie_keytab = default('/configurations/oozie-site/oozie.service.HadoopAccessorService.keytab.file',None)
-oozie_spnego_principal = default('/configurations/oozie-site/oozie.authentication.kerberos.principal',None)
-oozie_spnego_keytab= default('/configurations/oozie-site/oozie.authentication.kerberos.keytab',None)
+oozie_principal = default('/configurations/oozie-site/oozie.service.HadoopAccessorService.kerberos.principal','oozie')
+oozie_keytab = default('/configurations/oozie-site/oozie.service.HadoopAccessorService.keytab.file','oozie.service')
+oozie_spnego_principal = default('/configurations/oozie-site/oozie.authentication.kerberos.principal','spengo')
+oozie_spnego_keytab= default('/configurations/oozie-site/oozie.authentication.kerberos.keytab','spengo')
 
 
 #is_derbydb=False
