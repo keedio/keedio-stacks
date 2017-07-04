@@ -31,17 +31,7 @@
     </description>
   </property>
 
-  <property>
-    <name>oozie_database</name>
-    <value>mysql</value>
-    <description>Type of database to use. 'mysql' is the only one tested, but 'derby', 'oracle' and 'postgres' will be added.</description>
-  </property>
 
-  <property>
-    <name>oozie.db.server</name>
-    <value>ambariclean.jcfernandez.cediant.es</value>
-    <description>Database server</description>
-  </property>
 
   <property>
     <name>oozie.service.JPAService.jdbc.username</name>
