@@ -1,0 +1,155 @@
+{
+  "name": "default",
+  "description": "Default theme for Database service",
+  "configuration": {
+    "layouts": [
+      {
+        "name": "default",
+        "tabs": [
+          {
+            "name": "Settings",
+            "display-name": "Settings",
+            "layout": {
+              "tab-columns": "2",
+              "tab-rows": "1",
+              "sections": [
+                {
+                  "name": "section-internal",
+                  "display-name": "Internal MariaDB",
+                  "row-index": "0",
+                  "column-index": "0",
+                  "row-span": "1",
+                  "column-span": "1",
+                  "section-columns": "1",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "subsection-internal-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "section-external",
+                  "display-name": "External Database",
+                  "row-index": "0",
+                  "column-index": "1",
+                  "row-span": "1",
+                  "column-span": "1",
+                  "section-columns": "1",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "subsection-external-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "placement": {
+      "configuration-layout": "default",
+      "configs": [
+        {
+          "config": "database/datadir",
+          "subsection-name": "subsection-internal-col1"
+        },
+        {
+          "config": "database/password",
+          "subsection-name": "subsection-internal-col1"
+        },
+        {
+          "config": "database/use_external_db",
+          "subsection-name": "subsection-external-col1"
+        },
+        {
+          "config": "database/external_db_host",
+          "subsection-name": "subsection-external-col1",
+          "depends-on": [
+             {
+              "configs":[
+                "database/use_external_db"
+              ],
+              "if": "${database/use_external_db}",
+              "then": {
+                "property_value_attributes": {
+                  "visible": true
+                }
+              },
+              "else": {
+                "property_value_attributes": {
+                  "visible": false
+                }
+              }
+            }
+          ]
+        },
+        {
+          "config": "database/external_db_type",
+          "subsection-name": "subsection-external-col1",
+          "depends-on": [
+             {
+              "configs":[
+                "database/use_external_db"
+              ],
+              "if": "${database/use_external_db}",
+              "then": {
+                "property_value_attributes": {
+                  "visible": true
+                }
+              },
+              "else": {
+                "property_value_attributes": {
+                  "visible": false
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "widgets": [
+       {
+        "config": "database/datadir",
+        "widget": {
+          "type": "directory"
+         }
+        },
+       {
+        "config": "database/password",
+        "widget": {
+          "type": "password"
+         }
+        },
+       {
+        "config": "database/use_external_db",
+        "widget": {
+          "type": "checkbox"
+         }
+        },
+       {
+        "config": "database/external_db_host",
+        "widget": {
+          "type": "text-field"
+         }
+        },
+       {
+        "config": "database/external_db_type",
+        "widget": {
+          "type": "combo"
+         }
+        }
+    ]
+  }
+}
+

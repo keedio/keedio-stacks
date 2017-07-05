@@ -1,0 +1,36 @@
+{
+  "DATABASE": {
+    "service": [],
+    "MYSQL": [
+      {
+        "name": "mysql_port",
+        "label": "MySQL port",
+        "description": "This host-level alert is triggered if MySQL port is unreachable.",
+        "interval": 1,
+        "scope": "ANY",
+        "source": {
+          "type": "WEB",
+          "uri": {
+              "http": "{{database/mysql_port}}",
+              "https": "{{database/mysql_port}}",
+              "https_property": "http",
+              "https_property_value": "https",
+              "connection_timeout": 5.0,
+              "default_port": 3306
+          },
+          "reporting": {
+              "ok": {
+                  "text": "HTTP {0} response in {2:.3f}s"
+              },
+              "warning":{
+                  "text": "HTTP {0} response from {1} in {2:.3f}s ({3})"
+              },
+              "critical": {
+                  "text": "Connection failed to {1} ({3})"
+              }
+          }
+        }
+      }
+    ]
+  }
+}
