@@ -25,25 +25,63 @@
     <name>username</name>
     <value>root</value>
     <description>Mysql Administrator </description>
+    <value-attributes>
+       <type>string</type>
+    </value-attributes>
   </property>
   <property>
     <name>password</name>
     <value>root</value>
     <description>Mysql Admin password, minimum 6 characters </description>
+    <value-attributes>
+       <type>string</type>
+    </value-attributes>
+  </property>
+  <property>
+    <name>datadir</name>
+    <value>/mysql</value>
+    <description>Data directory for MariaDB</description>
+    <value-attributes>
+       <type>string</type>
+    </value-attributes>
   </property>
   <property>
     <name>use_external_db</name>
     <value>false</value>
     <description>JDBC Driver for internal DB</description>
+    <value-attributes>
+       <type>boolean</type>
+    </value-attributes>
   </property>
   <property>
     <name>external_db_host</name>
     <value>none</value>
     <description>Host for external DB DB</description>
+    <value-attributes>
+       <type>string</type>
+    </value-attributes>
   </property>
   <property>
     <name>external_db_type</name>
     <value>none</value>
     <description>External DB type, possibilities are mysql, postgres, oracle</description>
+    <value-attributes>
+       <type>value-list</type>
+       <entries>
+	      <entry>
+		<value>mysql</value>
+		<description>MySQL or MariaDB</description>
+	      </entry>
+	      <entry>
+		<value>postgres</value>
+		<description>PostgreSQL</description>
+	      </entry>
+	      <entry>
+		<value>oracle</value>
+		<description>Oracle SQL Server</description>
+	      </entry>
+       </entries>
+       <selection-cardinality>1</selection-cardinality>
+    </value-attributes>
   </property>
 </configuration>

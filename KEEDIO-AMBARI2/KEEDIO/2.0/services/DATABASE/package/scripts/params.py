@@ -25,6 +25,8 @@ config = Script.get_config()
 cluster_name = config['clusterName']
 username = str(default('/configurations/database/username','root'))
 password = str(default('/configurations/database/password','root'))
+datadir = str(default('/configurations/database/datadir','/mysql'))
+Logger.info("AAAAAA:"+datadir)
 #cb_clustercreator_host = [ str(elem) for elem in config['clusterHostInfo']['couchbase_clustercreator_hosts']]
 #cb_server_hosts = [ str(elem) for elem in config['clusterHostInfo']['couchbase_server_hosts']]
 #cb_data_hosts = [ str(elem) for elem in default('/clusterHostInfo/couchbase_data_hosts',[]) ]

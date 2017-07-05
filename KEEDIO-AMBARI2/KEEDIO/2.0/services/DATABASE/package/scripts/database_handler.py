@@ -27,6 +27,7 @@ from database import database
 class CouchbaseHandler(Script):
   def install(self, env):
     import params
+    env.set_params(params)
     self.install_packages(env)
     database(action="install")
     

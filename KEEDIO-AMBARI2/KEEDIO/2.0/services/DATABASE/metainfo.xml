@@ -46,8 +46,16 @@
         </osSpecific>
       </osSpecifics>
 
+      <configuration-dependencies>
+        <config-type>database</config-type>
+      </configuration-dependencies>
 
-
+      <themes>
+          <theme>
+              <fileName>theme.json</fileName>
+              <default>true</default>
+          </theme>
+      </themes>
     </service>
   </services>
 </metainfo>

@@ -36,9 +36,22 @@ def database(action=None):
     Package('mariadb-server')
     Package('pexpect')
     Package('MySQL-python')
+    
     import pexpect 
     import MySQLdb
-    cmd=Popen(['service','mariadb','start'],stdout=PIPE,stderr=PIPE)
+
+    Logger.info("Configuring datadir")
+    Directory(params.datadir,
+            create_parents=True,
+            owner='mysql',
+            group='mysql')
+    File('/etc/my.cnf.d/server.cnf',
+       owner='mysql',
+       group='mysql',
+       mode=0644,
+       content=Template("server.cnf.j2")
+     )
+    cmd=Popen(['service','mariadb','restart'],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     Logger.info("Starting MariaDB")
     Logger.info(out)
