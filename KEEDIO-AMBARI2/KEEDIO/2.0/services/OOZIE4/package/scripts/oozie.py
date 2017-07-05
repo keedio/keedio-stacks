@@ -24,7 +24,6 @@ from subprocess import *
 from utils import check_rc, execute_sudo_krb
 from functools import partial
 def oozie(action=None,is_server=False):
-  import params
   
   if action == 'install':
     import params
@@ -33,17 +32,28 @@ def oozie(action=None,is_server=False):
     Logger.info('Oozie action: %s.\nSTDOUT=%s\nSTDERR=%s' % (action,out,err))
 
 
-  if action == 'start' or action == 'stop' or action == 'status':
+  if action == 'start' or action == 'stop':
     import params
     cmd=Popen(['service','oozie',action],stdout=PIPE,stderr=PIPE)
     out,err=cmd.communicate()
     Logger.info('Oozie action: %s.\nSTDOUT=%s\nSTDERR=%s' % (action,out,err))
 
   if action == 'status':
-      check_rc(cmd.returncode,stdout=out,stderr=err)
+    cmd=Popen(['service','oozie',action],stdout=PIPE,stderr=PIPE)
+    out,err=cmd.communicate()
+    check_rc(cmd.returncode,stdout=out,stderr=err)
 
   if action == 'config' :
     import params
+    import os
+    if not os.path.exists('/etc/oozie/conf'):
+       conf_cmd=[ 'ls', '-s','/etc/oozie/conf.d','/etc/oozie/conf' ] 
+       cmd=Popen(conf_cmd)
+       out,err=cmd.communicate() 
+       Logger.info("/etc/oozie/conf doesn't exist: creating symlink to conf.d")
+       Logger.info(str(out))
+       Logger.info(str(err))
+      
 
     File(params.oozie_config_dir + '/oozie-site.xml',
       content=Template('oozie-site.j2'),
@@ -82,7 +92,7 @@ def oozie(action=None,is_server=False):
          Package("mysql-connector-java")
          if os.path.exists('/usr/lib/oozie/libext/mysql-connector-java.jar'):
             rm_cmd=[ 'rm', '-f','/usr/lib/oozie/libext/mysql-connector-java.jar' ] 
-            cmd=Popen(extract_cmd)
+            cmd=Popen(rm_cmd)
             out,err=cmd.communicate() 
             Logger.info("Removing existing jdbc symbolic link in /usr/lib/oozie/libext/")
             Logger.info(str(out))
