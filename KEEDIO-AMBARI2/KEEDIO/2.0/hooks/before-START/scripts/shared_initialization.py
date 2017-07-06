@@ -97,7 +97,9 @@ def setup_hadoop():
              group=params.user_group,
              owner=params.hdfs_user,
         )
-
+      # Remove legacy metrics file
+      if os.path.exists(os.path.join(params.hadoop_conf_dir, "hadoop-metrics.properties")):
+	      os.remove(os.path.join(params.hadoop_conf_dir, "hadoop-metrics.properties"))
       if params.hadoop_metrics2_properties_content:
         File(os.path.join(params.hadoop_conf_dir, "hadoop-metrics2.properties"),
              owner=params.hdfs_user,
