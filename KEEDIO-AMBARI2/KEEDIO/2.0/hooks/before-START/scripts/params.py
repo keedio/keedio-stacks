@@ -295,6 +295,10 @@ else:
 
 if namenode_rpc:
  nn_rpc_client_port = namenode_rpc.split(':')[1].strip()
+else:
+# Keedio: we don't explicitly set dfs.namenode.rpc-address, so we cannot retrieve this information from configuration
+#We use default value, which is namenode_host:8020
+ nn_rpc_client_port=8020
 
 if dfs_ha_enabled:
  dfs_service_rpc_address = default(format('/configurations/hdfs-site/dfs.namenode.servicerpc-address.{dfs_ha_nameservices}.{namenode_id}'), None)
