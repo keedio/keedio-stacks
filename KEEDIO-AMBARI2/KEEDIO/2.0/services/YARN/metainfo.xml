@@ -154,6 +154,7 @@
         <config-type>mapred-site</config-type>
         <config-type>yarn-log4j</config-type>
       </configuration-dependencies>
+      <widgetsFileName>YARN_widgets.json</widgetsFileName>
       <metricsFileName>YARN_metrics.json</metricsFileName>
       <quickLinksConfigurations-dir>quicklinks-yarn</quickLinksConfigurations-dir>
       <quickLinksConfigurations>
@@ -259,6 +260,7 @@
         <config-type>mapred-site</config-type>
         <config-type>mapred-env</config-type>
       </configuration-dependencies>
+      <widgetsFileName>MAPREDUCE2_widgets.json</widgetsFileName>
       <metricsFileName>MAPREDUCE2_metrics.json</metricsFileName>
       <quickLinksConfigurations-dir>quicklinks-mapred</quickLinksConfigurations-dir>
       <quickLinksConfigurations>
