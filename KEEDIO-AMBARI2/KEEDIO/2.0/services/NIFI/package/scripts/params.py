@@ -2,7 +2,7 @@
 from resource_management import *
 from resource_management.libraries.script.script import Script
 import sys, os, glob
-from resource_management.libraries.functions.version import format_hdp_stack_version
+#from resource_management.libraries.functions.version import format_hdp_stack_version
 from resource_management.libraries.functions.default import default
 
 
@@ -19,15 +19,16 @@ nifi_initial_mem = config['configurations']['nifi-ambari-config']['nifi.initial_
 nifi_max_mem = config['configurations']['nifi-ambari-config']['nifi.max_mem']
 nifi_ambari_reporting_frequency = config['configurations']['nifi-ambari-config']['nifi.ambari_reporting_frequency']
 
-nifi_port = config['configurations']['nifi-ambari-config']['nifi.port']
+nifi_port = config['configurations']['nifi-ambari-config']['nifi.node.port']
 
 master_configs = config['clusterHostInfo']
-
-nifi_hosts = ",".join(master_configs['nifi_hosts'])
-nifi_dir = os.path.join(*[nifi_install_dir,nifi_dirname])
-
-conf_dir=''
-bin_dir=''
+#print master_configs
+nifi_hosts = ",".join(master_configs['nifi_node_hosts'])
+#nifi_dir = os.path.join(*[nifi_install_dir,nifi_dirname])
+nifi_dir = "/usr/lib/nifi"
+setup_prebuilt=True
+conf_dir='/etc/nifi/conf'
+bin_dir='/usr/lib/nifi/bin'
 
 
 

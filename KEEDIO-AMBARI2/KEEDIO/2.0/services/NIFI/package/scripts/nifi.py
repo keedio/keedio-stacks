@@ -24,17 +24,18 @@ class Master(Script):
     Directory([status_params.nifi_pid_dir, params.nifi_log_dir],
             owner=params.nifi_user,
             group=params.nifi_group,
-            recursive=True
+            create_parents=True
     )
 
     Execute('touch ' +  params.nifi_log_file, user=params.nifi_user)
-    Execute('rm -rf ' + params.nifi_dir, ignore_failures=True)
+    # Not sure why they want to delete this
+    #Execute('rm -rf ' + params.nifi_dir, ignore_failures=True)
     Execute('mkdir -p '+params.nifi_dir)
     
     Directory([params.nifi_dir],
             owner=params.nifi_user,
             group=params.nifi_group,
-            recursive=True
+            create_parents=True
     )          
     
     Execute('echo Installing packages')
