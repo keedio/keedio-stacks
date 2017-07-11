@@ -34,3 +34,47 @@ drpc.servers:
 {% for key, value in configurations|dictsort if not key.startswith('_') %}
 {{key}} : {{ escape_yaml_propetry(value) }}
 {% endfor %}
+
+{% if has_ganglia_server %}
+enableGanglia: {{has_ganglia_server}}
+
+# ganglia configuration (necessary if ganglia reporting is enabled)
+ganglia:
+
+  # how often to report to ganglia metrics (in seconds)
+  reportInterval: {{ganglia_report_interval}}
+
+  # the hostname of the gmond server where storm cluster metrics will be sent
+  host: "{{ganglia_server}}"
+
+  # address mode
+  # default is MULTICAST
+  addressMode: "UNICAST"
+
+  # an <IP>:<HOSTNAME> pair to spoof
+  # this allows us to simulate storm cluster metrics coming from a specific host
+  #spoof: "192.168.1.1:storm"
+{% endif %}
+
+{% if has_metric_collector %}
+enableGanglia: False
+
+ganglia:
+  reportInterval: {{metric_collector_report_interval}}
+
+enableMetricsSink: True
+
+metrics_collector:
+
+  reportInterval: {{metric_collector_report_interval}}
+  collector.hosts: "{{ams_collector_hosts}}"
+  protocol: "{{metric_collector_protocol}}"
+  port: "{{metric_collector_port}}"
+  appId: "{{metric_collector_app_id}}"
+
+  # HTTPS settings
+  truststore.path : "{{metric_truststore_path}}"
+  truststore.type : "{{metric_truststore_type}}"
+  truststore.password : "{{metric_truststore_password}}"
+
+{% endif %}
