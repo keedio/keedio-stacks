@@ -26,7 +26,6 @@ master_configs = config['clusterHostInfo']
 nifi_hosts = ",".join(master_configs['nifi_node_hosts'])
 #nifi_dir = os.path.join(*[nifi_install_dir,nifi_dirname])
 nifi_dir = "/usr/lib/nifi"
-setup_prebuilt=True
 conf_dir='/etc/nifi/conf'
 bin_dir='/usr/lib/nifi/bin'
 
