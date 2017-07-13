@@ -89,6 +89,8 @@ java.arg.17=-Dambari.metrics.collector.url=http://{{metrics_collector_host}}:{{m
 #Application ID - used in flow.xml - passed into flow.xml for AmbariReportingTask
 java.arg.18=-Dambari.application.id=nifi
 
+# Master key in hexadecimal format for encrypted sensitive configuration values
+nifi.bootstrap.sensitive.key=
 
 ###
 # Notification Services for notifying interested parties when NiFi is stopped, started, dies
