@@ -36,8 +36,22 @@ class Master(Script):
             owner=params.nifi_user,
             group=params.nifi_group,
             create_parents=True
-    )          
-    
+    )
+
+    # Create Nifi data dir
+    Directory([params.nifi_data_dir],
+              owner=params.nifi_user,
+              group=params.nifi_group,
+              create_parents=True
+    )
+
+    # Create Nifi conf & resources dir
+    Directory([params.nifi_conf_resources],
+              owner=params.nifi_user,
+              group=params.nifi_group,
+              create_parents=True
+    )
+
     Execute('echo Installing packages')
 
     # Install packages listed in metainfo.xml

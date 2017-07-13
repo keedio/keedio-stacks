@@ -24,7 +24,7 @@
 
 # Core Properties #
 nifi.version=1.2.0-keedio
-nifi.flow.configuration.file=../configuration_resources/flow.xml.gz
+nifi.flow.configuration.file={{nifi_conf_resources}}/flow.xml.gz
 nifi.flow.configuration.archive.enabled=true
 nifi.flow.configuration.archive.dir=/dato/nifi1/archive/
 nifi.flow.configuration.archive.max.time=180 days
@@ -38,13 +38,13 @@ nifi.bored.yield.duration=10 millis
 
 nifi.authorizer.configuration.file=./conf/authorizers.xml
 nifi.login.identity.provider.configuration.file=./conf/login-identity-providers.xml
-nifi.templates.directory=../configuration_resources/templates
+nifi.templates.directory={{nifi_conf_resources}}/templates
 nifi.ui.banner.text=Nifi in Ambari
 nifi.ui.autorefresh.interval=30 sec
 nifi.nar.library.directory=./lib
-nifi.nar.library.directory.custom=../configuration_resources/custom_lib
-nifi.nar.working.directory=/dato/nifi1/work/nar/
-nifi.documentation.working.directory=/dato/nifi1/work/docs/components
+nifi.nar.library.directory.custom={{nifi_conf_resources}}/custom_lib
+nifi.nar.working.directory={{nifi_data_dir}}/work/nar/
+nifi.documentation.working.directory={{nifi_data_dir}}/work/docs/components
 
 ####################
 # State Management #
@@ -57,16 +57,16 @@ nifi.state.management.provider.cluster=zk-provider
 # Specifies whether or not this instance of NiFi should run an embedded ZooKeeper server
 nifi.state.management.embedded.zookeeper.start=false
 # Properties file that provides the ZooKeeper properties to use if nifi.state.management.embedded.zookeeper.start is set to true
-nifi.state.management.embedded.zookeeper.properties=../configuration_resources/zookeeper.properties
+nifi.state.management.embedded.zookeeper.properties={{nifi_conf_resources}}/zookeeper.properties
 
 
 # H2 Settings
-nifi.database.directory=/dato/nifi1/database_repository
+nifi.database.directory={{nifi_data_dir}}/database_repository
 nifi.h2.url.append=;LOCK_TIMEOUT=25000;WRITE_DELAY=0;AUTO_SERVER=FALSE
 
 # FlowFile Repository
 nifi.flowfile.repository.implementation=org.apache.nifi.controller.repository.WriteAheadFlowFileRepository
-nifi.flowfile.repository.directory=/dato/nifi1/flowfile_repository
+nifi.flowfile.repository.directory={{nifi_data_dir}}/flowfile_repository
 nifi.flowfile.repository.partitions=256
 nifi.flowfile.repository.checkpoint.interval=2 mins
 nifi.flowfile.repository.always.sync=false
@@ -82,7 +82,7 @@ nifi.swap.out.threads=4
 nifi.content.repository.implementation=org.apache.nifi.controller.repository.FileSystemRepository
 nifi.content.claim.max.appendable.size=10 MB
 nifi.content.claim.max.flow.files=100
-nifi.content.repository.directory.default=/dato/nifi1/content_repository
+nifi.content.repository.directory.default={{nifi_data_dir}}/content_repository
 nifi.content.repository.archive.max.retention.period=12 hours
 nifi.content.repository.archive.max.usage.percentage=50%
 nifi.content.repository.archive.enabled=true
@@ -136,7 +136,7 @@ nifi.web.http.host={{nifi_host}}
 nifi.web.http.port={{nifi_port}}
 nifi.web.https.host=
 nifi.web.https.port=
-nifi.web.jetty.working.directory=/dato/nifi1/work/jetty
+nifi.web.jetty.working.directory={{nifi_data_dir}}/work/jetty
 nifi.web.jetty.threads=200
 
 # security properties #
