@@ -9,6 +9,7 @@ from resource_management.libraries.functions.default import default
     
 # server configurations
 config = Script.get_config()
+zookeeper_server_hosts = str(default("/configurations/kafka-server-properties/zookeeper.connect",None))
 
 nifi_dirname = 'nifi'
 
