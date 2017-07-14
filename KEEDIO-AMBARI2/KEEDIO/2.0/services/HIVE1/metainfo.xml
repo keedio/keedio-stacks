@@ -27,14 +27,14 @@
 
       <components>
         <component>
-            <name>HIVE_METASTORE</name>
+            <name>HIVE1_METASTORE</name>
             <displayName>Hive Metastore</displayName>
             <category>MASTER</category>
             <cardinality>1+</cardinality>
             <clientsToUpdateConfigs></clientsToUpdateConfigs>
             <auto-deploy>
                 <enabled>true</enabled>
-                <co-locate>HIVE/HIVE_SERVER</co-locate>
+                <co-locate>HIVE1/HIVE1_SERVER</co-locate>
             </auto-deploy>
             <commandScript>
                 <script>scripts/hive_metastore_handler.py</script>
@@ -42,7 +42,7 @@
               <timeout>1200</timeout>
             </commandScript>
             <configuration-dependencies>
-                <config-type>hive-site</config-type>
+                <config-type>hive1-site</config-type>
             </configuration-dependencies>
         </component>
         <component>
@@ -56,7 +56,7 @@
           </commandScript>
         </component>
         <component>
-          <name>HIVE_SERVER</name>
+          <name>HIVE1_SERVER</name>
           <displayName>Hive Server2</displayName>
           <category>MASTER</category>
           <cardinality>1+</cardinality>
@@ -68,8 +68,8 @@
           <configFiles>
             <configFile>
               <type>xml</type>
-              <fileName>hive-site.xml</fileName>
-              <dictionaryName>hive-site</dictionaryName>
+              <fileName>hive1-site.xml</fileName>
+              <dictionaryName>hive1-site</dictionaryName>
             </configFile>
           </configFiles>
         </component>
@@ -132,7 +132,7 @@
       </osSpecifics>
  
      <commandScript>
-        <script>scripts/service_check.py</script>
+        <script>scripts/service1_check.py</script>
         <name>HIVE_SERVICE_CHECK</name>
         <scriptType>PYTHON</scriptType>
         <timeout>300</timeout>
@@ -140,6 +140,7 @@
       
       <requiredServices>
         <service>YARN</service>
+        <service>DATABASE</service>
       </requiredServices>
 
       <themes>
@@ -150,7 +151,7 @@
       </themes>
 
       <configuration-dependencies>
-        <config-type>hive-site</config-type>
+        <config-type>hive1-site</config-type>
         <config-type>yarn-site</config-type>
         <config-type>hive-env</config-type>
       </configuration-dependencies>

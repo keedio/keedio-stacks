@@ -50,9 +50,9 @@ def hive(action=None,service=None):
     import params
     XmlConfig("hive-site.xml",
             conf_dir = params.config_dir,
-            configurations = params.config['configurations']['hive-site'],
+            configurations = params.config['configurations']['hive1-site'],
             owner=params.hive_user,
-            configuration_attributes=params.config['configuration_attributes']['hive-site']
+            configuration_attributes=params.config['configuration_attributes']['hive1-site']
     )
     #File(params.config_dir + '/hive-site.xml',
     #  content=Template('hive-site.j2'),

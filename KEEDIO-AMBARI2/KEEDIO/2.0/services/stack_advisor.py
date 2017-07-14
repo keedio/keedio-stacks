@@ -395,39 +395,39 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
           putOozieProperty('oozie.service.JPAService.jdbc.url', dbConnection)
 
   def recommendHiveConfigurations(self, configurations, clusterData, services, hosts):
-    hiveSiteProperties = getSiteProperties(services['configurations'], 'hive-site')
+    hiveSiteProperties = getSiteProperties(services['configurations'], 'hive1-site')
     hiveEnvProperties = getSiteProperties(services['configurations'], 'hive-env')
     clusterEnvProperties = getSiteProperties(services['configurations'], 'spacewalk')
     containerSize = clusterData['mapMemory'] if clusterData['mapMemory'] > 2048 else int(clusterData['reduceMemory'])
     containerSize = min(clusterData['containers'] * clusterData['ramPerContainer'], containerSize)
     container_size_bytes = int(containerSize)*1024*1024
     putHiveEnvProperty = self.putProperty(configurations, "hive-env", services)
-    putHiveProperty = self.putProperty(configurations, "hive-site", services)
+    putHiveProperty = self.putProperty(configurations, "hive1-site", services)
     putHiveProperty('hive.auto.convert.join.noconditionaltask.size', int(round(container_size_bytes / 3)))
     putHiveProperty('hive.tez.java.opts', "-server -Xmx" + str(int(round((0.8 * containerSize) + 0.5)))
                     + "m -Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA -XX:+UseParallelGC -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps")
     putHiveProperty('hive.tez.container.size', containerSize)
 
     # javax.jdo.option.ConnectionURL recommendations
-    if hiveEnvProperties and self.checkSiteProperties(hiveEnvProperties, 'hive_database', 'hive_database_type'):
-      putHiveEnvProperty('hive_database_type', self.getDBTypeAlias(hiveEnvProperties['hive_database']))
-    if hiveEnvProperties and hiveSiteProperties and self.checkSiteProperties(hiveSiteProperties, 'javax.jdo.option.ConnectionDriverName') and self.checkSiteProperties(hiveEnvProperties, 'hive_database'):
-      putHiveProperty('javax.jdo.option.ConnectionDriverName', self.getDBDriver(hiveEnvProperties['hive_database']))
-    if hiveSiteProperties and hiveEnvProperties and self.checkSiteProperties(hiveSiteProperties, 'ambari.hive.db.schema.name', 'javax.jdo.option.ConnectionURL') and self.checkSiteProperties(hiveEnvProperties, 'hive_database'):
-      hiveServerHost = self.getHostWithComponent('HIVE', 'HIVE_SERVER', services, hosts)
-      hiveDBConnectionURL = hiveSiteProperties['javax.jdo.option.ConnectionURL']
-      protocol = self.getProtocol(hiveEnvProperties['hive_database'])
-      oldSchemaName = getOldValue(self, services, "hive-site", "ambari.hive.db.schema.name")
-      oldDBType = getOldValue(self, services, "hive-env", "hive_database")
-      database_host = 'master7'
+#    if hiveEnvProperties and self.checkSiteProperties(hiveEnvProperties, 'hive_database', 'hive_database_type'):
+#      putHiveEnvProperty('hive_database_type', self.getDBTypeAlias(hiveEnvProperties['hive_database']))
+#    if hiveEnvProperties and hiveSiteProperties and self.checkSiteProperties(hiveSiteProperties, 'javax.jdo.option.ConnectionDriverName') and self.checkSiteProperties(hiveEnvProperties, 'hive_database'):
+#      putHiveProperty('javax.jdo.option.ConnectionDriverName', self.getDBDriver(hiveEnvProperties['hive_database']))
+#    if hiveSiteProperties and hiveEnvProperties and self.checkSiteProperties(hiveSiteProperties, 'ambari.hive.db.schema.name', 'javax.jdo.option.ConnectionURL') and self.checkSiteProperties(hiveEnvProperties, 'hive_database'):
+#      hiveServerHost = self.getHostWithComponent('HIVE', 'HIVE1_SERVER', services, hosts)
+#      hiveDBConnectionURL = hiveSiteProperties['javax.jdo.option.ConnectionURL']
+#      protocol = self.getProtocol(hiveEnvProperties['hive_database'])
+#      oldSchemaName = getOldValue(self, services, "hive1-site", "ambari.hive.db.schema.name")
+#      oldDBType = getOldValue(self, services, "hive-env", "hive_database")
+#      database_host = 'master7'
       # under these if constructions we are checking if hive server hostname available,
       # if it's default db connection url with "localhost" or if schema name was changed or if db type was changed (only for db type change from default mysql to existing mysql)
       # or if protocol according to current db type differs with protocol in db connection url(other db types changes)
-      if hiveServerHost is not None:
-        if (hiveDBConnectionURL and "//localhost" in hiveDBConnectionURL) or oldSchemaName or oldDBType or (protocol and hiveDBConnectionURL and not hiveDBConnectionURL.startswith(protocol)):
+#      if hiveServerHost is not None:
+#        if (hiveDBConnectionURL and "//localhost" in hiveDBConnectionURL) or oldSchemaName or oldDBType or (protocol and hiveDBConnectionURL and not hiveDBConnectionURL.startswith(protocol)):
 #          dbConnection = self.getDBConnectionString(hiveEnvProperties['hive_database']).format(hiveServerHost['Hosts']['host_name'], hiveSiteProperties['ambari.hive.db.schema.name'])
-          dbConnection = self.getDBConnectionString(hiveEnvProperties['hive_database']).format(database_host, hiveSiteProperties['ambari.hive.db.schema.name'])
-          putHiveProperty('javax.jdo.option.ConnectionURL', dbConnection)
+#          dbConnection = self.getDBConnectionString(hiveEnvProperties['hive_database']).format(database_host, hiveSiteProperties['ambari.hive.db.schema.name'])
+#          putHiveProperty('javax.jdo.option.ConnectionURL', dbConnection)
 
     servicesList = self.get_services_list(services)
     if "PIG" in servicesList:
@@ -577,7 +577,7 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
               and "webhcat_user" in services["configurations"]["hive-env"]["properties"]:
         hive_user = services["configurations"]["hive-env"]["properties"]["hive_user"]
         webhcat_user = services["configurations"]["hive-env"]["properties"]["webhcat_user"]
-        hiveServerHosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER", services, hosts)
+        hiveServerHosts = self.getHostsWithComponent("HIVE", "HIVE1_SERVER", services, hosts)
         hiveServerInteractiveHosts = self.getHostsWithComponent("HIVE", "HIVE_SERVER_INTERACTIVE", services, hosts)
         webHcatServerHosts = self.getHostsWithComponent("HIVE", "WEBHCAT_SERVER", services, hosts)
 
@@ -1920,10 +1920,10 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
       'ES_DUMPER': {14: 9, 31: 9, "else": 2},
       'OOZIE_SERVER': {6: 1, 31: 8, "else": 3},
       'METRICS_COLLECTOR': {3: 2, 6: 2, 31: 3, "else": 5},
-      'HIVE_SERVER': {6: 1, 31: 2, "else": 4},
+      'HIVE1_SERVER': {6: 1, 31: 2, "else": 4},
       'NIMBUS': {6: 3, 14: 5, 31: 5, "else": 2},
       'DRPC_SERVER': {6: 2, 14: 6, 31: 6, "else": 3},
-      'HIVE_METASTORE': {6: 1, 31: 2, "else": 4},
+      'HIVE1_METASTORE': {6: 1, 31: 2, "else": 4},
       'WEBHCAT_SERVER': {6: 1, 31: 2, "else": 4}
       }
 
@@ -2264,7 +2264,7 @@ def getHeapsizeProperties():
            "HBASE_MASTER": [{"config-name": "hbase-env",
                              "property": "hbase_master_heapsize",
                              "default": "1024m"}],
-           "HIVE_CLIENT": [{"config-name": "hive-site",
+           "HIVE1_CLIENT": [{"config-name": "hive1-site",
                             "property": "hive.heapsize",
                             "default": "1024m"}],
            "HISTORYSERVER": [{"config-name": "mapred-env",

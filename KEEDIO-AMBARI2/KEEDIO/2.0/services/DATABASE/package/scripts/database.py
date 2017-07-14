@@ -66,7 +66,6 @@ def database(action=None):
     Logger.info("except: sending current password")
     child.send('\r')
     i=child.expect(['.*Set root password?.*',pexpect.TIMEOUT],timeout=2)
-    Logger.info("ALee:"+str(i))
     if i==0:
 	    child.send('y\r')
 	    Logger.info("except: setting new password")
@@ -93,25 +92,26 @@ def database(action=None):
 
 
     # Hue DB configuration
-    Logger.info("CREATE DATABASE "+params.hue_db_name+";")
-    try: 
-   	 cursor.execute("CREATE DATABASE "+params.hue_db_name+";")
-    except:
-         Logger.warning("Cannot create Hue Database, probably already created")
+    if params.has_hue: 
+	    Logger.info("CREATE DATABASE "+params.hue_db_name+";")
+	    try: 
+		 cursor.execute("CREATE DATABASE "+params.hue_db_name+";")
+	    except:
+		 Logger.warning("Cannot create Hue Database, probably already created")
 
-    Logger.info("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'localhost' IDENTIFIED BY '"+params.hue_db_password+"';")
-    try:
-  	  cursor.execute("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'localhost' IDENTIFIED BY '"+params.hue_db_password+"';")
-    except:
-         Logger.warning("Cannot create Hue localhost db user")
+	    Logger.info("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'localhost' IDENTIFIED BY '"+params.hue_db_password+"';")
+	    try:
+		  cursor.execute("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'localhost' IDENTIFIED BY '"+params.hue_db_password+"';")
+	    except:
+		 Logger.warning("Cannot create Hue localhost db user")
 
-    Logger.info("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'"+str(params.hue_server_host[0])+"' IDENTIFIED BY '"+params.hue_db_password+"';")
-    try:
-	    cursor.execute("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'"+str(params.hue_server_host[0])+"' IDENTIFIED BY '"+params.hue_db_password+"';")
-    except:
-         Logger.warning("Cannot create Hue specific host db user")
-  
-    cursor.execute("FLUSH PRIVILEGES;")
+	    Logger.info("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'"+str(params.hue_server_host[0])+"' IDENTIFIED BY '"+params.hue_db_password+"';")
+	    try:
+		    cursor.execute("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'"+str(params.hue_server_host[0])+"' IDENTIFIED BY '"+params.hue_db_password+"';")
+	    except:
+		 Logger.warning("Cannot create Hue specific host db user")
+	  
+	    cursor.execute("FLUSH PRIVILEGES;")
     
     # Oozie DB configuration
     if params.has_oozie: 
@@ -132,4 +132,94 @@ def database(action=None):
                 Logger.warning("Oozie db host permission cannot be set")
              
 	    cursor.execute("FLUSH PRIVILEGES;")
+
+    # Hive DB configuration
+    if params.has_hive: 
+	    Logger.info("CREATE DATABASE "+params.hive_jdbc_db+";")
+            try:
+	    	cursor.execute("CREATE DATABASE "+params.hive_jdbc_db+";")
+            except: 
+                Logger.warning("Cannot create Hive db, probably already created")
+	    Logger.info("GRANT ALL ON "+params.hive_jdbc_db+".* to '"+params.hive_db_user+"'@'localhost' IDENTIFIED BY '"+params.hive_db_pass+"';")
+            try:
+	    	cursor.execute("GRANT ALL ON "+params.hive_jdbc_db+".* to '"+params.hive_db_user+"'@'localhost' IDENTIFIED BY '"+params.hive_db_pass+"';")
+            except: 
+                Logger.warning("Hive db localhost permission cannot be set")
+	    Logger.info("GRANT ALL ON "+params.hive_jdbc_db+".* to '"+params.hive_db_user+"'@'"+str(params.hive_meta_host[0])+"' IDENTIFIED BY '"+params.hive_db_pass+"';")
+            try:
+	    	cursor.execute("GRANT ALL ON "+params.hive_jdbc_db+".* to '"+params.hive_db_user+"'@'"+str(params.hive_meta_host[0])+"' IDENTIFIED BY '"+params.hive_db_pass+"';")
+            except: 
+                Logger.warning("Hive db host permission cannot be set")
+             
+	    cursor.execute("FLUSH PRIVILEGES;")
    
+  elif action == 'post' :
+    import params
+    import MySQLdb
+    try:
+	    db = MySQLdb.connect("localhost",params.username,params.password)
+	    cursor = db.cursor()
+    except:
+           raise Fail("Cannot connect to Maria DB")
+    # Hue DB configuration
+    if params.has_hue: 
+	    Logger.info("CREATE DATABASE "+params.hue_db_name+";")
+	    try: 
+		 cursor.execute("CREATE DATABASE "+params.hue_db_name+";")
+	    except:
+		 Logger.warning("Cannot create Hue Database, probably already created")
+
+	    Logger.info("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'localhost' IDENTIFIED BY '"+params.hue_db_password+"';")
+	    try:
+		  cursor.execute("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'localhost' IDENTIFIED BY '"+params.hue_db_password+"';")
+	    except:
+		 Logger.warning("Cannot create Hue localhost db user")
+
+	    Logger.info("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'"+str(params.hue_server_host[0])+"' IDENTIFIED BY '"+params.hue_db_password+"';")
+	    try:
+		    cursor.execute("GRANT ALL ON "+params.hue_db_name+".* to '"+params.hue_db_username+"'@'"+str(params.hue_server_host[0])+"' IDENTIFIED BY '"+params.hue_db_password+"';")
+	    except:
+		 Logger.warning("Cannot create Hue specific host db user")
+	  
+	    cursor.execute("FLUSH PRIVILEGES;")
+    
+    # Oozie DB configuration
+    if params.has_oozie: 
+	    Logger.info("CREATE DATABASE "+params.oozie_db_schema_name+";")
+            try:
+	    	cursor.execute("CREATE DATABASE "+params.oozie_db_schema_name+";")
+            except: 
+                Logger.warning("Cannot create Oozie db, probably already created")
+	    Logger.info("GRANT ALL ON "+params.oozie_db_schema_name+".* to '"+params.oozie_db_user+"'@'localhost' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+            try:
+	    	cursor.execute("GRANT ALL ON "+params.oozie_db_schema_name+".* to '"+params.oozie_db_user+"'@'localhost' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+            except: 
+                Logger.warning("Oozie db localhost permission cannot be set")
+	    Logger.info("GRANT ALL ON "+params.oozie_db_schema_name+".* to '"+params.oozie_db_user+"'@'"+str(params.oozie_server_host[0])+"' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+            try:
+	    	cursor.execute("GRANT ALL ON "+params.oozie_db_schema_name+".* to '"+params.oozie_db_user+"'@'"+str(params.oozie_server_host[0])+"' IDENTIFIED BY '"+params.oozie_db_pass+"';")
+            except: 
+                Logger.warning("Oozie db host permission cannot be set")
+             
+	    cursor.execute("FLUSH PRIVILEGES;")
+    # Hive DB configuration
+    if params.has_hive: 
+	    Logger.info("CREATE DATABASE "+params.hive_jdbc_db+";")
+            try:
+	    	cursor.execute("CREATE DATABASE "+params.hive_jdbc_db+";")
+            except: 
+                Logger.warning("Cannot create Hive db, probably already created")
+	    Logger.info("GRANT ALL ON "+params.hive_jdbc_db+".* to '"+params.hive_db_user+"'@'localhost' IDENTIFIED BY '"+params.hive_db_pass+"';")
+            try:
+	    	cursor.execute("GRANT ALL ON "+params.hive_jdbc_db+".* to '"+params.hive_db_user+"'@'localhost' IDENTIFIED BY '"+params.hive_db_pass+"';")
+            except: 
+                Logger.warning("Hive db localhost permission cannot be set")
+	    Logger.info("GRANT ALL ON "+params.hive_jdbc_db+".* to '"+params.hive_db_user+"'@'"+str(params.hive_meta_host[0])+"' IDENTIFIED BY '"+params.hive_db_pass+"';")
+            try:
+	    	cursor.execute("GRANT ALL ON "+params.hive_jdbc_db+".* to '"+params.hive_db_user+"'@'"+str(params.hive_meta_host[0])+"' IDENTIFIED BY '"+params.hive_db_pass+"';")
+            except: 
+                Logger.warning("Hive db host permission cannot be set")
+             
+	    cursor.execute("FLUSH PRIVILEGES;")
+   
+

@@ -20,6 +20,10 @@ limitations under the License.
   <property>
     <name>hive_metastore_port</name>
     <value>9083</value>
+    <value-attributes>
+      <overridable>false</overridable>
+      <type>int</type>
+    </value-attributes>
   </property>
   <property>
     <name>hive.heapsize</name>
@@ -46,7 +50,7 @@ limitations under the License.
   </property>
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:mysql://localhost/hive?createDatabaseIfNotExist=true</value>
+    <value>{{ hive_db_url }}</value>
     <display-name>Database URL</display-name>
     <description>JDBC connect string for a JDBC metastore</description>
     <value-attributes>
@@ -59,14 +63,14 @@ limitations under the License.
       </property>
       <property>
         <name>ambari.hive.db.schema.name</name>
-        <type>hive-site</type>
+        <type>hive1-site</type>
       </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>javax.jdo.option.ConnectionDriverName</name>
-    <value>com.mysql.jdbc.Driver</value>
+    <value>{{ hive_db_driver }}</value>
     <display-name>JDBC Driver Class</display-name>
     <description>Driver class name for a JDBC metastore</description>
     <value-attributes>
@@ -1430,7 +1434,7 @@ limitations under the License.
   </property>
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>mysql://master7:3306/hive_meta</value>
+    <value>{{ hive_db_url }}</value>
     <display-name>Database URL</display-name>
     <description>JDBC connect string for a JDBC metastore</description>
     <value-attributes>
@@ -1443,7 +1447,7 @@ limitations under the License.
       </property>
       <property>
         <name>ambari.hive.db.schema.name</name>
-        <type>hive-site</type>
+        <type>hive1-site</type>
       </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
@@ -1885,7 +1889,7 @@ limitations under the License.
     </value-attributes>
     <depends-on>
       <property>
-        <type>hive-site</type>
+        <type>hive1-site</type>
         <name>hive.cbo.enable</name>
       </property>
     </depends-on>
@@ -1917,7 +1921,7 @@ limitations under the License.
     </value-attributes>
     <depends-on>
       <property>
-        <type>hive-site</type>
+        <type>hive1-site</type>
         <name>hive.cbo.enable</name>
       </property>
     </depends-on>
@@ -2576,7 +2580,7 @@ limitations under the License.
     </value-attributes>
     <depends-on>
       <property>
-        <type>hive-site</type>
+        <type>hive1-site</type>
         <name>hive.tez.container.size</name>
       </property>
     </depends-on>
@@ -2664,7 +2668,7 @@ limitations under the License.
     </value-attributes>
     <depends-on>
       <property>
-        <type>hive-site</type>
+        <type>hive1-site</type>
         <name>hive.cbo.enable</name>
       </property>
     </depends-on>
@@ -2836,7 +2840,7 @@ limitations under the License.
     <value> </value>
     <depends-on>
       <property>
-        <type>hive-site</type>
+        <type>hive1-site</type>
         <name>hive.server2.authentication</name>
       </property>
     </depends-on>
@@ -2846,7 +2850,7 @@ limitations under the License.
     <name>hive.server2.authentication.ldap.baseDN</name>
     <depends-on>
       <property>
-        <type>hive-site</type>
+        <type>hive1-site</type>
         <name>hive.server2.authentication</name>
       </property>
     </depends-on>
@@ -2857,7 +2861,7 @@ limitations under the License.
     <value>/etc/security/keytabs/hive.service.keytab</value>
     <depends-on>
       <property>
-        <type>hive-site</type>
+        <type>hive1-site</type>
         <name>hive.server2.authentication</name>
       </property>
     </depends-on>
@@ -2868,7 +2872,7 @@ limitations under the License.
     <value>hive/_HOST@EXAMPLE.COM</value>
     <depends-on>
       <property>
-        <type>hive-site</type>
+        <type>hive1-site</type>
         <name>hive.server2.authentication</name>
       </property>
     </depends-on>
@@ -2878,7 +2882,7 @@ limitations under the License.
     <name>hive.server2.authentication.pam.services</name>
     <depends-on>
       <property>
-        <type>hive-site</type>
+        <type>hive1-site</type>
         <name>hive.server2.authentication</name>
       </property>
     </depends-on>
@@ -2888,7 +2892,7 @@ limitations under the License.
     <name>hive.server2.custom.authentication.class</name>
     <depends-on>
       <property>
-        <type>hive-site</type>
+        <type>hive1-site</type>
         <name>hive.server2.authentication</name>
       </property>
     </depends-on>

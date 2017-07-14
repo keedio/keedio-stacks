@@ -30,6 +30,9 @@ class HiveClient(Script):
     env.set_params(params)
     self.install_packages(env)
     hive(action='config')
+
+  def status(self, env):
+    raise ClientComponentHasNoStatus()
     
 if __name__ == "__main__":
   HiveClient().execute()

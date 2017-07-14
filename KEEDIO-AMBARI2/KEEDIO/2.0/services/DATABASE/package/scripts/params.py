@@ -53,3 +53,13 @@ if has_oozie:
 	oozie_db_user = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.username']
 	oozie_db_pass = config['configurations']['oozie-site']['oozie.service.JPAService.jdbc.password']
 
+hive_server_host = default('/clusterHostInfo/hive1_server_hosts',[])
+hive_meta_host = default('/clusterHostInfo/hive1_metastore_hosts',[])
+has_hive = not len(hive_server_host) == 0
+if has_hive:
+	hive_jdbc_db = config['configurations']['hive1-site']['ambari.hive.db.schema.name'] 
+	hive_db_user = config['configurations']['hive1-site']['javax.jdo.option.ConnectionUserName']
+	hive_db_pass = default('/configurations/hive1-site/javax.jdo.option.ConnectionPassword',None)
+        
+
+

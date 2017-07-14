@@ -140,11 +140,11 @@
       "configuration-layout": "default",
       "configs": [
         {
-          "config": "hive-site/hive.exec.orc.default.stripe.size",
+          "config": "hive1-site/hive.exec.orc.default.stripe.size",
           "subsection-name": "optimization-row2-col1"
         },
         {
-          "config": "hive-site/hive.exec.orc.default.compress",
+          "config": "hive1-site/hive.exec.orc.default.compress",
           "subsection-name": "optimization-row2-col1"
         },
         {
@@ -164,11 +164,11 @@
           "subsection-name": "optimization-row2-col2"
         },
         {
-          "config": "hive-site/hive.auto.convert.join.noconditionaltask.size",
+          "config": "hive1-site/hive.auto.convert.join.noconditionaltask.size",
           "subsection-name": "optimization-row2-col3"
         },
         {
-          "config": "hive-site/hive.exec.reducers.bytes.per.reducer",
+          "config": "hive1-site/hive.exec.reducers.bytes.per.reducer",
           "subsection-name": "optimization-row2-col3"
         },
         {
@@ -176,47 +176,47 @@
           "subsection-name": "acid-transactions-row1-col1-1"
         },
         {
-          "config": "hive-site/hive.compactor.initiator.on",
+          "config": "hive1-site/hive.compactor.initiator.on",
           "subsection-name": "acid-transactions-row1-col1-1"
         },
         {
-          "config": "hive-site/hive.compactor.worker.threads",
+          "config": "hive1-site/hive.compactor.worker.threads",
           "subsection-name": "acid-transactions-row1-col1-1"
         },
         {
-          "config": "hive-site/hive.execution.engine",
+          "config": "hive1-site/hive.execution.engine",
           "subsection-name": "optimization-row1-col1"
         },
         {
-          "config": "hive-site/hive.tez.container.size",
+          "config": "hive1-site/hive.tez.container.size",
           "subsection-name": "optimization-row1-col1"
         },
         {
-          "config": "hive-site/hive.prewarm.enabled",
+          "config": "hive1-site/hive.prewarm.enabled",
           "subsection-name": "optimization-row1-col2"
         },
         {
-          "config": "hive-site/hive.prewarm.numcontainers",
+          "config": "hive1-site/hive.prewarm.numcontainers",
           "subsection-name": "optimization-row1-col2"
         },
         {
-          "config": "hive-site/hive.cbo.enable",
+          "config": "hive1-site/hive.cbo.enable",
           "subsection-name": "optimization-row1-col3"
         },
         {
-          "config": "hive-site/hive.stats.fetch.column.stats",
+          "config": "hive1-site/hive.stats.fetch.column.stats",
           "subsection-name": "optimization-row1-col3"
         },
         {
-          "config": "hive-site/hive.server2.tez.default.queues",
+          "config": "hive1-site/hive.server2.tez.default.queues",
           "subsection-name": "interactive-query-row1-col1"
         },
         {
-          "config": "hive-site/hive.server2.tez.initialize.default.sessions",
+          "config": "hive1-site/hive.server2.tez.initialize.default.sessions",
           "subsection-name": "interactive-query-row1-col1"
         },
         {
-          "config": "hive-site/hive.server2.tez.sessions.per.default.queue",
+          "config": "hive1-site/hive.server2.tez.sessions.per.default.queue",
           "subsection-name": "interactive-query-row1-col1"
         },
         {
@@ -224,22 +224,22 @@
           "subsection-name": "security-row1-col1"
         },
         {
-          "config": "hive-site/hive.server2.enable.doAs",
+          "config": "hive1-site/hive.server2.enable.doAs",
           "subsection-name": "security-row1-col1"
         },
         {
-          "config": "hive-site/hive.server2.authentication",
+          "config": "hive1-site/hive.server2.authentication",
           "subsection-name": "security-row1-col1"
         },
         {
-          "config": "hive-site/hive.server2.use.SSL",
+          "config": "hive1-site/hive.server2.use.SSL",
           "subsection-name": "security-row1-col1"
         }
       ]
     },
     "widgets": [
       {
-        "config": "hive-site/hive.exec.orc.default.stripe.size",
+        "config": "hive1-site/hive.exec.orc.default.stripe.size",
         "widget": {
           "type": "slider",
           "units": [
@@ -250,7 +250,7 @@
         }
       },
       {
-        "config": "hive-site/hive.exec.orc.default.compress",
+        "config": "hive1-site/hive.exec.orc.default.compress",
         "widget": {
           "type": "combo"
         }
@@ -295,7 +295,7 @@
         }
       },
       {
-        "config": "hive-site/hive.auto.convert.join.noconditionaltask.size",
+        "config": "hive1-site/hive.auto.convert.join.noconditionaltask.size",
         "widget": {
           "type": "slider",
           "units": [
@@ -306,7 +306,7 @@
         }
       },
       {
-        "config": "hive-site/hive.exec.reducers.bytes.per.reducer",
+        "config": "hive1-site/hive.exec.reducers.bytes.per.reducer",
         "widget": {
           "type": "slider",
           "units": [
@@ -323,13 +323,13 @@
         }
       },
       {
-        "config": "hive-site/hive.compactor.initiator.on",
+        "config": "hive1-site/hive.compactor.initiator.on",
         "widget": {
           "type": "toggle"
         }
       },
       {
-        "config": "hive-site/hive.compactor.worker.threads",
+        "config": "hive1-site/hive.compactor.worker.threads",
         "widget": {
           "type": "slider",
           "units": [
@@ -340,13 +340,13 @@
         }
       },
       {
-        "config": "hive-site/hive.execution.engine",
+        "config": "hive1-site/hive.execution.engine",
         "widget": {
           "type": "combo"
         }
       },
       {
-        "config": "hive-site/hive.tez.container.size",
+        "config": "hive1-site/hive.tez.container.size",
         "widget": {
           "type": "slider",
           "units": [
@@ -357,13 +357,13 @@
         }
       },
       {
-        "config": "hive-site/hive.prewarm.enabled",
+        "config": "hive1-site/hive.prewarm.enabled",
         "widget": {
           "type": "toggle"
         }
       },
       {
-        "config": "hive-site/hive.prewarm.numcontainers",
+        "config": "hive1-site/hive.prewarm.numcontainers",
         "widget": {
           "type": "slider",
           "units": [
@@ -374,25 +374,25 @@
         }
       },
       {
-        "config": "hive-site/hive.cbo.enable",
+        "config": "hive1-site/hive.cbo.enable",
         "widget": {
           "type": "toggle"
         }
       },
       {
-        "config": "hive-site/hive.stats.fetch.column.stats",
+        "config": "hive1-site/hive.stats.fetch.column.stats",
         "widget": {
           "type": "toggle"
         }
       },
       {
-        "config": "hive-site/hive.server2.tez.initialize.default.sessions",
+        "config": "hive1-site/hive.server2.tez.initialize.default.sessions",
         "widget": {
           "type": "toggle"
         }
       },
       {
-        "config": "hive-site/hive.server2.tez.sessions.per.default.queue",
+        "config": "hive1-site/hive.server2.tez.sessions.per.default.queue",
         "widget": {
           "type": "slider",
           "units": [
@@ -403,7 +403,7 @@
         }
       },
       {
-        "config": "hive-site/hive.server2.enable.doAs",
+        "config": "hive1-site/hive.server2.enable.doAs",
         "widget": {
           "type": "toggle"
         }
@@ -415,19 +415,19 @@
         }
       },
       {
-        "config": "hive-site/hive.server2.authentication",
+        "config": "hive1-site/hive.server2.authentication",
         "widget": {
           "type": "combo"
         }
       },
       {
-        "config": "hive-site/hive.server2.use.SSL",
+        "config": "hive1-site/hive.server2.use.SSL",
         "widget": {
           "type": "toggle"
         }
       },
       {
-        "config": "hive-site/hive.server2.tez.default.queues",
+        "config": "hive1-site/hive.server2.tez.default.queues",
         "widget": {
           "type": "list"
         }

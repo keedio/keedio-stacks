@@ -18,41 +18,24 @@ limitations under the License.
 
 """
 
-import sys
 from resource_management import *
+from functools import partial
+from utils import *
 
-from database import database
-
-         
-class CouchbaseHandler(Script):
-  def install(self, env):
+class ServiceCheck(Script):
+  def service_check(self, env):
     import params
     env.set_params(params)
-    self.install_packages(env)
-    database(action="install")
-    
-  def configure(self, env):
-    import params
-    env.set_params(params)
-    database(action='config')
-    
-  def start(self, env):
-    import params
-    env.set_params(params)
-    self.configure(env)
-    database(action='start')
-    database(action='post')
-    
-  def stop(self, env):
-    import params
-    database(action='stop')
+    execute_smoke = partial(execute_sudo_krb,user=params.smoke_user,principal=params.smoke_user,keytab=params.smoke_user_keytab)
+    connection_url = 'jdbc:hive2://'+params.hive_server2_host+':'+str(params.hive_server2_port)+'/default'
+    if params.security_enabled:
+      connection_url += ';principal='+params.hive_server2_principal
+    check_hiveserver2 = ['beeline','-u',connection_url,'-n',params.smoke_user]
+    out,err,rc=execute_smoke(check_hiveserver2)
+    print out
+    print err
+    if 'Error' in out or 'Error' in err:
+      raise Exception(out+err)
 
-  def rebalance(self, env):
-    import params
-    database(action='rebalance')
-
-  def status(self, env):
-    database(action='status')
-     
 if __name__ == "__main__":
-  CouchbaseHandler().execute()
+  ServiceCheck().execute()
