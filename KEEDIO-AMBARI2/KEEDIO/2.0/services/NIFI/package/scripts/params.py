@@ -10,7 +10,7 @@ from resource_management.libraries.functions.default import default
 # server configurations
 config = Script.get_config()
 
-nifi_dirname = 'nifi-1.2.0'
+nifi_dirname = 'nifi'
 
 # params from nifi-ambari-config
 nifi_install_dir = config['configurations']['nifi-ambari-config']['nifi.install_dir']
@@ -20,21 +20,22 @@ nifi_max_mem = config['configurations']['nifi-ambari-config']['nifi.max_mem']
 nifi_ambari_reporting_frequency = config['configurations']['nifi-ambari-config']['nifi.ambari_reporting_frequency']
 
 nifi_port = config['configurations']['nifi-ambari-config']['nifi.node.port']
+nifi_protocol_port = config['configurations']['nifi-ambari-config']['nifi.node.protocol.port']
 
 master_configs = config['clusterHostInfo']
 #print master_configs
 nifi_hosts = ",".join(master_configs['nifi_node_hosts'])
 #nifi_dir = os.path.join(*[nifi_install_dir,nifi_dirname])
-nifi_dir = "/usr/lib/nifi"
-conf_dir='/etc/nifi/conf'
-bin_dir='/usr/lib/nifi/bin'
+nifi_dir = '{}/{}'.format(nifi_install_dir, nifi_dirname)
+conf_dir='/etc/{}/conf'.format(nifi_dirname)
+bin_dir= '{}/bin'.format(nifi_dir)
 
 
 # Directory for repositories, databases, etc
-nifi_data_dir = '/data/{}'.format(nifi_dirname)
+nifi_data_dir = config['configurations']['nifi-ambari-config']['nifi.conf_resources_dir']
 
 # DIrectory for conf & resources
-nifi_conf_resources = '{}/../configuration_resources'.format(nifi_install_dir)
+nifi_conf_resources = '{}/configuration_resources'.format(nifi_dir)
 
 # params from nifi-boostrap
 nifi_boostrap_content = config['configurations']['nifi-bootstrap-env']['content']

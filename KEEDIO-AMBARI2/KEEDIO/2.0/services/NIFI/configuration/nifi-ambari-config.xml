@@ -7,8 +7,14 @@
 
   <property>
     <name>nifi.install_dir</name>
-    <value>/var/lib</value>
-    <description>Local dir where to install Nifi. NiFi folder will be created as a subdir of this dir e.g. /opt/nifi/nifi-x.x.x</description>
+    <value>/usr/lib</value>
+    <description>Local dir where to install Nifi. NiFi folder will be created as a subdir of this dir e.g. /usr/lib/nifi</description>
+  </property>
+
+  <property>
+    <name>nifi.conf_resources_dir</name>
+    <value>/data/nifi</value>
+    <description>Local dir where to place configuration resources for Nifi.</description>
   </property>
   
   <property>

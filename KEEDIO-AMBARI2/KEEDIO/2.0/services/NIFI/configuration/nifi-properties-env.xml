@@ -26,7 +26,7 @@
 nifi.version=1.2.0-keedio
 nifi.flow.configuration.file={{nifi_conf_resources}}/flow.xml.gz
 nifi.flow.configuration.archive.enabled=true
-nifi.flow.configuration.archive.dir=/dato/nifi1/archive/
+nifi.flow.configuration.archive.dir={{nifi_data_dir}}/archive/
 nifi.flow.configuration.archive.max.time=180 days
 nifi.flow.configuration.archive.max.storage=20 GB
 nifi.flowcontroller.autoResumeState=true
@@ -93,7 +93,7 @@ nifi.content.viewer.url=/nifi-content-viewer/
 nifi.provenance.repository.implementation=org.apache.nifi.provenance.PersistentProvenanceRepository
 
 # Persistent Provenance Repository Properties
-nifi.provenance.repository.directory.default=./provenance_repository
+nifi.provenance.repository.directory.default={{nifi_conf_resources}}/provenance_repository
 nifi.provenance.repository.max.storage.time=24 hours
 nifi.provenance.repository.max.storage.size=1 GB
 nifi.provenance.repository.rollover.time=30 secs
