@@ -42,10 +42,6 @@ limitations under the License.
     <value>hive</value>
     <display-name>Database Name</display-name>
     <description>Database name used as the Hive Metastore</description>
-    <value-attributes>
-      <type>database</type>
-      <overridable>false</overridable>
-    </value-attributes>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
@@ -203,15 +199,6 @@ limitations under the License.
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
-    <name>hive.server2.enable.doAs</name>
-    <value>true</value>
-    <description>Impersonate the connected user. By default HiveServer2 performs the query processing as the user who
-      submitted the query. But if the parameter is set to false, the query will run as the user that the hiveserver2
-      process runs as.
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
     <name>hive.server2.enable.impersonation</name>
     <description>Enable user impersonation for HiveServer2</description>
     <value>true</value>
@@ -222,12 +209,6 @@ limitations under the License.
     <description>This number of times HiveServer2 will attempt to start before exiting, sleeping 60 seconds between retries.</description>
     <value>5</value>
     <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
-    <name>hive.server2.authentication</name>
-    <description>Authentication mode, default NONE. Options are NONE, NOSASL, KERBEROS, LDAP, PAM and CUSTOM</description>
-    <value>NONE</value>
-    <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>fs.hdfs.impl.disable.cache</name>
@@ -310,23 +291,6 @@ limitations under the License.
       size. If this paramater is on, and the sum of size for n-1 of the tables/partitions for a n-way join is smaller than the
       specified size, the join is directly converted to a mapjoin (there is no conditional task).
     </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>hive.auto.convert.join.noconditionaltask.size</name>
-    <value>2147483648</value>
-    <description>If hive.auto.convert.join.noconditionaltask is off, this parameter does not take affect. However, if it
-      is on, and the sum of size for n-1 of the tables/partitions for a n-way join is smaller than this size, the join is directly
-      converted to a mapjoin(there is no conditional task).
-    </description>
-    <display-name>For Map Join, per Map memory threshold</display-name>
-    <value-attributes>
-      <type>int</type>
-      <minimum>1073741824</minimum>
-      <maximum>17179869184</maximum>
-      <unit>B</unit>
-      <increment-step>1073741824</increment-step>
-    </value-attributes>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
@@ -644,15 +608,6 @@ limitations under the License.
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
-    <name>hive.server2.enable.doAs</name>
-    <value>true</value>
-    <description>Impersonate the connected user. By default HiveServer2 performs the query processing as the user who
-      submitted the query. But if the parameter is set to false, the query will run as the user that the hiveserver2
-      process runs as.
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
     <name>fs.hdfs.impl.disable.cache</name>
     <value>true</value>
     <description>Disable HDFS filesystem cache.</description>
@@ -742,15 +697,6 @@ limitations under the License.
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
-    <name>hive.auto.convert.join.noconditionaltask.size</name>
-    <value>1000000000</value>
-    <description>If hive.auto.convert.join.noconditionaltask is off, this parameter does not take affect. However, if it
-      is on, and the sum of size for n-1 of the tables/partitions for a n-way join is smaller than this size, the join is directly
-      converted to a mapjoin(there is no conditional task).
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
     <name>hive.optimize.reducededuplication.min.reducer</name>
     <value>4</value>
     <description>Reduce deduplication merges two RSs by moving key/parts/reducer-num of the child RS to parent RS.
@@ -798,12 +744,6 @@ limitations under the License.
     <description>
     Whether to enable automatic use of indexes
     </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>hive.execution.engine</name>
-    <value>mr</value>
-    <description>Whether to use MR or Tez</description>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
@@ -1533,12 +1473,6 @@ limitations under the License.
     <name>hive.map.aggr</name>
     <value>true</value>
     <description>Whether to use map-side aggregation in Hive Group By queries</description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>hive.cbo.enable</name>
-    <value>true</value>
-    <description>Flag to control enabling Cost Based Optimizations using Calcite framework.</description>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>

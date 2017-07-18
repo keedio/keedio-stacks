@@ -84,6 +84,12 @@
     <on-ambari-upgrade add="true"/>
   </property-->
   <property>
+    <name>hive_database_schema</name>
+    <value>hive</value>
+    <description>Database name.</description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>hive_database_name</name>
     <value>hive</value>
     <description>Database name.</description>
@@ -363,12 +369,6 @@ export METASTORE_PORT={{hive_metastore_port}}
       access control at column level through the Hive plugin.
     </description>
     <value>None</value>
-    <depends-on>
-      <property>
-        <type>ranger-env</type>
-        <name>ranger-hive-plugin-enabled</name>
-      </property>
-    </depends-on>
     <value-attributes>
       <type>value-list</type>
       <entries>
@@ -379,10 +379,6 @@ export METASTORE_PORT={{hive_metastore_port}}
         <entry>
           <value>SQLStdAuth</value>
           <label>SQLStdAuth</label>
-        </entry>
-        <entry>
-          <value>Ranger</value>
-          <label>Ranger</label>
         </entry>
       </entries>
     </value-attributes>
