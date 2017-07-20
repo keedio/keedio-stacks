@@ -29,14 +29,16 @@ import utils
 class HiveServerHandler(Script):
   def install(self, env):
     import params
-    self.install_packages(env)
+    #self.install_packages(env)
     Package("hive-metastore")
+    Package("hive")
     self.initialize_db(env)
     
   def configure(self, env):
     import params
     env.set_params(params)
     hive(action='config',service='hive-metastore')
+    self.initialize_db(env)
     
   def start(self, env):
     self.configure(env)
@@ -50,11 +52,14 @@ class HiveServerHandler(Script):
 
   def initialize_db(self,env):
     import params
+    Logger.info("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
     try:
-      if params.jdbc_driver == "com.mysql.jdbc.Driver":
+      if params.hive_db_driver == "com.mysql.jdbc.Driver":
+        Package('mysql-connector-java')
+        Package('mariadb')
         Logger.info('Using Mysql, creating symlink /usr/lib/hive/lib/mysql-jdbc-driver.jar')
 #        cmd=Popen(['ln','-s','/usr/share/java/postgresql-jdbc.jar','/usr/lib/hive/lib/postgresql.jar'])
-        extract_cmd=[ 'ln', '-s','/usr/lib/ambari-agent/mysql-jdbc-driver.jar','/usr/lib/hive/lib/mysql-jdbc-driver.jar']
+        extract_cmd=[ 'ln', '-s','/usr/share/java/mysql-connector-java.jar','/usr/lib/hive/lib/mysql-jdbc-driver.jar']
         cmd=Popen(extract_cmd)
         out,err=cmd.communicate()
         Logger.info(str(out))
@@ -65,7 +70,7 @@ class HiveServerHandler(Script):
         Logger.info(str(out))
         Logger.info(str(err))
 
-      elif params.jdbc_driver == "org.postgresql.Driver":
+      elif params.hive_db_driver == "org.postgresql.Driver":
         Logger.info('Using Postgres, creating symlink /usr/lib/hive/lib/postgres-jdbc-driver.jar')
 #        cmd=Popen(['ln','-s','/usr/share/java/postgresql-jdbc.jar','/usr/lib/hive/lib/postgresql.jar'])
         extract_cmd=[ 'ln', '-s','/usr/lib/ambari-agent/postgres-jdbc-driver.jar','/usr/lib/hive/lib/postgres-jdbc-driver.jar']
@@ -79,7 +84,7 @@ class HiveServerHandler(Script):
         Logger.info(str(out))
         Logger.info(str(err))
 
-      elif params.jdbc_driver == "oracle.jdbc.driver.OracleDriver":
+      elif params.hive_db_driver == "oracle.jdbc.driver.OracleDriver":
         Logger.info('Using Oracle DB, creating symlink /usr/lib/hive/lib/oracle-jdbc-driver.jar')
         extract_cmd=[ 'ln', '-s','/usr/lib/ambari-agent/oracle-jdbc-driver.jar','/usr/lib/hive/lib/oracle-jdbc-driver.jar']
         cmd=Popen(extract_cmd)

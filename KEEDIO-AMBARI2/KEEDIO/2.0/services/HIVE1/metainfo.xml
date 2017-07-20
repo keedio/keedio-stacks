@@ -19,7 +19,7 @@
   <schemaVersion>2.0</schemaVersion>
   <services>
     <service>
-      <name>HIVE</name>
+      <name>HIVE1</name>
       <displayName>Hive</displayName>
       <version>1.2.2</version>
       <comment>The Apache Hive  data warehouse software facilitates querying and managing large datasets residing in distributed storage. Hive provides a mechanism to project structure onto this data and query the data using a SQL-like language called HiveQL. At the same time this language also allows traditional map/reduce programmers to plug in their custom mappers and reducers when it is inconvenient or inefficient to express this logic in HiveQL.</comment>
@@ -46,7 +46,7 @@
             </configuration-dependencies>
         </component>
         <component>
-          <name>HIVE_CLIENT</name>
+          <name>HIVE1_CLIENT</name>
           <displayName>Hive Client</displayName>
           <category>CLIENT</category>
           <cardinality>1+</cardinality>

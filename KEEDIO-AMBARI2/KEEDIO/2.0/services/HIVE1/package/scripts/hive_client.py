@@ -28,7 +28,8 @@ class HiveClient(Script):
   def install(self, env):
     import params
     env.set_params(params)
-    self.install_packages(env)
+#    self.install_packages(env)
+    Package("hive")
     hive(action='config')
 
   def status(self, env):

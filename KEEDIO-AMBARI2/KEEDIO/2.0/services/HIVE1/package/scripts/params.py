@@ -24,6 +24,8 @@ from resource_management import *
 # server configurations
 config = Script.get_config()
 
+hadoop_home='/usr/lib/hadoop'
+
 hive_metastore_host = config['clusterHostInfo']['hive1_metastore_hosts'][0]
 hive_metastore_port = config['configurations']['hive1-site']['hive_metastore_port']
 
@@ -83,6 +85,7 @@ hive_server2_spnego_principal = config['configurations']['hive1-site']['hive.ser
 hive_server2_spnego_keytab = config['configurations']['hive1-site']['hive.server2.authentication.spnego.keytab']
 
 hive_heapsize = config['configurations']['hive-env']['hive.heapsize']
+hive_metastore_heapsize = config['configurations']['hive-env']['hive.metastore.heapsize']
 config_dir = "/etc/hive/conf"
 hive_user = 'hive'
 hive_group = config['configurations']['cluster-env']['user_group']

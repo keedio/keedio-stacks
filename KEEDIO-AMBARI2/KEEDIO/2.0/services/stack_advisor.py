@@ -335,10 +335,10 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
       "HBASE": self.recommendHbaseConfigurations,
       "STORM": self.recommendStormConfigurations,
       "OOZIE": self.recommendOozieConfigurations,
-      "HIVE": self.recommendHiveConfigurations,
       "RANGER": self.recommendRangerConfigurations,
       "KAFKA": self.recommendKafkaConfigurations,
     }
+      #"HIVE": self.recommendHiveConfigurations,
 
   def recommendKafkaConfigurations(self, configurations, clusterData, services, hosts):
     print "KKKKKKKKKKKKKKK"
@@ -2264,7 +2264,7 @@ def getHeapsizeProperties():
            "HBASE_MASTER": [{"config-name": "hbase-env",
                              "property": "hbase_master_heapsize",
                              "default": "1024m"}],
-           "HIVE1_CLIENT": [{"config-name": "hive1-site",
+           "HIVE_CLIENT": [{"config-name": "hive1-site",
                             "property": "hive.heapsize",
                             "default": "1024m"}],
            "HISTORYSERVER": [{"config-name": "mapred-env",

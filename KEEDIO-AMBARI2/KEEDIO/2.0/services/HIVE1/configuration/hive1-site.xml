@@ -39,7 +39,7 @@ limitations under the License.
   </property>
   <property>
     <name>ambari.hive.db.schema.name</name>
-    <value>hive</value>
+    <value>hive_meta</value>
     <display-name>Database Name</display-name>
     <description>Database name used as the Hive Metastore</description>
     <on-ambari-upgrade add="true"/>
@@ -93,7 +93,7 @@ limitations under the License.
   </property>
   <property require-input="true">
     <name>javax.jdo.option.ConnectionPassword</name>
-    <value> </value>
+    <value>hive</value>
     <property-type>PASSWORD</property-type>
     <display-name>Database Password</display-name>
     <description>password to use against metastore database</description>
@@ -141,7 +141,7 @@ limitations under the License.
   </property>
   <property>
     <name>datanucleus.autoCreateSchema</name>
-    <value>false</value>
+    <value>true</value>
     <description>Creates necessary schema on a startup if one doesn't exist</description>
     <on-ambari-upgrade add="true"/>
   </property>
@@ -2831,11 +2831,6 @@ limitations under the License.
       </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
-    <name>datanucleus.autoCreateSchema</name>
-    <value>false</value>
-    <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>datanucleus.fixedDatastore</name>

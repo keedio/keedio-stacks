@@ -27,7 +27,8 @@ from hive import hive
 class HiveServerHandler(Script):
   def install(self, env):
     import params
-    self.install_packages(env)
+    #self.install_packages(env)
+    Package("hive")
     Package("hive-server2")
     
   def configure(self, env):
