@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+ 
+<configuration>
+
+  <!-- params for service -->
+
+  <property>
+    <name>nifi.install_dir</name>
+    <value>/usr/lib</value>
+    <description>Local dir where to install Nifi. NiFi folder will be created as a subdir of this dir e.g. /usr/lib/nifi</description>
+  </property>
+
+  <property>
+    <name>nifi.conf_resources_dir</name>
+    <value>/data/nifi</value>
+    <description>Local dir where to place configuration resources for Nifi.</description>
+  </property>
+  
+  <property>
+    <name>nifi.node.port</name>
+    <value>9090</value>
+    <description>Port NiFi node runs on</description>
+  </property>
+
+  <property>
+    <name>nifi.node.protocol.port</name>
+    <value>7088</value>
+    <description>Port NiFi node protocol runs on</description>
+  </property>
+
+
+  <property>
+    <name>nifi.initial_mem</name>
+    <value>512m</value>
+    <description>Initial memory allocation for NiFi JVM (Xms)</description>
+  </property>
+  
+  <property>
+    <name>nifi.max_mem</name>
+    <value>512m</value>
+    <description>Max memory allocation for Nifi JVM (Xmx)</description>
+  </property>
+    
+  <!-- <property>
+    <name>nifi.setup_prebuilt</name>
+    <value>true</value>
+    <description>If false, latest Nifi will be built from source. Otherwise a prebuilt version will be downloaded</description>
+  </property> -->
+
+  <property>
+    <name>nifi.ambari_reporting_frequency</name>
+    <value>1 mins</value>
+    <description>Frequency with which Nifi metrics will be reported to Ambari Metrics. Only used during initial install of service. Post-install this can be reconfigured from Nifi UI under Controller Settings</description>
+  </property>
+
+
+  <property>
+    <name>zookeeper.connect</name>
+    <value>localhost:2181/nifi</value>
+    <description>Zookeeper connection string</description>
+  </property>
+
+  <property>
+    <name>zookeeper.connection.timeout.ms</name>
+    <value>1000000</value>
+    <description>Timeout in ms for connection to zookeeper</description>
+  </property>
+  
+  
+  
+    
+</configuration>  

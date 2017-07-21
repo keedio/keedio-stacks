@@ -1,0 +1,57 @@
+{
+  "NIFI": {
+    "service": [],
+    "NIFI_NODE": [
+      {
+        "name": "nifi_node_ui",
+        "label": "Nifi Node UI",
+        "description": "This host-level alert is triggered if the Nifi service cannot be determined to be up.",
+        "interval": 1,
+        "scope": "HOST",
+        "source": {
+          "type": "PORT",
+          "uri": "{{nifi-ambari-config/nifi.node.port}}",
+          "default_port": 9090,
+          "reporting": {
+            "ok": {
+              "text": "TCP OK - {0:.3f}s response on port {1}"
+            },
+            "warning": {
+              "text": "TCP OK - {0:.3f}s response on port {1}",
+              "value": 1.5
+            },
+            "critical": {
+              "text": "Connection failed: {0} to {1}:{2}",
+              "value": 5.0
+            }
+          }
+        }
+      },
+      {
+        "name": "nifi_protocol_port",
+        "label": "Nifi Protocol port",
+        "description": "This host-level alert is triggered if the Nifi service cannot be determined to be up.",
+        "interval": 1,
+        "scope": "HOST",
+        "source": {
+          "type": "PORT",
+          "uri": "{{nifi-ambari-config/nifi.node.protocol.port}}",
+          "default_port": 7088,
+          "reporting": {
+            "ok": {
+              "text": "TCP OK - {0:.3f}s response on port {1}"
+            },
+            "warning": {
+              "text": "TCP OK - {0:.3f}s response on port {1}",
+              "value": 1.5
+            },
+            "critical": {
+              "text": "Connection failed: {0} to {1}:{2}",
+              "value": 5.0
+            }
+          }
+        }
+      }
+    ]
+  }
+}

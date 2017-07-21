@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<metainfo>
+    <schemaVersion>2.0</schemaVersion>
+    <services>
+        <service>
+            <name>NIFI</name>
+            <displayName>NiFi</displayName>
+            <comment>Apache NiFi is an easy to use, powerful, and reliable system to process and distribute data.</comment>
+            <version>1.2.0-keedio</version>
+            <components>
+                <component>
+                  <name>NIFI_NODE</name>
+                  <displayName>NiFi node</displayName>
+                  <category>MASTER</category>
+                  <cardinality>1+</cardinality>
+                  <timelineAppid>NIFI</timelineAppid>
+                  <commandScript>
+                    <script>scripts/nifi.py</script>
+                    <scriptType>PYTHON</scriptType>
+                    <timeout>10000</timeout>
+                  </commandScript>
+                </component>
+                                
+            </components>
+            <osSpecifics>
+        <osSpecific>
+          <osFamily>any</osFamily>
+          <packages>
+            <package>
+              <name>nifi</name>
+            </package>
+          </packages>
+        </osSpecific>
+      </osSpecifics>
+
+      <requiredServices>
+        <service>ZOOKEEPER</service>
+      </requiredServices>
+      <commandScript>
+        <script>scripts/nifi_check.py</script>
+        <scriptType>PYTHON</scriptType>
+        <timeout>300</timeout>
+      </commandScript>
+
+      	    <configuration-dependencies>
+        	    <config-type>nifi-ambari-config</config-type>      	   
+                <config-type>nifi-flow</config-type> 
+      	    </configuration-dependencies>
+            <restartRequiredAfterChange>false</restartRequiredAfterChange>
+            <quickLinksConfigurations>
+              <quickLinksConfiguration>
+                <fileName>quicklinks.json</fileName>
+                <default>true</default>
+              </quickLinksConfiguration>
+            </quickLinksConfigurations>   
+            <widgetsFileName>widgets.json</widgetsFileName>
+      		<metricsFileName>metrics.json</metricsFileName>        
+        </service>
+    </services>
+</metainfo>
