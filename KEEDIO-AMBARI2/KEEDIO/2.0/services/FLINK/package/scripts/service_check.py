@@ -46,6 +46,7 @@ class ServiceCheck(Script):
 
     Logger.info("The environment for Flink execution:")
     Logger.info(str(os.environ))
+    # For checkpointing
     cmd_create_dir_hdfs=['hdfs','dfs','-mkdir','-p',params.flink_hdfs_home+'/savepoints']
     cmd_chown_dir_hdfs=['hdfs','dfs','-chown','%s:',params.flink_user ,params.flink_hdfs_home]
     cmd_chown_dir_hdfs2=['hdfs','dfs','-chown','%s:',params.flink_user ,params.flink_hdfs_home+'/savepoints']
@@ -53,6 +54,20 @@ class ServiceCheck(Script):
     execute_hdfs(cmd_create_dir_hdfs)
     execute_hdfs(cmd_chown_dir_hdfs)
     execute_hdfs(cmd_chown_dir_hdfs2)
+    execute_hdfs(cmd_chmod_dir_hdfs)  
+    # For the HA
+    cmd_create_dir_hdfs=['hdfs','dfs','-mkdir','-p',params.flink_hdfs_home+'/recovery']
+    cmd_chown_dir_hdfs=['hdfs','dfs','-chown','%s:',params.flink_user ,params.flink_hdfs_home+'/recovery']
+    cmd_chmod_dir_hdfs=['hdfs','dfs','-chmod','777',params.flink_hdfs_home+'/recovery']
+    execute_hdfs(cmd_create_dir_hdfs)
+    execute_hdfs(cmd_chown_dir_hdfs)
+    execute_hdfs(cmd_chmod_dir_hdfs)
+    # For the history server 
+    cmd_create_dir_hdfs=['hdfs','dfs','-mkdir','-p',params.flink_hdfs_home+'/user/flink/completed-jobs']
+    cmd_chown_dir_hdfs=['hdfs','dfs','-chown','%s:',params.flink_user ,params.flink_hdfs_home+'/user/flink/completed-jobs']
+    cmd_chmod_dir_hdfs=['hdfs','dfs','-chmod','777',params.flink_hdfs_home+'/user/flink/completed-jobs']
+    execute_hdfs(cmd_create_dir_hdfs)
+    execute_hdfs(cmd_chown_dir_hdfs)
     execute_hdfs(cmd_chmod_dir_hdfs)
     
     check_flink = ['/usr/lib/flink/default/bin/flink','run','-m','yarn-cluster','-yn','2','-j','/usr/lib/flink/default/examples/batch/KMeans.jar']

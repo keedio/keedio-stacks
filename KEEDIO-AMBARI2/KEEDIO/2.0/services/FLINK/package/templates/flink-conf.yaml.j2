@@ -129,6 +129,14 @@ state.savepoints.dir: hdfs://{{ flink_hdfs_home }}/savepoints
 #
 # fs.hdfs.hadoopconf: /path/to/hadoop/conf/
 
+# Directory to upload completed job information
+jobmanager.archive.fs.dir: hdfs:///user/flink/completed-jobs
+# Monitor the following directories for completed jobs
+historyserver.archive.fs.dir: hdfs:///user/flink/completed-jobs
+#
+# # Refresh every 10 seconds
+historyserver.archive.fs.refresh-interval: 10000
+
 {% if has_zookeeper %}
 #==============================================================================
 # Master High Availability (required configuration)
@@ -138,14 +146,16 @@ state.savepoints.dir: hdfs://{{ flink_hdfs_home }}/savepoints
 # setup. This must be a list of the form:
 # "host1:clientPort,host2[:clientPort],..." (default clientPort: 2181)
 #
-recovery.mode: zookeeper
+high-availability: zookeeper
 #
-recovery.zookeeper.quorum: {{ zk_host_ports }}
+high-availability.zookeeper.quorum: {{ zk_host_ports }}
 #
 # Note: You need to set the state backend to 'filesystem' and the checkpoint
 # directory (see above) before configuring the storageDir.
 #
-recovery.zookeeper.storageDir: hdfs:///user/flink/recovery
+high-availability.zookeeper.path.root: /flink
+high-availability.zookeeper.storageDir: hdfs:///user/flink/recovery
+yarn.application-attempts: 10
 {% else %}
 #==============================================================================
 # Master High Availability (required configuration)
