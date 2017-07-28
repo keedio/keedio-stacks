@@ -36,6 +36,7 @@ is_es_indexer_str = str(hostname in es_indexer_hosts).lower()
 allocated_mem = config['configurations']['elasticsearch']['allocated.memory']
 mlockall = str(config['configurations']['elasticsearch']['mlockall'])
 path_data = config['configurations']['elasticsearch']['path.data']
+network_host = config['configurations']['elasticsearch']['network.host']
 
 #min_required_hosts = len(set(es_master_hosts + es_indexer_hosts + kibana3_host + kibana4_host))/2+1
 min_required_hosts = len(set(es_master_hosts))/2+1

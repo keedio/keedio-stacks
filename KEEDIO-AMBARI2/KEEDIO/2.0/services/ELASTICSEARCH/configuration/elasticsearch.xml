@@ -45,4 +45,10 @@
     <description>Port used for http service</description>
   </property>
 
+  <property>
+    <name>network.host</name>
+    <value>_site_</value>
+    <description>Selects network interface for connectivity, possible values are _[networkInterface]_, _local_, _site_, _global_, default: _site_</description>
+  </property>
+
 </configuration>
