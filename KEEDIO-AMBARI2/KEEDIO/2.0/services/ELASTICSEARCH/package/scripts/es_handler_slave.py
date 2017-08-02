@@ -34,17 +34,25 @@ class EsHandler(Script):
     env.set_params(params)
     elasticsearch(action='config')
     
+  def restart(self, env):
+    import params
+    self.stop(env)
+    self.start(env)
   def start(self, env):
     import params
-    if not params.is_es_master:
+    if not params.is_es_master_str:
       env.set_params(params)
       self.configure(env)
       elasticsearch(action='start')
+    else:
+      Logger.info("START:This is a master, the indexer doesn't need to be restarted")
     
   def stop(self, env):
     import params
-    if not params.is_es_master:
+    if not params.is_es_master_str:
       elasticsearch(action='stop')
+    else:
+      Logger.info("STOP:This is a master, the indexer doesn't need to be restarted")
 
   def status(self, env):
     elasticsearch(action='status')
