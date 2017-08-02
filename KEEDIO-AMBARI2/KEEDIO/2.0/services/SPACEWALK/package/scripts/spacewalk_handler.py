@@ -33,7 +33,7 @@ class SpacewalkHandler(Script):
     
 
   def status(self, env):
-    cassandra(action='status')
+    raise ClientComponentHasNoStatus()
      
 if __name__ == "__main__":
   SpacewalkHandler().execute()
