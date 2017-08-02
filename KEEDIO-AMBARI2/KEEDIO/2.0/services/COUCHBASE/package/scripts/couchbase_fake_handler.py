@@ -29,7 +29,12 @@ class CouchbaseHandler(Script):
     import params
     #self.install_packages(env)
     #couchbase(action="install")
-    
+
+  def restart(self, env):
+    import params
+    self.stop(env)
+    self.start(env) 
+
   def configure(self, env):
     import params
     env.set_params(params)
