@@ -1,0 +1,105 @@
+{
+  "name": "default",
+  "description": "Default theme for Database service",
+  "configuration": {
+    "layouts": [
+      {
+        "name": "default",
+        "tabs": [
+          {
+            "name": "Settings",
+            "display-name": "Settings",
+            "layout": {
+              "tab-columns": "2",
+              "tab-rows": "1",
+              "sections": [
+                {
+                  "name": "section-es",
+                  "display-name": "Server configuration",
+                  "row-index": "0",
+                  "column-index": "0",
+                  "row-span": "1",
+                  "column-span": "1",
+                  "section-columns": "1",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "subsection-es-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "placement": {
+      "configuration-layout": "default",
+      "configs": [
+        {
+          "config": "elasticsearch/path.data",
+          "subsection-name": "subsection-es-col1"
+        },
+        {
+          "config": "elasticsearch/allocated.memory",
+          "subsection-name": "subsection-es-col1"
+        },
+        {
+          "config": "elasticsearch/mlockall",
+          "subsection-name": "subsection-es-col1"
+        },
+        {
+          "config": "elasticsearch/service_port",
+          "subsection-name": "subsection-es-col1"
+        },
+        {
+          "config": "elasticsearch/network.host",
+          "subsection-name": "subsection-es-col1"
+        }
+      ] 
+    },
+    "widgets": [
+       {
+        "config": "elasticsearch/path.data",
+        "widget": {
+          "type": "directory"
+         }
+        },
+       {
+        "config": "elasticsearch/allocated.memory",
+        "widget": {
+          "type" : "slider",
+          "units": [
+            {
+              "unit-name": "MB"
+            }
+          ]
+         }
+        },
+       {
+        "config": "elasticsearch/mlockall",
+        "widget": {
+          "type": "checkbox"
+         }
+        },
+       {
+        "config": "elasticsearch/service_port",
+        "widget": {
+          "type": "text-field"
+         }
+        },
+       {
+        "config": "elasticsearch/network.host",
+        "widget": {
+          "type": "combo"
+         }
+        }
+    ]
+  }
+}
+

@@ -25,18 +25,33 @@
     <name>path.data</name>
     <value>/data/elasticsearch</value>
     <description>Path in local filesystem where data will be stored.It is possible to add more than one path with comma separated paths</description>
+    <value-attributes>
+       <type>string</type>
+    </value-attributes>
   </property>
 
   <property>
     <name>allocated.memory</name>
-    <value></value>
+    <value>512</value>
     <description>In order to avoid ES use swap, ES will reserve this memory always. Unit is in megabytes and only an integer value. As memory will be locked, you have to ensure machine has enough memory.</description>
-  </property>
+    <value-attributes>
+      <unit>MB</unit>
+      <overridable>false</overridable>
+      <minimum>512</minimum>
+      <maximum>8192</maximum>
+      <unit>MB</unit>
+      <increment-step>64</increment-step>
+      <type>int</type>
+    </value-attributes> 
+ </property>
 
   <property>
     <name>mlockall</name>
     <value>true</value>
     <description>ElasticSearch performs poorly when JVM starts swapping: you should ensure that it _never_ swaps. Enabling this property forces JVM to lock memory on start, but when ES is running with other services in same machine, this will make ES greedy with memory.</description>
+    <value-attributes>
+       <type>boolean</type>
+    </value-attributes>
   </property>
 
   <property>
@@ -49,6 +64,52 @@
     <name>network.host</name>
     <value>_site_</value>
     <description>Selects network interface for connectivity, possible values are _[networkInterface]_, _local_, _site_, _global_, default: _site_</description>
+    <value-attributes>
+       <type>value-list</type>
+       <entries>
+	      <entry>
+		<value>_site_</value>
+		<description>Autodiscovers internal IP adress (Default)</description>
+	      </entry>
+	      <entry>
+		<value>_global_</value>
+		<description>Autodiscovers extrnal IP adress</description>
+	      </entry>
+	      <entry>
+		<value>_eth0_</value>
+		<description>Uses eth0 interface</description>
+	      </entry>
+	      <entry>
+		<value>_eth1_</value>
+		<description>Uses eth1 interface</description>
+	      </entry>
+	      <entry>
+		<value>_eth2_</value>
+		<description>Uses eth2 interface</description>
+	      </entry>
+	      <entry>
+		<value>_eth3_</value>
+		<description>Uses eth3 interface</description>
+	      </entry>
+	      <entry>
+		<value>_en0_</value>
+		<description>Uses en0 interface</description>
+	      </entry>
+	      <entry>
+		<value>_en1_</value>
+		<description>Uses en1 interface</description>
+	      </entry>
+	      <entry>
+		<value>_en2_</value>
+		<description>Uses en2 interface</description>
+	      </entry>
+	      <entry>
+		<value>_en3_</value>
+		<description>Uses en3 interface</description>
+	      </entry>
+       </entries>
+       <selection-cardinality>1</selection-cardinality>
+    </value-attributes>
   </property>
 
 </configuration>
