@@ -32,6 +32,9 @@
     <property-type>PASSWORD</property-type>
     <description>This is the key to subscribe to the spacewalk server
     </description>
+    <value-attributes>
+       <type>string</type>
+    </value-attributes>
   </property>
   <property>
     <name>spacewalk_certificate</name>
@@ -47,11 +50,22 @@
     <name>gpgcheck</name>
     <value>false</value>
     <description>Checks gpg signatures</description>
+    <value-attributes>
+       <type>boolean</type>
+    </value-attributes>
   </property>
   <property>
     <name>spacewalk_timeout</name>
     <value>120</value>
     <description>Timeout for spacewalk in seconds</description>
+    <value-attributes>
+      <unit>Secs</unit>
+      <overridable>false</overridable>
+      <minimum>64</minimum>
+      <maximum>600</maximum>
+      <increment-step>30</increment-step>
+      <type>int</type>
+    </value-attributes> 
   </property>
 
 </configuration>

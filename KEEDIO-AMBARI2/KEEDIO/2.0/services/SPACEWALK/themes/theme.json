@@ -1,0 +1,115 @@
+{
+  "name": "default",
+  "description": "Default theme for Spacewalk service",
+  "configuration": {
+    "layouts": [
+      {
+        "name": "default",
+        "tabs": [
+          {
+            "name": "Settings",
+            "display-name": "Settings",
+            "layout": {
+              "tab-columns": "2",
+              "tab-rows": "1",
+              "sections": [
+                {
+                  "name": "section-client",
+                  "display-name": "Client configuration",
+                  "row-index": "0",
+                  "column-index": "0",
+                  "row-span": "1",
+                  "column-span": "1",
+                  "section-columns": "1",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "subsection-client-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "placement": {
+      "configuration-layout": "default",
+      "configs": [
+        {
+          "config": "spacewalk/activation_key",
+          "subsection-name": "subsection-client-col1"
+        },
+        {
+          "config": "spacewalk/spacewalk_server",
+          "subsection-name": "subsection-client-col1"
+        },
+        {
+          "config": "spacewalk/gpgcheck",
+          "subsection-name": "subsection-client-col1"
+        },
+        {
+          "config": "spacewalk/spacewalk_timeout",
+          "subsection-name": "subsection-client-col1"
+        },
+        {
+          "config": "spacewalk/spacewalk_pub_url",
+          "subsection-name": "subsection-client-col1"
+        },
+        {
+          "config": "spacewalk/spacewalk_certificate",
+          "subsection-name": "subsection-client-col1"
+        }
+      ] 
+    },
+    "widgets": [
+       {
+        "config": "spacewalk/spacewalk_server",
+        "widget": {
+          "type": "text-field"
+         }
+        },
+       {
+        "config": "spacewalk/spacewalk_timeout",
+        "widget": {
+          "type" : "slider",
+          "units": [
+            {
+              "unit-name": "Secs"
+            }
+          ]
+         }
+        },
+       {
+        "config": "spacewalk/gpgcheck",
+        "widget": {
+          "type": "checkbox"
+         }
+        },
+       {
+        "config": "spacewalk/activation_key",
+        "widget": {
+          "type": "password"
+         }
+        },
+       {
+        "config": "spacewalk/spacewalk_certificate",
+        "widget": {
+          "type": "text-field"
+         }
+        },
+       {
+        "config": "spacewalk/spacewalk_pub_url",
+        "widget": {
+          "type": "text-field"
+         }
+        }
+    ]
+  }
+}
+
