@@ -162,6 +162,12 @@
           <default>true</default>
         </quickLinksConfiguration>
       </quickLinksConfigurations>
+      <themes>
+        <theme>
+          <fileName>theme.json</fileName>
+          <default>true</default>
+        </theme>
+      </themes>
     </service>
 
     <service>
@@ -267,7 +273,15 @@
           <default>true</default>
         </quickLinksConfiguration>
       </quickLinksConfigurations>
-    </service>
+      <themes-dir>themes-mapred</themes-dir>
+      <themes>
+        <theme>
+          <fileName>theme.json</fileName>
+          <default>true</default>
+        </theme>
+      </themes>
 
+
+   </service>
   </services>
 </metainfo>

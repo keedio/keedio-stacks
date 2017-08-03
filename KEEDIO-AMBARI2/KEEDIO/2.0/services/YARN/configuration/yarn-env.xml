@@ -24,43 +24,99 @@
   <property>
     <name>yarn_log_dir_prefix</name>
     <value>/var/log/hadoop-yarn</value>
+    <value-attributes>
+      <type>directory</type>
+      <overridable>false</overridable>
+    </value-attributes>
     <description>YARN Log Dir Prefix</description>
+  </property>
+  <property>
+    <name>yarn_cgroups_enabled</name>
+    <value>false</value>
+    <description>You can use CGroups to isolate CPU-heavy processes in a Hadoop cluster.</description>
+    <display-name>CPU Isolation</display-name>
+    <value-attributes>
+      <type>value-list</type>
+      <entries>
+        <entry>
+          <value>true</value>
+          <label>Enabled</label>
+        </entry>
+        <entry>
+          <value>false</value>
+          <label>Disabled</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1</selection-cardinality>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>yarn_pid_dir_prefix</name>
     <value>/var/run/hadoop-yarn</value>
+    <display-name>YARN PID Dir Prefix</display-name>
     <description>YARN PID Dir Prefix</description>
   </property>
   <property>
     <name>yarn_user</name>
+    <display-name>Yarn User</display-name>
     <value>yarn</value>
     <property-type>USER</property-type>
     <description>YARN User</description>
+    <value-attributes>
+      <type>user</type>
+      <overridable>false</overridable>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>yarn_heapsize</name>
     <value>1024</value>
+    <display-name>YARN Java heap size</display-name>
     <description>Max heapsize for all YARN components using a numerical value in the scale of MB</description>
+    <value-attributes>
+      <type>int</type>
+      <unit>MB</unit>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>resourcemanager_heapsize</name>
     <value>1024</value>
+    <display-name>ResourceManager Java heap size</display-name>
     <description>Max heapsize for ResourceManager using a numerical value in the scale of MB</description>
+    <value-attributes>
+      <type>int</type>
+      <overridable>false</overridable>
+      <unit>MB</unit>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>nodemanager_heapsize</name>
     <value>1024</value>
+    <display-name>NodeManager Java heap size</display-name>
     <description>Max heapsize for NodeManager using a numerical value in the scale of MB</description>
+    <value-attributes>
+      <type>int</type>
+      <unit>MB</unit>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>min_user_id</name>
     <value>1000</value>
+    <display-name>Minimum user ID for submitting job</display-name>
     <description>Set to 0 to disallow root from submitting jobs. Set to 1000 to disallow all superusers from submitting jobs</description>
+    <value-attributes>
+      <type>int</type>
+    </value-attributes>
   </property>  
 
   <!-- yarn-env.sh -->
   <property>
     <name>content</name>
+    <display-name>yarn-env template</display-name>
     <description>This is the jinja template for yarn-env.sh file</description>
     <value>
 # User for YARN daemons
@@ -168,6 +224,24 @@ if [ "x$JAVA_LIBRARY_PATH" != "x" ]; then
 fi
 YARN_OPTS="$YARN_OPTS -Dyarn.policy.file=$YARN_POLICYFILE"
     </value>
+    <value-attributes>
+      <type>content</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>service_check.queue.name</name>
+    <value>default</value>
+    <description>
+      The queue that used by service check.
+    </description>
+    <depends-on>
+      <property>
+        <type>capacity-scheduler</type>
+        <name>yarn.scheduler.capacity.root.queues</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="false"/>
   </property>
 
 </configuration>
