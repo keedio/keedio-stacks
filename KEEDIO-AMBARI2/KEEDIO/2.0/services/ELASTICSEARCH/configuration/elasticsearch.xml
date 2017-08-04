@@ -38,7 +38,7 @@
       <unit>MB</unit>
       <overridable>false</overridable>
       <minimum>512</minimum>
-      <maximum>8192</maximum>
+      <maximum>32768</maximum>
       <unit>MB</unit>
       <increment-step>64</increment-step>
       <type>int</type>
