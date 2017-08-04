@@ -26,11 +26,26 @@
 
   <property>
     <name>mapreduce.task.io.sort.mb</name>
-    <value>200</value>
+    <value>358</value>
     <description>
       The total amount of buffer memory to use while sorting files, in megabytes.
       By default, gives each merge stream 1MB, which should minimize seeks.
     </description>
+    <display-name>Sort Allocation Memory</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>0</minimum>
+      <maximum>2047</maximum>
+      <unit>MB</unit>
+      <increment-step>1</increment-step>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>mapred-site</type>
+        <name>mapreduce.map.memory.mb</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="true"/>
   </property>
 
   <property>
@@ -97,6 +112,15 @@
       Fraction of the number of maps in the job which should be complete before
       reduces are scheduled for the job.
     </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>mapreduce.job.counters.max</name>
+    <value>130</value>
+    <description>
+      Limit on the number of counters allowed per job.
+    </description>
+    <on-ambari-upgrade add="true"/>
   </property>
 
   <property>
@@ -160,14 +184,52 @@
 
   <property>
     <name>mapreduce.map.memory.mb</name>
-    <value>1024</value>
+    <value>512</value>
     <description>Virtual memory for single Map task</description>
+    <display-name>Map Memory</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>512</minimum>
+      <maximum>5120</maximum>
+      <unit>MB</unit>
+      <increment-step>256</increment-step>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>yarn-site</type>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+      </property>
+      <property>
+        <type>yarn-site</type>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="true"/>
   </property>
 
   <property>
     <name>mapreduce.reduce.memory.mb</name>
     <value>1024</value>
     <description>Virtual memory for single Reduce task</description>
+    <display-name>Reduce Memory</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>512</minimum>
+      <maximum>5120</maximum>
+      <unit>MB</unit>
+      <increment-step>256</increment-step>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>yarn-site</type>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+      </property>
+      <property>
+        <type>yarn-site</type>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="true"/>
   </property>
 
   <property>
@@ -229,11 +291,30 @@
     <name>yarn.app.mapreduce.am.resource.mb</name>
     <value>512</value>
     <description>The amount of memory the MR AppMaster needs.</description>
+    <display-name>AppMaster Memory</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>512</minimum>
+      <maximum>5120</maximum>
+      <unit>MB</unit>
+      <increment-step>256</increment-step>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>yarn-site</type>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+      </property>
+      <property>
+        <type>yarn-site</type>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="true"/>
   </property>
 
   <property>
     <name>yarn.app.mapreduce.am.command-opts</name>
-    <value>-Xmx312m</value>
+    <value>-Xmx410m</value>
     <description>
       Java opts for the MR App Master processes.
       The following symbol, if present, will be interpolated: @taskid@ is replaced
@@ -247,6 +328,14 @@
       of LD_LIBRARY_PATH in the map / reduce JVM env using the mapreduce.map.env and
       mapreduce.reduce.env config settings.
     </description>
+    <display-name>MR AppMaster Java Heap Size</display-name>
+    <depends-on>
+      <property>
+        <type>mapred-site</type>
+        <name>yarn.app.mapreduce.am.resource.mb</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="true"/>
   </property>
 
   <property>
@@ -262,6 +351,14 @@
       of LD_LIBRARY_PATH in the map / reduce JVM env using the mapreduce.map.env and
       mapreduce.reduce.env config settings.
     </description>
+    <display-name>MR AppMaster Java Heap Size</display-name>
+    <depends-on>
+      <property>
+        <type>mapred-site</type>
+        <name>yarn.app.mapreduce.am.resource.mb</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="true"/>
   </property>
 
   <property>
@@ -280,6 +377,37 @@
     <name>mapreduce.admin.reduce.child.java.opts</name>
     <value>-server -XX:NewRatio=8 -Djava.net.preferIPv4Stack=true -Dhadoop.metrics.log.level=WARN</value>
     <description>This property stores Java options for reduce tasks.</description>
+  </property>
+
+  <property>
+    <name>mapreduce.reduce.shuffle.fetch.retry.enabled</name>
+    <value>1</value>
+    <description/>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>mapreduce.reduce.shuffle.fetch.retry.interval-ms</name>
+    <value>1000</value>
+    <description/>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>mapreduce.reduce.shuffle.fetch.retry.timeout-ms</name>
+    <value>30000</value>
+    <description/>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>mapreduce.job.emit-timeline-data</name>
+    <value>false</value>
+    <description/>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>mapreduce.jobhistory.bind-host</name>
+    <value>0.0.0.0</value>
+    <description/>
+    <on-ambari-upgrade add="true"/>
   </property>
 
   <property>
@@ -306,10 +434,18 @@
 
   <property>
     <name>mapreduce.map.java.opts</name>
-    <value>-Xmx756m</value>
+    <value>-Xmx410m</value>
     <description>
       Larger heap-size for child jvms of maps.
     </description>
+    <display-name>MR Map Java Heap Size</display-name>
+    <depends-on>
+      <property>
+        <type>mapred-site</type>
+        <name>mapreduce.map.memory.mb</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="true"/>
   </property>
 
 
@@ -319,6 +455,14 @@
     <description>
       Larger heap-size for child jvms of reduces.
     </description>
+    <display-name>MR Reduce Java Heap Size</display-name>
+    <depends-on>
+      <property>
+        <type>mapred-site</type>
+        <name>mapreduce.reduce.memory.mb</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="true"/>
   </property>
 
   <property>
@@ -355,6 +499,31 @@
     <description>
       Should the job outputs be compressed?
     </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>mapreduce.jobhistory.http.policy</name>
+    <value>HTTP_ONLY</value>
+    <description>
+      This configures the HTTP endpoint for JobHistoryServer web UI.
+      The following values are supported: - HTTP_ONLY : Service is provided only
+      on http - HTTPS_ONLY : Service is provided only on https
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>mapreduce.job.queuename</name>
+    <value>default</value>
+    <description>
+      Queue to which a job is submitted.
+    </description>
+    <depends-on>
+      <property>
+        <type>capacity-scheduler</type>
+        <name>yarn.scheduler.capacity.root.queues</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="false"/>
   </property>
 
 </configuration>
