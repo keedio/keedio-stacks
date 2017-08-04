@@ -89,6 +89,12 @@
         <service>HDFS</service>
         <service>YARN</service>
       </requiredServices>
+      <themes>
+          <theme>
+              <fileName>theme.json</fileName>
+              <default>true</default>
+          </theme>
+      </themes>
     </service>
   </services>
 </metainfo>
