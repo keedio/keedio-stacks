@@ -82,7 +82,7 @@
                   "subsections": [
                     {
                       "name": "optimization-row1-col1",
-                      "display-name": "Tez",
+                      "display-name": "Execution engine",
                       "row-index": "0",
                       "column-index": "0",
                       "row-span": "1",
@@ -200,11 +200,11 @@
           "subsection-name": "optimization-row1-col1"
         },
         {
-          "config": "hive1-site/hive.prewarm.enabled",
+          "config": "hive1-site/hive.vectorized.execution.enabled",
           "subsection-name": "optimization-row1-col2"
         },
         {
-          "config": "hive1-site/hive.prewarm.numcontainers",
+          "config": "hive1-site/hive.vectorized.execution.reduce.enabled",
           "subsection-name": "optimization-row1-col2"
         },
         {
@@ -360,20 +360,15 @@
         }
       },
       {
-        "config": "hive1-site/hive.prewarm.enabled",
+        "config": "hive1-site/hive.vectorized.execution.enabled",
         "widget": {
-          "type": "toggle"
+          "type": "checkbox"
         }
       },
       {
-        "config": "hive1-site/hive.prewarm.numcontainers",
+        "config": "hive1-site/hive.vectorized.execution.reduce.enabled",
         "widget": {
-          "type": "slider",
-          "units": [
-            {
-              "unit-name": "int"
-            }
-          ]
+          "type": "checkbox"
         }
       },
       {

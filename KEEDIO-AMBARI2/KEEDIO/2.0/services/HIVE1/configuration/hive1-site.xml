@@ -322,13 +322,6 @@ limitations under the License.
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
-    <name>hive.vectorized.execution.enabled</name>
-    <value>true</value>
-    <description>This flag controls the vectorized mode of query execution as documented in HIVE-4160 (as of Hive 0.13.0)
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
     <name>hive.optimize.reducededuplication</name>
     <value>true</value>
     <description>Remove extra map-reduce jobs if the data is already clustered by the same key which needs to be used again.
@@ -721,13 +714,6 @@ limitations under the License.
     <description>
       Size per reducer.The default is 1G, i.e if the input size is 10G, it
       will use 10 reducers.
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>hive.vectorized.execution.enabled</name>
-    <value>true</value>
-    <description>This flag controls the vectorized mode of query execution as documented in HIVE-4160 (as of Hive 0.13.0)
     </description>
     <on-ambari-upgrade add="true"/>
   </property>
@@ -2543,10 +2529,9 @@ limitations under the License.
   </property>
   <property>
     <name>hive.execution.engine</name>
-    <value>tez</value>
+    <value>mr</value>
     <description>
-      Expects one of [mr, tez].
-      Chooses execution engine. Options are: mr (Map reduce, default) or tez (hadoop 2 only)
+      Only MapReduce supported at the moment
     </description>
     <display-name>Execution Engine</display-name>
     <value-attributes>
@@ -2555,10 +2540,6 @@ limitations under the License.
         <entry>
           <value>mr</value>
           <label>MapReduce</label>
-        </entry>
-        <entry>
-          <value>tez</value>
-          <label>TEZ</label>
         </entry>
       </entries>
       <selection-cardinality>1</selection-cardinality>
