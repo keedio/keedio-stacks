@@ -74,6 +74,9 @@
             <package>
               <name>zeppelin</name>
             </package>
+            <package>
+              <name>python-requests</name>
+            </package>
           </packages>
         </osSpecific>
       </osSpecifics>
