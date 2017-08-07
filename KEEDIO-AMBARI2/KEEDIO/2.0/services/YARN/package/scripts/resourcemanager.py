@@ -54,9 +54,10 @@ class Resourcemanager(Script):
   def refreshqueues(self, env):
     import params
 
-    self.configure(env)
-    env.set_params(params)
 
+    env.set_params(params)
+    resourcemanager(action="configure")
+    env.set_params(params)
     resourcemanager(action="refreshqueues")
 
   def decommission(self, env):

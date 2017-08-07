@@ -31,3 +31,14 @@ def resourcemanager(action=None):
     out,err = cmd.communicate()
     rc=cmd.returncode
     check_rc(rc,stdout=out,stderr=err)
+  elif action == 'refreshQueues':
+    rm_kinit_cmd = params.rm_kinit_cmd
+    refresh_cmd = format("{rm_kinit_cmd} export HADOOP_LIBEXEC_DIR={hadoop_libexec_dir} && {yarn_container_bin}/yarn rmadmin -refreshQueues")
+
+    Execute(refresh_cmd,
+            user = usr,
+            timeout = 20, # when Yarn is not started command hangs forever and should be killed
+            tries = 5,
+            try_sleep = 5,
+            timeout_kill_strategy = TerminateStrategy.KILL_PROCESS_GROUP, # the process cannot be simply killed by 'kill -15', so kill pg group instread.
+    )
