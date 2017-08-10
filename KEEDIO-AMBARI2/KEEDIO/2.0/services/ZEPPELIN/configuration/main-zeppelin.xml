@@ -27,6 +27,11 @@
     <description>Port where zeppelin will listen</description>
   </property>
   <property>
+    <name>zeppelin_ssl_port</name>
+    <value>8043</value>
+    <description>Port where zeppelin will listen</description>
+  </property>
+  <property>
     <name>zeppelin_notebook_dir</name>
     <value>notebook</value>
     <description>Porsistent storage for notebooks</description>
@@ -38,7 +43,7 @@
   </property>
   <property>
     <name>zeppelin.ssl</name>
-    <value>true</value>
+    <value>false</value>
     <description>Use ssl</description>
   </property>
 </configuration>

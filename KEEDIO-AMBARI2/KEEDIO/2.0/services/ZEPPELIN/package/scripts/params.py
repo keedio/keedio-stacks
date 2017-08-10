@@ -23,7 +23,9 @@ from resource_management import *
 # server configurations
 config = Script.get_config()
 cluster_name = config['clusterName']
-zeppelin_port = int(default('/configurations/main/zeppelin_port',8044))
+zeppelin_port = int(default('/configurations/main-zeppelin/zeppelin_port',8044))
+zeppelin_ssl_port = int(default('/configurations/main-zeppelin/zeppelin_ssl_port',8043))
+zeppelin_ssl = str(default('/configurations/main-zeppelin/zeppelin.ssl','false')).lower()
 zeppelin_notebook_dir = str(default('/configurations/main/zeppelin_notebook_dir','notebook'))
 authentication = str(default('/configurations/main/authentication','internal'))
 kerberos_domain = default('/configurations/cluster-env/kerberos_domain',None)

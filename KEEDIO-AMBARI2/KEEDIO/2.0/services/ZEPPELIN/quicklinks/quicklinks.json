@@ -22,9 +22,9 @@
         "component_name": "ZEPPELIN",
         "url":"%@://%@:%@/",
         "port":{
-          "http_property": "zeppelin.server.port",
+          "http_property": "zeppelin_port",
           "http_default_port": "8044",
-          "https_property": "zeppelin.server.port",
+          "https_property": "zeppelin_ssl_port",
           "https_default_port": "8044",
           "regex": "^(\\d+)$",
           "site": "main"

@@ -32,6 +32,12 @@
 </property>
 
 <property>
+  <name>zeppelin.ssl.server.port</name>
+  <value>{{ zeppelin_ssl_port }}</value>
+  <description>Server port.</description>
+</property>
+
+<property>
   <name>zeppelin.server.context.path</name>
   <value>/</value>
   <description>Context Path of the Web Application</description>
@@ -191,7 +197,7 @@
 
 <property>
   <name>zeppelin.ssl</name>
-  <value>true</value>
+  <value>{{ zeppelin_ssl }}</value>
   <description>Should SSL be used by the servers?</description>
 </property>
 
