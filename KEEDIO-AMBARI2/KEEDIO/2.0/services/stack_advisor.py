@@ -21,7 +21,8 @@ import re
 import os
 import sys
 import socket
-
+import json
+import os.path
 from math import ceil, floor
 
 from resource_management.core.logger import Logger
@@ -31,6 +32,21 @@ from stack_advisor import DefaultStackAdvisor
 
 
 class KEEDIO20StackAdvisor(DefaultStackAdvisor):
+
+  def getDirPrefix(self,service):
+    try: 
+	    data=[]
+	    with open('/var/lib/ambari-server/resources/volume.json') as data_file:
+		 data = json.loads(data_file.read())
+		 Logger.info(str(data)) 
+		 if service in data:
+		    volume=data[service]
+		 else:
+		    volume=data["general"]
+		 return volume  
+    except: 
+            volume="/"
+            return volume
 
   def getDBDriver(self, databaseType):
     driverDict = {
@@ -333,18 +349,58 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
       "YARN": self.recommendYARNConfigurations,
       "HDFS": self.recommendHDFSConfigurations,
       "HBASE": self.recommendHbaseConfigurations,
+      "ZOOKEEPER": self.recommendZKConfigurations,
       "STORM": self.recommendStormConfigurations,
       "OOZIE": self.recommendOozieConfigurations,
       "RANGER": self.recommendRangerConfigurations,
       "KAFKA": self.recommendKafkaConfigurations,
+      "CASSANDRA": self.recommendCassandraConfigurations,
+      "COUCHBASE": self.recommendCouchbaseConfigurations,
+      "DATABASE": self.recommendMysqlConfigurations,
+      "ELASTICSEARCH": self.recommendESConfigurations,
     }
       #"HIVE": self.recommendHiveConfigurations,
 
+  def putprefix( self, service, site, prop, defaultpath, services, configurations):
+    # reads the content of /var/lib/ambari-server/resources/volume.json to set good default for datadirs
+    putAppProperty = self.putProperty(configurations, site, services)
+ 
+    volume = self.getDirPrefix(service)
+    #Initialize default 'dataDir' if needed
+    if (prop not in configurations[site].keys()):
+      dataDir = os.path.join(volume,defaultpath)
+      putAppProperty(prop, dataDir)
+    else:
+      dataDir = configurations[site][prop].split(",")
+      if len(dataDir) ==1 and volume not in dataDir[0]:
+       dataDir2=[]
+       for dirs in dataDir:
+         temp=os.path.join(str(volume),dirs[1:])
+         dataDir2.append(temp)
+         dataDir=dataDirs
+       putAppProperty(prop, dataDir[0])
+
+  def recommendCouchbaseConfigurations(self, configurations, clusterData, services, hosts):
+      self.putprefix( 'couchbase', 'couchbase', 'datadir', 'couchbase/datadir', services, configurations )
+      self.putprefix( 'couchbase', 'couchbase', 'indexdir', 'couchbase/indexdir', services, configurations )
+
+  def recommendCassandraConfigurations(self, configurations, clusterData, services, hosts):
+      self.putprefix( 'cassandra', 'cassandra', 'cassandra_data_path', 'cassandra', services, configurations )
+
+  def recommendESConfigurations(self, configurations, clusterData, services, hosts):
+      self.putprefix( 'elasticsearch', 'elasticsearch', 'path.data', 'elasticsearch', services, configurations )
+
+  def recommendMysqlConfigurations(self, configurations, clusterData, services, hosts):
+      self.putprefix( 'database', 'database', 'datadir', 'mysql', services, configurations )
+
+  def recommendZKConfigurations(self, configurations, clusterData, services, hosts):
+      self.putprefix( 'zookeeper', 'zoo.cfg', 'dataDir', 'hadoop/zookeeper', services, configurations )
+
   def recommendKafkaConfigurations(self, configurations, clusterData, services, hosts):
-    print "KKKKKKKKKKKKKKK"
     kafka_mounts = [
       ("log.dirs", "KAFKA_BROKER", "/kafka-logs", "multi")
     ]
+    self.putprefix( 'kafka', 'kafka-broker', 'log.dirs', 'kafka-logs', services, configurations )
 
     self.updateMountProperties("kafka-broker", kafka_mounts, configurations, services, hosts)
 
@@ -487,6 +543,36 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
     putYarnProperty("yarn.nodemanager.linux-container-executor.group", containerExecutorGroup)
 
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
+    
+    volume = self.getDirPrefix('yarn')
+    #Initialize default 'yarn.nodemanager.local-dirs' if needed
+    if ('yarn.nodemanager.local-dirs' not in configurations["yarn-site"]["properties"].keys()):
+      localDirs = os.path.join(volume,'hadoop/yarn/local')
+      putYarnProperty('yarn.nodemanager.local-dirs', localDirs)
+    else:
+      localDirs = configurations["yarn-site"]["properties"]['yarn.nodemanager.local-dirs'].split(",")
+      if len(localDirs) ==1 and volume not in localDirs[0]:
+       localDirs2=[]
+       for dirs in localDirs:
+         temp=os.path.join(str(volume),dirs[1:])
+         localDirs2.append(temp)
+         localDirs=localDirs2
+       putYarnProperty('yarn.nodemanager.local-dirs', localDirs[0])
+
+    #Initialize default 'yarn.nodemanager.log-dirs' if needed
+    if ('yarn.nodemanager.log-dirs' not in configurations["yarn-site"]["properties"].keys()):
+      logDirs = os.path.join(volume,'hadoop/yarn/log')
+      putYarnProperty('yarn.nodemanager.log-dirs', logDirs)
+    else:
+      logDirs = configurations["yarn-site"]["properties"]['yarn.nodemanager.log-dirs'].split(",")
+      if len(logDirs) ==1 and volume not in logDirs[0]:
+       logDirs2=[]
+       for dirs in logDirs:
+         temp=os.path.join(str(volume),dirs[1:])
+         logDirs2.append(temp)
+         logDirs=logDirs2
+       putYarnProperty('yarn.nodemanager.log-dirs', logDirs[0])
+
     if "TEZ" in servicesList:
         ambari_user = self.getAmbariUser(services)
         ambariHostName = socket.getfqdn()
@@ -684,12 +770,50 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
       if len(namenodes.split(',')) > 1:
         putHDFSSitePropertyAttributes("dfs.namenode.rpc-address", "delete", "true")
 
+    #
+    volume = self.getDirPrefix('hdfs')    
+
     #Initialize default 'dfs.datanode.data.dir' if needed
     if (not hdfsSiteProperties) or ('dfs.datanode.data.dir' not in hdfsSiteProperties):
-      dataDirs = '/hadoop/hdfs/data'
+      dataDirs = os.path.join(volume,'hadoop/hdfs/data')
       putHDFSSiteProperty('dfs.datanode.data.dir', dataDirs)
     else:
       dataDirs = hdfsSiteProperties['dfs.datanode.data.dir'].split(",")
+      if len(dataDirs) ==1 and volume not in dataDirs[0]:
+       dataDirs2=[] 
+       for dirs in dataDirs:
+         temp=os.path.join(str(volume),dirs[1:])
+         dataDirs2.append(temp) 
+         dataDirs=dataDirs2
+       putHDFSSiteProperty('dfs.datanode.data.dir', dataDirs[0])
+    
+    #Initialize default 'dfs.namenode.name.dir' if needed
+    if (not hdfsSiteProperties) or ('dfs.namenode.name.dir' not in hdfsSiteProperties):
+      nameDirs = os.path.join(volume,'hadoop/hdfs/namenode')
+      putHDFSSiteProperty('dfs.namenode.name.dir', nameDirs)
+    else:
+      nameDirs = hdfsSiteProperties['dfs.namenode.name.dir'].split(",")
+      if len(nameDirs) ==1 and volume not in nameDirs[0]:
+       nameDirs2=[] 
+       for dirs in nameDirs:
+         temp=os.path.join(str(volume),dirs[1:])
+         nameDirs2.append(temp) 
+         nameDirs=nameDirs2
+       putHDFSSiteProperty('dfs.namenode.name.dir', nameDirs[0])
+    # Check if there is a default path for installation
+    #volume=getDirPrefix('hdfs')    
+    #if volume and volume not in dataDirs:
+    #   try:
+    #     dataDirs2=[] 
+    #     for dirs in dataDirs:
+    #     
+    #         temp=os.path.join(str(volume),dirs[1:])
+    #         dataDirs2.append(temp)
+    #     dataDirs=dataDirs2
+    #     putHDFSSiteProperty('dfs.datanode.data.dir', dataDirs[0])
+    #   except: 
+    #     Logger.warning("Problems in adding prefix from volume.json, reverting to default")
+         
 
     # dfs.datanode.du.reserved should be set to 10-15% of volume size
     # For each host selects maximum size of the volume. Then gets minimum for all hosts.
@@ -932,6 +1056,23 @@ class KEEDIO20StackAdvisor(DefaultStackAdvisor):
     # Storm AMS integration
     if 'AMBARI_METRICS' in servicesList:
       putStormSiteProperty('metrics.reporter.register', 'org.apache.hadoop.metrics2.sink.storm.StormTimelineMetricsReporter')
+ 
+    self.putprefix( 'storm', 'storm-site', 'storm.local.dir', 'storm', services, configurations )
+#   volume = self.getDirPrefix('storm')
+
+    #Initialize default 'storm.local.dir' if needed
+#    if ('storm.local.dir' not in configurations["storm-site"].keys()):
+#      localDir = os.path.join(volume,'storm')
+#      putStormSiteProperty('storm.local.dir', localDir)
+#    else:
+#      localDir = configurations["storm-site"]['storm.local.dir'].split(",")
+#      if len(localDir) ==1 and volume not in localDir[0]:
+#       localDir2=[]
+#       for dirs in localDir:
+#         temp=os.path.join(str(volume),dirs[1:])
+#         localDirs.append(temp)
+#         localDir=localDirs
+#       putStormSiteProperty('storm.local.dir', localDir[0])
 
   def recommendAmsConfigurations(self, configurations, clusterData, services, hosts):
     putAmsEnvProperty = self.putProperty(configurations, "ams-env", services)
