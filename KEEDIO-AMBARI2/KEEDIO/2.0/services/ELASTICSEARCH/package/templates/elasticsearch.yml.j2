@@ -64,6 +64,14 @@ bootstrap.memory_lock: true
 # Set the bind address to a specific IP (IPv4 or IPv6):
 #
 network.host: {{ network_host }}
+
+{% if (publish_host != 'default') %}
+network.publish_host: {{ publish_host }}
+{% endif %}
+
+{% if (bind_host != 'default') %}
+network.bind_host: {{ bind_host }}
+{% endif %}
 #
 # Set a custom port for HTTP:
 #

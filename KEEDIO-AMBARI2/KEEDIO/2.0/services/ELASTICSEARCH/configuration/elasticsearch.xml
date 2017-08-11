@@ -61,6 +61,17 @@
   </property>
 
   <property>
+    <name>network.publish_host</name>
+    <value>default</value>
+    <description>The publish host is the single interface that the node advertises to other nodes in the cluster, so that those nodes can connect to it.</description>
+  </property>
+  <property>
+    <name>network.bind_host</name>
+    <value>default</value>
+    <description>This specifies which network interface(s) a node should bind to in order to listen for incoming requests. A node can bind to multiple interfaces, e.g. two network cards, or a site-local address and a local address. Defaults to network.host.</description>
+  </property>
+  <property>
+
     <name>network.host</name>
     <value>_site_</value>
     <description>Selects network interface for connectivity, possible values are _[networkInterface]_, _local_, _site_, _global_, default: _site_</description>
